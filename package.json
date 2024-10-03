@@ -1,0 +1,13 @@
+{
+    "name": "shop",
+    "private": true,
+    "scripts": {
+        "format": "prettier --write ."
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "prettier": "^3.3.3"
+    }
+}
