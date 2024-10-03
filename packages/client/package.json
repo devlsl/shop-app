@@ -12,7 +12,8 @@
     "dependencies": {
         "@shop/shared": "*",
         "react": "^18.3.1",
-        "react-dom": "^18.3.1"
+        "react-dom": "^18.3.1",
+        "ts-api-generator": "^1.0.21"
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
