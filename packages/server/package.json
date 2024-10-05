@@ -2,12 +2,13 @@
     "name": "@shop/server",
     "version": "1.0.0",
     "main": "./src/main.ts",
-    "type": "module",
+    "type": "commonjs",
     "scripts": {
-        "build": "tsc --build --clean && tsc",
         "build:w": "tsc -w",
         "dev": "node --watch ./dist/main.js",
-        "format": "prettier --write ."
+        "build": "npm run clear && tsc",
+        "format": "prettier --write .",
+        "clear": "rm -rf dist/*"
     },
     "keywords": [],
     "author": "",
@@ -22,10 +23,11 @@
     },
     "dependencies": {
         "@shop/shared": "*",
+        "@shop/testmodule": "*",
         "@sweet-monads/either": "^3.3.1",
         "bcrypt": "^5.1.1",
         "jsonwebtoken": "^9.0.2",
-        "ts-api-generator": "1.0.21",
+        "ts-api-generator": "^1.0.27",
         "uuid": "^10.0.0",
         "zod": "^3.23.8"
     }

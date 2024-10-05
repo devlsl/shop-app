@@ -1,9 +1,9 @@
-import { Handlers } from './types.js';
-import checkAuth from './auth/checkAuth.js';
-import refreshAuth from './auth/refreshAuth.js';
-import signInByEmailAndPassword from './auth/signInByEmailAndPassword.js';
-import signOut from './auth/signOut.js';
-import signUpByEmailAndPassword from './auth/signUpByEmailAndPassword.js';
+import { Handlers } from './types';
+import checkAuth from './auth/checkAuth';
+import refreshAuth from './auth/refreshAuth';
+import signInByEmailAndPassword from './auth/signInByEmailAndPassword';
+import signOut from './auth/signOut';
+import signUpByEmailAndPassword from './auth/signUpByEmailAndPassword';
 
 type Options = {
     jwtSecret: string;

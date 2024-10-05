@@ -1,4 +1,4 @@
-import { Handlers } from '../types.js';
+import { Handlers } from '../types';
 
 const checkAuth: Handlers['checkAuth'] = async (context) => context;
 

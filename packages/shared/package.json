@@ -1,17 +1,28 @@
 {
     "name": "@shop/shared",
     "version": "1.0.0",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.js",
-    "type": "module",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "types": "./dist/types/index.d.ts",
+    "exports": {
+        ".": {
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js",
+            "types": "./dist/types/index.d.ts"
+        }
+    },
     "scripts": {
-        "build": "tsc"
+        "build": "npm run clear && npm run build:cjs && npm run build:esm && npm run build:types",
+        "build:types": "tsc -p ./tsconfig.types.json",
+        "build:esm": "tsc -p ./tsconfig.esm.json",
+        "build:cjs": "tsc -p ./tsconfig.cjs.json",
+        "clear": "rm -rf dist/*"
     },
     "devDependencies": {
         "typescript": "^5.6.2"
     },
     "dependencies": {
-        "ts-api-generator": "^1.0.21",
+        "ts-api-generator": "^1.0.27",
         "zod": "^3.23.8"
     }
 }

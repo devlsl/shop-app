@@ -1,1 +1,6 @@
-export { apiSchema } from './apiSchema.js';
+import { apiSchema } from './apiSchema.js';
+
+export { apiSchema };
+export default {
+    apiSchema,
+};

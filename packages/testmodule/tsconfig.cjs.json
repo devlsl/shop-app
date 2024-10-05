@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
         "target": "es2018",
-        "module": "CommonJS",
         "moduleResolution": "node",
-        "outDir": "./dist",
+        "outDir": "./dist/cjs",
+        "module": "CommonJS",
         "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
         "strict": true,
-        "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true
+        "skipLibCheck": true
     }
 }

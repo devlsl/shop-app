@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { Handlers } from '../types.js';
+import { Handlers } from '../types';
 import { ActionError, AuthContext } from 'ts-api-generator';
-import { setCookie } from '../../utils/setCookie.js';
-import { getCookie } from '../../utils/getCookie.js';
-import { createSession, getSession, getUserById } from '../../db/methods.js';
+import { setCookie } from '../../utils/setCookie';
+import { getCookie } from '../../utils/getCookie';
+import { createSession, getSession, getUserById } from '../../db/methods';
 
 type Options = {
     secret: string;

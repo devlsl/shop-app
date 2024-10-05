@@ -1,7 +1,7 @@
 import { createServer } from 'http';
-import { createVerifyAccess } from './utils/verifyAccess.js';
+import { createVerifyAccess } from './utils/verifyAccess';
 import { apiSchema } from '@shop/shared';
-import { createHandlers } from './handlers/instance.js';
+import { createHandlers } from './handlers/instance';
 import { bindActions } from 'ts-api-generator';
 
 const jwtSecret = 'secret';
@@ -23,7 +23,7 @@ const handlers = createHandlers({
 
 const requestHandler = bindActions(apiSchema)
     .bindHandlers(handlers)
-    .createRequestHandler(verifyAccess, clientHostname);
+    .createDefaultHttpRequestHandler(verifyAccess, clientHostname);
 
 const server = createServer(requestHandler);
 server.listen(port);

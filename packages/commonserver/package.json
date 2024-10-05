@@ -1,0 +1,13 @@
+{
+    "name": "@shop/commonserver",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "commonjs",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "zod": "^3.23.8",
+        "@shop/testmodule": "*"
+    }
+}
