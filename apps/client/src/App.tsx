@@ -1,46 +1,17 @@
-import { useState } from 'react';
-import { api } from './api';
+import { useEffect } from 'react';
+import { useUrl } from './hooks/useUrl';
+import { Layout } from './Layout';
+import './reset.css';
 
 function App() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    useEffect(() => {
+        window.addEventListener('popstate', useUrl.handlePopState);
+        return window.removeEventListener('popstate', useUrl.handlePopState);
+    }, []);
 
     return (
         <>
-            <input
-                type='text'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type='text'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={() => api.signOut().then(console.log)}>
-                sign out
-            </button>
-            <button
-                onClick={() =>
-                    api
-                        .signInByEmailAndPassword({ email, password })
-                        .then(console.log)
-                }
-            >
-                sign in
-            </button>
-            <button
-                onClick={() =>
-                    api
-                        .signUpByEmailAndPassword({ email, password })
-                        .then(console.log)
-                }
-            >
-                sign up
-            </button>
-            <button onClick={() => api.checkAuth().then(console.log)}>
-                authme
-            </button>
+            <Layout />
         </>
     );
 }

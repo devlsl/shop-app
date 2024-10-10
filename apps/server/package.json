@@ -23,7 +23,6 @@
     },
     "dependencies": {
         "@shop/shared": "*",
-        "@shop/testmodule": "*",
         "@sweet-monads/either": "^3.3.1",
         "bcrypt": "^5.1.1",
         "jsonwebtoken": "^9.0.2",

@@ -1,0 +1,23 @@
+.wrapper {
+    display: flex;
+    gap: 6px;
+}
+
+.every {
+    --size: 8px;
+    --duration: 0.8s;
+    --start-anim-background-color: #d6cbff;
+    --end-anim-background-color: #ab96ff;
+}
+
+.left {
+    --delay: 0s;
+}
+
+.center {
+    --delay: 0.2s;
+}
+
+.right {
+    --delay: 0.4s;
+}

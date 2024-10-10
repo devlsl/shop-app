@@ -1,0 +1,17 @@
+.circle {
+    width: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--start-anim-background-color);
+    animation: loader-anim var(--duration) infinite linear alternate
+        var(--delay);
+}
+
+@keyframes loader-anim {
+    0% {
+        background-color: var(--start-anim-background-color);
+    }
+    100% {
+        background-color: var(--end-anim-background-color);
+    }
+}
