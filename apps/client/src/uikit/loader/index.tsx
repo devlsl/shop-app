@@ -1,4 +1,4 @@
-import { Circle } from '../../circle';
+import { Circle } from '../circle';
 import styles from './styles.module.css';
 import cn from 'classnames';
 

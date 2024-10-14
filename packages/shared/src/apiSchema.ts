@@ -1,4 +1,4 @@
-import { ActionOptionsMap } from 'ts-api-generator';
+import { ActionOptionsMap, createDefaultHttpClient } from 'ts-api-generator';
 import { z } from 'zod';
 
 export const apiSchema = {

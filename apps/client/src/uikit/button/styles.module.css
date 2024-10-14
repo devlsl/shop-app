@@ -1,54 +1,78 @@
 .button {
-    padding: 8px 14px;
-    min-height: 47px;
-    min-width: 140px;
-    color: #ab96ff;
-    background-color: #f5efff;
-    border: 3px solid #ab96ff;
+    padding: 8px 16px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     border-radius: 8px;
-    margin: 20px;
 
     outline-color: transparent;
-
     &:focus-visible {
-        outline: 2px solid #3a47be;
-        outline-offset: 2px;
-    }
-
-    &:enabled {
-        @media (hover: hover) {
-            &:hover {
-                color: #9382eb;
-                border-color: #9382eb;
-            }
-        }
-
-        &:active {
-            transform: translateY(2px);
-            color: #806af0;
-            border-color: #806af0;
-        }
+        outline: var(--outline-width) solid var(--outline-color);
+        outline-offset: var(--outline-offset);
     }
 
     &:disabled {
         opacity: 0.6;
-
         cursor: default;
     }
 
-    font-family: 'Montserrat', sans-serif;
+    &.primary {
+        color: var(--button-primary-text-color);
+        background-color: var(--button-primary-background-color);
+    }
+
+    &.secondary {
+        color: var(--button-secondary-text-color);
+        background-color: var(--button-secondary-background-color);
+    }
+
+    &.dangerous {
+        color: var(--button-dangerous-text-color);
+        background-color: var(--button-dangerous-background-color);
+    }
+
+    &.outline {
+        color: var(--button-outline-text-color);
+        background-color: var(--button-outline-background-color);
+        border-color: var(--button-outline-border-color);
+    }
+
+    @media (hover: hover) {
+        &:enabled:hover {
+            &.primary {
+                background-color: var(--button-primary-hover-background-color);
+            }
+
+            &.secondary {
+                background-color: var(
+                    --button-secondary-hover-background-color
+                );
+            }
+
+            &.dangerous {
+                background-color: var(
+                    --button-dangerous-hover-background-color
+                );
+            }
+
+            &.outline {
+                background-color: var(--button-outline-hover-background-color);
+            }
+        }
+    }
+
+    font-family: 'Geist', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 700;
+    font-weight: 500;
     font-style: normal;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
 
     transition-property: color, border-color, background-color, outline-color,
         opacity, transform;
-    transition-duration: 150ms;
+    transition-duration: var(--transition-duration);
 
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     -webkit-tap-highlight-color: transparent;
