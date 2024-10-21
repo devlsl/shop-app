@@ -2,8 +2,6 @@ import { Either, isEither, left, right } from '@sweet-monads/either';
 import { useState } from 'react';
 import { ActionOptions, ActionOptionsMap } from 'ts-api-generator';
 import { z } from 'zod';
-import { useAppState } from './useAppState';
-import { useUser } from './useUser';
 
 const parseResponse = (
     json: any,
@@ -148,29 +146,16 @@ export type FetchState<Error, Data> =
           data: Data;
       };
 
-const handleNetworkError = () =>
-    useAppState.setState((state) => ({
-        errors: [...state.errors, 'network error'],
-    }));
-
-const handleUnauthorizedError = (promptToSignIn: boolean = true) => {
-    useUser.setState({ user: null });
-    if (promptToSignIn) useAppState.setState({ showSignInView: true });
-};
-
-const handleRequiredUnauthorizedError = () =>
-    useAppState.setState((state) => ({
-        errors: [...state.errors, 'need to sign out'],
-    }));
-
 export const createUseApi =
     <Config extends ActionOptionsMap>(
         url: string,
         config: Config,
         refreshActionName: keyof Config,
+        onError: (
+            type: 'unauthorized' | 'requiredUnauthorized' | 'network',
+        ) => void,
     ) =>
     <
-        // Payload = undefined extends Config[ActionName]['payload'] ? z.infer<Config[ActionName]['payload']!> : undefined,
         ActionName extends keyof Config,
         Data = undefined extends Config[ActionName]['return']
             ? undefined
@@ -178,7 +163,6 @@ export const createUseApi =
               z.infer<Config[ActionName]['return']!>,
     >(
         actionName: ActionName,
-        promptToSignIn: boolean = false,
         refreshAuth: boolean = true,
     ) => {
         const options = config[actionName];
@@ -212,7 +196,7 @@ export const createUseApi =
                     data: null,
                     error: 'NotLogicError',
                 });
-                return handleNetworkError();
+                return onError('network');
             }
             if (response.isRight()) {
                 return setFetchState({
@@ -227,7 +211,7 @@ export const createUseApi =
                     data: null,
                     error: 'NotLogicError',
                 });
-                return handleUnauthorizedError(promptToSignIn);
+                return onError('unauthorized');
             }
             if (response.value === 'RequiredUnauthorized') {
                 setFetchState({
@@ -235,7 +219,7 @@ export const createUseApi =
                     data: null,
                     error: 'NotLogicError',
                 });
-                return handleRequiredUnauthorizedError();
+                return onError('requiredUnauthorized');
             }
             if (response.value === 'NetworkError') {
                 setFetchState({
@@ -243,7 +227,7 @@ export const createUseApi =
                     data: null,
                     error: 'NotLogicError',
                 });
-                return handleNetworkError();
+                return onError('network');
             }
 
             return setFetchState({
@@ -263,9 +247,4 @@ export const createUseApi =
             ...fetchState,
             call,
         };
-
-        // type Data = Awaited<ReturnType<typeof apiAction>>['value']
-        // type Error = Parameters<Parameters<Awaited<ReturnType<typeof apiAction>>['mapLeft']>['0']>['0']
-        // type Data = Parameters<Parameters<Awaited<ReturnType<typeof apiAction>>['mapRight']>['0']>['0']
-        // type Payload =  Parameters<typeof apiAction>['0']
     };

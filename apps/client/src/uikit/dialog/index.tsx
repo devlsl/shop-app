@@ -1,9 +1,128 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import styles from './styles.module.css';
-import cn from 'classnames';
-import { Button } from '../button';
 import { X } from 'lucide-react';
-import { Typography } from '../typography';
+import styled, { css, keyframes } from 'styled-components';
+import { pushNotification } from '../../hooks/useAppState';
+import { Portal } from '../../components/portal';
+
+const mountingOverlay = keyframes`
+    0% {
+        backdrop-filter: blur(0px);
+        opacity: 0;
+    }
+    100% {
+        backdrop-filter: blur(1px);
+        opacity: 1;
+    }
+`;
+
+const unmountingOverlay = keyframes`
+    0% {
+        backdrop-filter: blur(1px);
+        opacity: 1;
+    }
+    100% {
+        backdrop-filter: blur(0px);
+        opacity: 0;
+    }
+`;
+
+const Overlay = styled(Dialog.Overlay).attrs({ forceMount: true })<{
+    $animationDuration: string;
+    $animationFillMode: string;
+    $unmounting: boolean;
+}>`
+    position: fixed;
+    inset: 0;
+
+    background-color: ${({ theme }) => theme.dialog.overlay.bgColor};
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    animation-name: ${mountingOverlay};
+    animation-duration: ${({ $animationDuration }) => $animationDuration};
+    animation-fill-mode: ${({ $animationFillMode }) => $animationFillMode};
+    ${({ $unmounting }) =>
+        $unmounting &&
+        css`
+            animation-name: ${unmountingOverlay};
+        `}
+`;
+
+const mountingContentWrapper = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+`;
+
+const unmountingContentWrapper = keyframes`
+    0% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(2px);
+        opacity: 0;
+    }
+`;
+
+const Content = styled(Dialog.Content).attrs({ forceMount: true })<{
+    $animationDuration: string;
+    $animationFillMode: string;
+    $unmounting: boolean;
+}>`
+    background-color: ${({ theme }) => theme.dialog.content.bgColor};
+    box-shadow: ${({ theme }) => theme.dialog.content.shadow};
+
+    padding: 10px;
+    width: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    animation-name: ${mountingContentWrapper};
+    animation-duration: ${({ $animationDuration }) => $animationDuration};
+    animation-fill-mode: ${({ $animationFillMode }) => $animationFillMode};
+    ${({ $unmounting }) =>
+        $unmounting &&
+        css`
+            animation-name: ${unmountingContentWrapper};
+        `}
+`;
+
+const Gapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    padding-top: 14px;
+`;
+
+const CloseDialogWrapper = styled.div`
+    display: flex;
+    justify-content: end;
+    width: 100%;
+`;
+
+const CloseIcon = styled(X).attrs({ size: 20 })`
+    stroke-width: 3px;
+`;
+
+const CloseButton = () => (
+    <CloseDialogWrapper>
+        <Dialog.Close asChild>
+            <button>
+                <CloseIcon />
+            </button>
+        </Dialog.Close>
+    </CloseDialogWrapper>
+);
 
 export const DialogDemo = ({
     mounted,
@@ -20,57 +139,68 @@ export const DialogDemo = ({
     };
 }) => {
     return (
-        <Dialog.Root open={mounted} onOpenChange={toggle}>
-            <Dialog.Portal>
+        <Portal asChild container={document.querySelector('#dialogs')}>
+            <Dialog.Root open={mounted} onOpenChange={toggle}>
                 {mounted ? (
                     <>
                         <Dialog.DialogTitle>Hello</Dialog.DialogTitle>
-                        <Dialog.DialogDescription>
-                            HelloDeb
-                        </Dialog.DialogDescription>
-                        <Dialog.Overlay
-                            className={cn(
-                                styles.overlay,
-                                unmounting && styles.unmounting,
-                            )}
-                            style={animStyles}
-                            forceMount
+                        <Dialog.DialogDescription>фыв</Dialog.DialogDescription>
+                        <Overlay
+                            $animationDuration={animStyles.animationDuration}
+                            $animationFillMode={animStyles.animationFillMode}
+                            $unmounting={unmounting}
                         >
-                            <Dialog.Content
-                                className={cn(
-                                    styles.contentWrapper,
-                                    unmounting && styles.unmounting,
-                                )}
-                                style={animStyles}
+                            <Content
+                                $animationDuration={
+                                    animStyles.animationDuration
+                                }
+                                $animationFillMode={
+                                    animStyles.animationFillMode
+                                }
+                                $unmounting={unmounting}
                             >
-                                {/* <Dialog.Title className={styles.title}>
-                                Edit profile
-                                </Dialog.Title>
-                                <Dialog.Description className={styles.description}>
-                                Make changes to your profile here. Click save
-                                when you're done.
-                                </Dialog.Description> */}
-                                <div className={styles.closeWrapper}>
-                                    <Dialog.Close asChild>
-                                        <Button
-                                            className={styles.close}
-                                            aria-label='Close'
-                                        >
-                                            <X className={styles.closeIcon} />
-                                        </Button>
-                                    </Dialog.Close>
-                                </div>
-                                <div className={styles.content}>
-                                    <Typography>dsad</Typography>
-                                    <Typography>dsad</Typography>
-                                    <Typography>dsad</Typography>
-                                    <Typography>dsad</Typography>
-                                </div>
-                            </Dialog.Content>
-                        </Dialog.Overlay>
+                                <CloseButton />
+                                <Gapper>
+                                    <button
+                                        onClick={() =>
+                                            pushNotification('error', 'heeeee')
+                                        }
+                                    >
+                                        addError
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            pushNotification('info', 'heeeee')
+                                        }
+                                    >
+                                        addInfo
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            pushNotification(
+                                                'neutral',
+                                                'heeeee',
+                                            )
+                                        }
+                                    >
+                                        addNeutral
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            pushNotification(
+                                                'success',
+                                                'heeeee',
+                                            )
+                                        }
+                                    >
+                                        addSuccess
+                                    </button>
+                                </Gapper>
+                            </Content>
+                        </Overlay>
                     </>
                 ) : null}
-            </Dialog.Portal>
-        </Dialog.Root>
+            </Dialog.Root>
+        </Portal>
     );
 };

@@ -1,10 +1,18 @@
+import styled from 'styled-components';
 import { Loader } from '../../uikit/loader';
-import styles from './styles.module.css';
+
+const Stretch = styled.div`
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 export const PageLoader = () => {
     return (
-        <div className={styles.streach}>
+        <Stretch>
             <Loader />
-        </div>
+        </Stretch>
     );
 };

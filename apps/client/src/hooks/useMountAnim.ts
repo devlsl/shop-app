@@ -3,14 +3,8 @@ import { useEffect, useState } from 'react';
 export const useMountAnim = (
     expected: boolean,
     duration: number,
-): [
-    mounted: boolean,
-    unmounting: boolean,
-    styles: {
-        animationDuration: string;
-        animationFillMode: string;
-    },
-] => {
+    onUnmount?: () => void,
+) => {
     const [unmounting, setUnmounting] = useState(false);
     const [mounted, setMounted] = useState(expected);
 
@@ -21,6 +15,7 @@ export const useMountAnim = (
             return setTimeout(() => {
                 setUnmounting(false);
                 setMounted(false);
+                onUnmount && onUnmount();
             }, duration);
         }
         setMounted(nextValue);
@@ -30,12 +25,12 @@ export const useMountAnim = (
         handleExpectedChange(expected);
     }, [expected]);
 
-    return [
+    return {
         mounted,
         unmounting,
-        {
+        styles: {
             animationDuration: `${duration}ms`,
             animationFillMode: 'forwards',
         },
-    ];
+    };
 };

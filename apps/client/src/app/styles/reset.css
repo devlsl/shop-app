@@ -89,8 +89,12 @@ input[type='submit'] {
     cursor: pointer;
 }
 
+a:focus,
+a:active,
 input:focus,
 input:active,
+textarea:focus,
+select:focus,
 button:focus,
 button:active {
     outline: none;
