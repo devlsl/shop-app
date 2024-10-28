@@ -23,6 +23,8 @@
         "react-dom": "^18.3.1",
         "styled-components": "^6.1.13",
         "ts-api-generator": "^1.0.29",
+        "typed.js": "^2.1.0",
+        "typewriter-effect": "^2.21.0",
         "zustand": "^5.0.0-rc.2"
     },
     "devDependencies": {

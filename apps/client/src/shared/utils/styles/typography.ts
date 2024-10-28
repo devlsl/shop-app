@@ -1,6 +1,6 @@
 import { css, CSSProperties } from 'styled-components';
 
-export const typographyCSS = (
+export const typography = (
     props?: Pick<
         CSSProperties,
         | 'fontSize'
@@ -14,10 +14,10 @@ export const typographyCSS = (
     >,
 ) => {
     const {
-        fontSize = '0.875rem',
+        fontSize = '1rem',
         fontStyle = 'normal',
         fontWeight = '500',
-        lineHeight = '1.25rem',
+        lineHeight = '1.5rem',
         textAlign = 'start',
         textDecoration = 'none',
         textTransform = 'none',

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Portal } from '../portal';
 import { Notification, removeNotificationById } from '../../hooks/useAppState';
 import { NotificationItem } from './item';
+import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
+import { css } from 'styled-components';
 
 const NotificationsWrapper = styled.div`
     position: fixed;
@@ -9,10 +11,13 @@ const NotificationsWrapper = styled.div`
     bottom: 6px;
     z-index: 99;
 
-    @media (max-width: 350px) {
-        left: 6px;
-        min-width: max-content;
-    }
+    ${breakpoint(
+        'showBottomBar',
+        css`
+            left: 6px;
+            min-width: max-content;
+        `,
+    )}
 `;
 
 export const NotificationsView = ({ items }: { items: Notification[] }) => {

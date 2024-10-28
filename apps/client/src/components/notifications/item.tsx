@@ -1,50 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMountAnim } from '../../hooks/useMountAnim';
-import styled, { css, CSSProperties, keyframes } from 'styled-components';
-import { animateUnmount } from '../../utils/animateUnmount';
+import styled, { css, keyframes } from 'styled-components';
+import { animateUnmount } from '../../shared/utils/styles/animateUnmount';
 import { Notification } from '../../hooks/useAppState';
-import { animate } from '../../utils/animate';
+import { transition } from '../../shared/utils/styles/transition';
 import { X } from 'lucide-react';
-import { typographyCSS } from '../../utils/typography';
+import { typography } from '../../shared/utils/styles/typography';
+import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 
 const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
-    background-color: ${({ theme, $variant }) => {
-        if (theme.isDark)
-            return {
-                success: '#2d3f26',
-                info: '#535238',
-                error: '#4f3632',
-                neutral: '#404042',
-            }[$variant];
+    background-color: ${({ theme, $variant }) =>
+        theme.notification[$variant].background};
 
-        return {
-            success: '#d4eccb',
-            info: '#ebe9b4',
-            error: '#ffd1d1',
-            neutral: '#e8e8e8',
-        }[$variant];
-    }};
+    color: ${({ theme, $variant }) => theme.notification[$variant].text};
 
-    color: ${({ theme, $variant }) => {
-        if (theme.isDark)
-            return {
-                success: '#69ad65',
-                info: '#c2bd7d',
-                error: '#a45252',
-                neutral: '#c7c7c7',
-            }[$variant];
-
-        return {
-            success: '#57c152',
-            info: '#959263',
-            error: '#e66a6a',
-            neutral: '#18181b',
-        }[$variant];
-    }};
-
-    @media (max-width: 350px) {
-        width: 100%;
-    }
+    ${breakpoint(
+        'showBottomBar',
+        css`
+            width: 100%;
+        `,
+    )}
     width: fit-content;
 
     display: flex;
@@ -56,9 +31,17 @@ const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
     margin-top: 6px;
     border-radius: 6px;
 
-    ${typographyCSS()}
+    ${typography()}
 
-    ${animate('background-color', 'color')}
+    ${breakpoint(
+        'showBottomBar',
+        css`
+            font-size: 20px;
+            font-weight: 700;
+        `,
+    )}
+
+    ${transition('background-color', 'color')}
 `;
 
 const CloseButton = styled.button`
@@ -68,6 +51,13 @@ const CloseButton = styled.button`
     border-radius: 6px;
 
     svg {
+        ${breakpoint(
+            'showBottomBar',
+            css`
+                width: 34px;
+            `,
+        )}
+
         width: 16px;
         stroke-width: 4px;
     }
@@ -94,9 +84,13 @@ const NotificationView = ({
 
 const Animated = styled.div<{ $unmounting: boolean }>`
     display: grid;
-    @media (min-width: 350px) {
-        justify-content: end;
-    }
+
+    ${breakpoint(
+        'showBottomBar',
+        css`
+            justify-content: end;
+        `,
+    )}
 
     ${({ $unmounting }) =>
         animateUnmount(

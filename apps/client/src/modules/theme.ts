@@ -33,7 +33,7 @@ export const toggleTheme = () =>
         theme: prev.theme === 'dark' ? 'light' : 'dark',
     }));
 
-export const useDeviceThemeEffect = () => {
+export const useDeviceThemeListener = () => {
     useEffect(() => {
         const handler = (ev: MediaQueryListEvent) =>
             setThemeState({ theme: ev.matches ? 'dark' : 'light' });

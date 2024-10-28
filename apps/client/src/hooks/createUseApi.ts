@@ -95,11 +95,11 @@ const invokeWithRefreshing = async (
     options: ActionOptions,
     payload: unknown,
     refreshActionName: string,
-    refreshAuth: boolean = true,
+    refreshCredentialsIfUnauthorized: boolean = true,
 ) => {
     try {
         const maybeResponse = await invoke(url, actionName, options, payload);
-        if (!refreshAuth) return maybeResponse;
+        if (!refreshCredentialsIfUnauthorized) return maybeResponse;
 
         if (maybeResponse.isLeft() && maybeResponse.value === 'Unauthorized') {
             const maybeRefreshed = await invoke(
@@ -163,7 +163,7 @@ export const createUseApi =
               z.infer<Config[ActionName]['return']!>,
     >(
         actionName: ActionName,
-        refreshAuth: boolean = true,
+        refreshCredentialsIfUnauthorized: boolean = true,
     ) => {
         const options = config[actionName];
 
@@ -188,7 +188,7 @@ export const createUseApi =
                 options,
                 payload,
                 refreshActionName as string,
-                refreshAuth,
+                refreshCredentialsIfUnauthorized,
             );
             if (!isEither(response)) {
                 setFetchState({

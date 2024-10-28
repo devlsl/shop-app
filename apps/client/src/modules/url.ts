@@ -128,7 +128,7 @@ export const navigate = (to: string, replace: boolean = false) =>
         };
     });
 
-export const usePopStateHandlingEffect = () => {
+export const usePopUrlStateListener = () => {
     useEffect(() => {
         const handle = () => {
             const href = window.location.href;

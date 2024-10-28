@@ -7,12 +7,11 @@ import {
 import { useApi } from '../hooks/useApi';
 import { useMountAnim } from '../hooks/useMountAnim';
 import { DialogDemo } from '../uikit/dialog';
-import { Button } from '../uikit/button';
-import { Item, Test } from './test';
 import { setUser, useUser } from '../modules/user';
 import { toggleTheme } from '../modules/theme';
+import { Button } from '../shared/uikit/buttons/button';
 
-const items: Item[] = [
+const items = [
     {
         id: '1',
         name: 'Электроника',
@@ -301,7 +300,6 @@ export const AfterAuthPage = () => {
             <br />
             <Button onClick={toggleTheme}>change theme</Button>
             <Button>sign in</Button>
-            <Test items={items} />
         </div>
     );
 };
