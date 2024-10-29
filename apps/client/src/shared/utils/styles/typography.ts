@@ -11,10 +11,14 @@ export const typography = (
         | 'textDecoration'
         | 'textTransform'
         | 'textAlign'
+        | 'letterSpacing'
+        | 'wordSpacing'
     >,
 ) => {
     const {
+        wordSpacing = 'normal',
         fontSize = '1rem',
+        letterSpacing = 'normal',
         fontStyle = 'normal',
         fontWeight = '500',
         lineHeight = '1.5rem',
@@ -23,8 +27,10 @@ export const typography = (
         textTransform = 'none',
     } = props ?? {};
     return css`
-        font-family: 'Geist', sans-serif;
+        font-family: 'Montserrat', serif;
         font-optical-sizing: auto;
+        letter-spacing: ${letterSpacing};
+        word-spacing: ${wordSpacing};
         font-weight: ${fontWeight};
         font-style: ${fontStyle};
         font-size: ${fontSize};

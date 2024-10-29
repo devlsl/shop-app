@@ -1,6 +1,10 @@
 export const staticStyles = {
     transition: { duration: '200ms' },
-    scrollbar: { width: '8px' },
+    scrollbar: { size: '8px' },
+    loader: {
+        flashingDuration: '800ms',
+        flashingDelay: 400,
+    },
     border: {
         width: {
             m: '2px',

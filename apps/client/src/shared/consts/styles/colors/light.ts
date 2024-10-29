@@ -1,4 +1,4 @@
-import { Colors } from './Colors';
+import { darkColors } from './dark';
 
 const palette = {
     text: '#353535',
@@ -9,7 +9,7 @@ const palette = {
     background: '#ffffff',
 };
 
-export const lightColors: Colors = {
+export const lightColors: typeof darkColors = {
     body: {
         background: palette.background,
     },
@@ -20,6 +20,16 @@ export const lightColors: Colors = {
             hover: {
                 background: palette.hover,
             },
+        },
+    },
+    loader: {
+        onBackground: {
+            start: palette.border,
+            end: palette.active,
+        },
+        onForeground: {
+            start: palette.border,
+            end: palette.background,
         },
     },
     input: {

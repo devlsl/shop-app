@@ -3,7 +3,7 @@ import { createUseApi } from './createUseApi';
 import { setUser } from '../modules/user';
 import { pushNotification } from './useAppState';
 
-export const useApi = createUseApi(
+export const { useApi, apiAction } = createUseApi(
     'http://localhost:3000',
     apiSchema,
     'refreshAuth',

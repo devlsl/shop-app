@@ -20,7 +20,6 @@ const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
             width: 100%;
         `,
     )}
-    width: fit-content;
 
     display: flex;
     justify-content: space-between;
@@ -85,10 +84,11 @@ const NotificationView = ({
 const Animated = styled.div<{ $unmounting: boolean }>`
     display: grid;
 
+    justify-content: end;
     ${breakpoint(
         'showBottomBar',
         css`
-            justify-content: end;
+            justify-content: stretch;
         `,
     )}
 

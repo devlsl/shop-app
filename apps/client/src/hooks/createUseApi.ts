@@ -146,16 +146,15 @@ export type FetchState<Error, Data> =
           data: Data;
       };
 
-export const createUseApi =
-    <Config extends ActionOptionsMap>(
-        url: string,
-        config: Config,
-        refreshActionName: keyof Config,
-        onError: (
-            type: 'unauthorized' | 'requiredUnauthorized' | 'network',
-        ) => void,
-    ) =>
-    <
+export const createUseApi = <Config extends ActionOptionsMap>(
+    url: string,
+    config: Config,
+    refreshActionName: keyof Config,
+    onError: (
+        type: 'unauthorized' | 'requiredUnauthorized' | 'network',
+    ) => void,
+) => {
+    const useApi = <
         ActionName extends keyof Config,
         Data = undefined extends Config[ActionName]['return']
             ? undefined
@@ -248,3 +247,87 @@ export const createUseApi =
             call,
         };
     };
+
+    const apiAction = <
+        ActionName extends keyof Config,
+        Data = undefined extends Config[ActionName]['return']
+            ? undefined
+            : // @ts-expect-error
+              z.infer<Config[ActionName]['return']!>,
+        Return = Promise<
+            FetchState<
+                Config[ActionName]['errors'] extends readonly string[]
+                    ? Config[ActionName]['errors'][number]
+                    : undefined,
+                Data
+            >
+        >,
+    >(
+        actionName: ActionName,
+        refreshCredentialsIfUnauthorized: boolean = true,
+    ) =>
+        (async (payload: unknown) => {
+            const options = config[actionName];
+
+            const response = await invokeWithRefreshing(
+                url,
+                actionName as string,
+                options,
+                payload,
+                refreshActionName as string,
+                refreshCredentialsIfUnauthorized,
+            );
+            if (!isEither(response)) {
+                onError('network');
+                return {
+                    status: 'error',
+                    data: null,
+                    error: 'NotLogicError',
+                };
+            }
+            if (response.isRight()) {
+                return {
+                    status: 'success',
+                    data: response.value as Data,
+                    error: null,
+                };
+            }
+            if (response.value === 'Unauthorized') {
+                onError('unauthorized');
+                return {
+                    status: 'error',
+                    data: null,
+                    error: 'NotLogicError',
+                };
+            }
+            if (response.value === 'RequiredUnauthorized') {
+                onError('requiredUnauthorized');
+                return {
+                    status: 'error',
+                    data: null,
+                    error: 'NotLogicError',
+                };
+            }
+            if (response.value === 'NetworkError') {
+                onError('network');
+                return {
+                    status: 'error',
+                    data: null,
+                    error: 'NotLogicError',
+                };
+            }
+
+            return {
+                status: 'error',
+                data: null,
+                error: response.value,
+            };
+        }) as undefined extends Config[ActionName]['payload']
+            ? () => Return
+            : (
+                  // @ts-expect-error
+                  payload: z.infer<Config[ActionName]['payload']!>,
+              ) => Return;
+
+    return { useApi, apiAction };
+};

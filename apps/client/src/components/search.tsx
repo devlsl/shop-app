@@ -5,7 +5,7 @@ import { typography } from '../shared/utils/styles/typography';
 import { useTyping } from '../shared/hooks/useTyping';
 import { useEffect, useState } from 'react';
 
-const StyledSearch = styled.input`
+const Wrapper = styled.input`
     ${transition('border-color', 'outline-color', 'color')}
     ${typography()}
     display: flex;
@@ -64,5 +64,5 @@ export const Search = () => {
         start();
     }, []);
 
-    return <StyledSearch placeholder={searchPlaceholder} onFocus={stop} />;
+    return <Wrapper placeholder={searchPlaceholder} onFocus={stop} />;
 };

@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { Portal } from '../portal';
-import { Notification, removeNotificationById } from '../../hooks/useAppState';
+import {
+    removeNotificationById,
+    useNotifications,
+} from '../../hooks/useAppState';
 import { NotificationItem } from './item';
 import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 import { css } from 'styled-components';
@@ -15,12 +18,13 @@ const NotificationsWrapper = styled.div`
         'showBottomBar',
         css`
             left: 6px;
-            min-width: max-content;
         `,
     )}
 `;
 
-export const NotificationsView = ({ items }: { items: Notification[] }) => {
+export const NotificationsView = () => {
+    const items = useNotifications();
+
     return (
         <Portal asChild container={document.querySelector('#notifications')}>
             <NotificationsWrapper>
