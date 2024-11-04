@@ -43,7 +43,6 @@ export const GlobalStyles = createGlobalStyle`
     
     ::-webkit-scrollbar-track {
         background-color: transparent; 
-
     }
     
     ::-webkit-scrollbar-thumb {
@@ -52,6 +51,9 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background-color: ${({ theme }) => theme.scroll.thumb.hover.background}; 
+        background-color: ${({ theme }) => theme.scroll.thumb.hover.background};  
+    }
+    ::-webkit-scrollbar-thumb:active {
+        background-color: ${({ theme }) => theme.scroll.thumb.active.background}; 
     }
 `;

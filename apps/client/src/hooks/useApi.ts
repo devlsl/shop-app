@@ -8,10 +8,9 @@ export const { useApi, apiAction } = createUseApi(
     apiSchema,
     'refreshAuth',
     (type) => {
-        if (type === 'network')
-            return pushNotification('error', 'network error');
+        if (type === 'network') return pushNotification('error', 'Ошибка сети');
         if (type === 'requiredUnauthorized')
-            return pushNotification('error', 'need to sign out');
+            return pushNotification('error', 'Выйдите из уч. записи');
         if (type === 'unauthorized') return setUser(null);
     },
 );

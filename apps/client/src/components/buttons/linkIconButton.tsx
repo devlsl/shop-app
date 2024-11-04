@@ -3,26 +3,27 @@ import { transition } from '../../shared/utils/styles/transition';
 import { staticStyles } from '../../shared/consts/styles/static';
 import { hover } from '../../shared/utils/styles/hover';
 
-export const IconButton = styled.button`
-    ${transition('background-color', 'transform', 'outline-color')}
+export const LinkIconButton = styled.button`
+    ${transition('transform', 'outline-color')}
     svg {
         ${transition('color')}
     }
 
     border-radius: ${staticStyles.border.radius};
 
-    background-color: ${({ theme }) => theme.button.secondary.background};
     svg {
         color: ${({ theme }) => theme.button.secondary.text};
     }
     ${hover(css`
-        background-color: ${({ theme }) =>
-            theme.button.secondary.hover.background};
+        svg {
+            color: ${({ theme }) => theme.button.secondary.hover.text};
+        }
     `)}
 
     &:active {
-        background-color: ${({ theme }) =>
-            theme.button.secondary.active.background};
+        svg {
+            color: ${({ theme }) => theme.button.secondary.active.text};
+        }
     }
     flex-shrink: 0;
     display: flex;
@@ -33,12 +34,8 @@ export const IconButton = styled.button`
     aspect-ratio: 1;
 
     svg {
-        stroke-width: 2px;
+        stroke-width: 3px;
         width: 100%;
         height: 100%;
-    }
-
-    &:active {
-        transform: translateY(1px);
     }
 `;

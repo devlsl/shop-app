@@ -129,21 +129,25 @@ export type FetchState<Error, Data> =
           status: 'idle';
           error: null;
           data: null;
+          cash: null;
       }
     | {
           status: 'loading';
           error: null;
           data: null;
+          cash: Data | null;
       }
     | {
           status: 'error';
           error: Error | 'NotLogicError';
           data: null;
+          cash: Data | null;
       }
     | {
           status: 'success';
           error: null;
           data: Data;
+          cash: Data;
       };
 
 export const createUseApi = <Config extends ActionOptionsMap>(
@@ -165,7 +169,6 @@ export const createUseApi = <Config extends ActionOptionsMap>(
         refreshCredentialsIfUnauthorized: boolean = true,
     ) => {
         const options = config[actionName];
-
         const [fetchState, setFetchState] = useState<
             FetchState<
                 Config[ActionName]['errors'] extends readonly string[]
@@ -173,14 +176,15 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     : undefined,
                 Data
             >
-        >({ status: 'idle', data: null, error: null });
+        >({ status: 'idle', data: null, error: null, cash: null });
 
         const call = (async (payload: unknown) => {
-            setFetchState({
+            setFetchState((prev) => ({
                 status: 'loading',
                 data: null,
                 error: null,
-            });
+                cash: prev.cash,
+            }));
             const response = await invokeWithRefreshing(
                 url,
                 actionName as string,
@@ -190,51 +194,57 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                 refreshCredentialsIfUnauthorized,
             );
             if (!isEither(response)) {
-                setFetchState({
+                setFetchState((prev) => ({
                     status: 'error',
                     data: null,
                     error: 'NotLogicError',
-                });
+                    cash: prev.cash,
+                }));
                 return onError('network');
             }
             if (response.isRight()) {
-                return setFetchState({
+                return setFetchState((prev) => ({
                     status: 'success',
                     data: response.value as Data,
                     error: null,
-                });
+                    cash: response.value as Data,
+                }));
             }
             if (response.value === 'Unauthorized') {
-                setFetchState({
+                setFetchState((prev) => ({
                     status: 'error',
                     data: null,
                     error: 'NotLogicError',
-                });
+                    cash: prev.cash,
+                }));
                 return onError('unauthorized');
             }
             if (response.value === 'RequiredUnauthorized') {
-                setFetchState({
+                setFetchState((prev) => ({
                     status: 'error',
                     data: null,
                     error: 'NotLogicError',
-                });
+                    cash: prev.cash,
+                }));
                 return onError('requiredUnauthorized');
             }
             if (response.value === 'NetworkError') {
-                setFetchState({
+                setFetchState((prev) => ({
                     status: 'error',
                     data: null,
                     error: 'NotLogicError',
-                });
+                    cash: prev.cash,
+                }));
                 return onError('network');
             }
 
-            return setFetchState({
+            // @ts-expect-error
+            setFetchState((prev) => ({
                 status: 'error',
                 data: null,
-                // @ts-expect-error
                 error: response.value,
-            });
+                cash: null,
+            }));
         }) as undefined extends Config[ActionName]['payload']
             ? () => Promise<void>
             : (
@@ -265,8 +275,8 @@ export const createUseApi = <Config extends ActionOptionsMap>(
     >(
         actionName: ActionName,
         refreshCredentialsIfUnauthorized: boolean = true,
-    ) =>
-        (async (payload: unknown) => {
+    ) => ({
+        call: (async (payload: unknown) => {
             const options = config[actionName];
 
             const response = await invokeWithRefreshing(
@@ -327,7 +337,8 @@ export const createUseApi = <Config extends ActionOptionsMap>(
             : (
                   // @ts-expect-error
                   payload: z.infer<Config[ActionName]['payload']!>,
-              ) => Return;
+              ) => Return,
+    });
 
     return { useApi, apiAction };
 };

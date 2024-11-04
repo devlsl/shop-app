@@ -55,3 +55,8 @@ export const showSignInView = () =>
     useAppState.setState({
         isShownSignInView: true,
     });
+
+export const hideSignInView = () =>
+    useAppState.setState({
+        isShownSignInView: false,
+    });

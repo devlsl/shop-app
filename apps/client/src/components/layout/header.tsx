@@ -20,6 +20,7 @@ import { setUser, useUser } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
+import { showSignInView } from '../../hooks/useAppState';
 
 const Styled = styled.div`
     ${container()}
@@ -45,7 +46,7 @@ export const Header = () => {
                     >
                         Каталог
                     </TextButton>
-                    {pathname.startsWith('/catalog') && (
+                    {pathname.startsWith('/products' satisfies Page) && (
                         <IconButton>
                             <FilterIcon />
                         </IconButton>
@@ -53,11 +54,12 @@ export const Header = () => {
                 </>
             )}
             <>
-                {pathname.startsWith('/catalog') && isBottomBarShowed && (
-                    <IconButton>
-                        <FilterIcon />
-                    </IconButton>
-                )}
+                {pathname.startsWith('/products' satisfies Page) &&
+                    isBottomBarShowed && (
+                        <IconButton>
+                            <FilterIcon />
+                        </IconButton>
+                    )}
                 <Search />
                 <IconButton>
                     <SearchIcon />
@@ -79,30 +81,16 @@ export const Header = () => {
                     </IconButton>
 
                     {user === null && (
-                        <IconButton
-                            onClick={() =>
-                                apiAction('signInByEmailAndPassword')({
-                                    email: '1',
-                                    password: '1',
-                                }).then(
-                                    (res) =>
-                                        res.status === 'success' &&
-                                        setUser(res.data),
-                                )
-                            }
-                        >
+                        <IconButton onClick={showSignInView}>
                             <UserRoundIcon />
                         </IconButton>
                     )}
                     {user !== null && user !== undefined && (
                         <IconButton
-                            onClick={() =>
-                                apiAction('signOut')().then(
-                                    (res) =>
-                                        res.status === 'success' &&
-                                        setUser(null),
-                                )
-                            }
+                            onClick={() => {
+                                setUser(null);
+                                apiAction('signOut').call();
+                            }}
                         >
                             <LogOutIcon />
                         </IconButton>

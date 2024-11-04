@@ -17,6 +17,7 @@ import { Page } from '../../shared/types/page';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
+import { showSignInView } from '../../hooks/useAppState';
 
 const Styled = styled.div`
     ${container()}
@@ -54,27 +55,16 @@ export const Footer = () => {
             </FooterButton>
 
             {user === null && (
-                <FooterButton
-                    onClick={() =>
-                        apiAction('signInByEmailAndPassword')({
-                            email: '1',
-                            password: '1',
-                        }).then(
-                            (res) =>
-                                res.status === 'success' && setUser(res.data),
-                        )
-                    }
-                >
+                <FooterButton onClick={showSignInView}>
                     <UserRoundIcon />
                 </FooterButton>
             )}
             {user !== null && user !== undefined && (
                 <FooterButton
-                    onClick={() =>
-                        apiAction('signOut')().then(
-                            (res) => res.status === 'success' && setUser(null),
-                        )
-                    }
+                    onClick={() => {
+                        setUser(null);
+                        apiAction('signOut').call();
+                    }}
                 >
                     <LogOutIcon />
                 </FooterButton>

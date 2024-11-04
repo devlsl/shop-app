@@ -6,7 +6,7 @@ import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 import { PageLoader } from '../pageLoader';
 import { Header } from './header';
 import { Footer } from './footer';
-import { Category } from './category';
+import { SignInView } from '../SignInView';
 
 const Styled = styled.div`
     width: 100%;
@@ -32,10 +32,10 @@ export const Layout = () => {
     return (
         <Styled>
             <Header />
-            <Category />
             <Content />
             <Footer />
 
+            <SignInView />
             <NotificationsView />
         </Styled>
     );

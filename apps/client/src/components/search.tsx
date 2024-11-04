@@ -4,6 +4,7 @@ import { transition } from '../shared/utils/styles/transition';
 import { typography } from '../shared/utils/styles/typography';
 import { useTyping } from '../shared/hooks/useTyping';
 import { useEffect, useState } from 'react';
+import { setSearchParam, useSearchParam } from '../modules/url';
 
 const Wrapper = styled.input`
     ${transition('border-color', 'outline-color', 'color')}
@@ -35,11 +36,9 @@ export const Search = () => {
         loop: true,
         phrases: [
             'iphone 16 pro',
-            'холодильник',
-            'кроссовки',
             'механическая клавиатура',
             'планшет Samsung Galaxy',
-            'умные часы ',
+            'умные часы',
             'телевизор LG OLED',
             'беспроводные наушники',
             'игровая приставка PlayStation 5',
@@ -64,5 +63,20 @@ export const Search = () => {
         start();
     }, []);
 
-    return <Wrapper placeholder={searchPlaceholder} onFocus={stop} />;
+    const searchValue = useSearchParam('search');
+
+    return (
+        <Wrapper
+            placeholder={searchPlaceholder}
+            value={searchValue ?? ''}
+            onChange={(e) =>
+                setSearchParam(
+                    'search',
+                    e.target.value === '' ? null : e.target.value,
+                    true,
+                )
+            }
+            onFocus={stop}
+        />
+    );
 };

@@ -100,7 +100,7 @@ export const setHash = (
         };
     });
 
-export const navigate = (to: string, replace: boolean = false) =>
+export const navigate = (to: string, replace: boolean = false) => {
     setUrlState((prev) => {
         const prevHref = window.location.href;
         const prevUrl = new URL(prevHref);
@@ -127,6 +127,8 @@ export const navigate = (to: string, replace: boolean = false) =>
             hash: nextUrl.hash.replace(/#/g, ''),
         };
     });
+    return null;
+};
 
 export const usePopUrlStateListener = () => {
     useEffect(() => {

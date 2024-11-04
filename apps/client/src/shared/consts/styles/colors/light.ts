@@ -1,11 +1,14 @@
 import { darkColors } from './dark';
 
 const palette = {
-    text: '#353535',
-    border: '#f1f1f1',
+    textDark: '#393939',
+    text: '#585858',
+    hoverText: '#2a2a2a',
+    activeText: '#0c0c0c',
     placeholder: '#b3b3b3',
-    hover: '#e5e5e5',
-    active: '#d8d8d8',
+    border: '#f1f1f1',
+    hover: '#e8e8e8',
+    active: '#e5e5e5',
     background: '#ffffff',
 };
 
@@ -14,11 +17,33 @@ export const lightColors: typeof darkColors = {
         background: palette.background,
     },
     focusOutline: '#2f2da8',
+    categoryPath: {
+        text: '#b3b3b3',
+        hover: { text: palette.text },
+        active: { text: '#131313' },
+    },
+    dialog: {
+        overlay: 'rgba(0,0,0,0.24)',
+        paper: palette.background,
+        foreground: {
+            text: palette.text,
+            background: palette.border,
+            hover: { background: palette.hover },
+            active: { background: palette.active },
+        },
+        loader: {
+            start: '#e5e5e5',
+            end: '#c8c8c8',
+        },
+    },
     scroll: {
         thumb: {
             background: palette.border,
             hover: {
                 background: palette.hover,
+            },
+            active: {
+                background: palette.active,
             },
         },
     },
@@ -41,18 +66,42 @@ export const lightColors: typeof darkColors = {
         error: {
             background: '#ffd1d1',
             text: '#e66a6a',
+            hover: {
+                text: '#d75656',
+            },
+            active: {
+                text: '#c64a4a',
+            },
         },
         success: {
             background: '#d4eccb',
             text: '#57c152',
+            hover: {
+                text: '#49b443',
+            },
+            active: {
+                text: '#3fa739',
+            },
         },
         neutral: {
             background: '#e8e8e8',
             text: '#18181b',
+            hover: {
+                text: '#101012',
+            },
+            active: {
+                text: '#040405',
+            },
         },
         info: {
             background: '#ebe9b4',
             text: '#959263',
+            hover: {
+                text: '#7f7c4d',
+            },
+            active: {
+                text: '#656239',
+            },
         },
     },
     button: {
@@ -70,9 +119,11 @@ export const lightColors: typeof darkColors = {
             background: palette.border,
             text: palette.text,
             hover: {
+                text: palette.hoverText,
                 background: palette.hover,
             },
             active: {
+                text: palette.activeText,
                 background: palette.active,
             },
         },

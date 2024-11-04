@@ -1,1 +1,1 @@
-export const pages = ['/categories', '/catalog'] as const;
+export const pages = ['/categories', '/products'] as const;

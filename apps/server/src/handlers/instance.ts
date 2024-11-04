@@ -4,6 +4,10 @@ import refreshAuth from './auth/refreshAuth';
 import signInByEmailAndPassword from './auth/signInByEmailAndPassword';
 import signOut from './auth/signOut';
 import signUpByEmailAndPassword from './auth/signUpByEmailAndPassword';
+import { getCategoriesPageData } from './categories/getCategoriesPageData';
+import { getProductsForProductPage } from './products/getProductsForProductPage';
+import { getFiltersForCategory } from './filters/getFiltersForCategory';
+import { getCategoryPath } from './categories/getCategoryPath';
 
 type Options = {
     jwtSecret: string;
@@ -31,5 +35,9 @@ export const createHandlers = (options: Options): Handlers => {
             accessTokenExpInSec,
             refreshTokenExpInSec,
         }),
+        getCategoriesPageData,
+        getProductsForProductPage,
+        getFiltersForCategory,
+        getCategoryPath,
     };
 };

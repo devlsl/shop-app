@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
+import { cssTimeToMs } from '../shared/utils/helpers/cssTimeToMs';
 
 export const useMountAnim = (
     expected: boolean,
-    duration: number,
+    duration: number | string,
     onUnmount?: () => void,
 ) => {
     const [unmounting, setUnmounting] = useState(false);
     const [mounted, setMounted] = useState(expected);
+
+    const numericDuration =
+        typeof duration === 'string' ? cssTimeToMs(duration) : duration;
 
     const handleExpectedChange = (nextValue: boolean) => {
         if (unmounting) return;
@@ -16,7 +20,7 @@ export const useMountAnim = (
                 setUnmounting(false);
                 setMounted(false);
                 onUnmount && onUnmount();
-            }, duration);
+            }, numericDuration);
         }
         setMounted(nextValue);
     };
@@ -29,7 +33,7 @@ export const useMountAnim = (
         mounted,
         unmounting,
         styles: {
-            animationDuration: `${duration}ms`,
+            animationDuration: `${numericDuration}ms`,
             animationFillMode: 'forwards',
         },
     };

@@ -4,9 +4,11 @@ import styled, { css, keyframes } from 'styled-components';
 import { animateUnmount } from '../../shared/utils/styles/animateUnmount';
 import { Notification } from '../../hooks/useAppState';
 import { transition } from '../../shared/utils/styles/transition';
-import { X } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import { typography } from '../../shared/utils/styles/typography';
 import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
+import { LinkIconButton } from '../buttons/linkIconButton';
+import { hover } from '../../shared/utils/styles/hover';
 
 const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
     background-color: ${({ theme, $variant }) =>
@@ -17,48 +19,111 @@ const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
     ${breakpoint(
         'showBottomBar',
         css`
+            max-width: 100%;
             width: 100%;
+            gap: 6px;
         `,
     )}
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
 
-    gap: 14px;
-    padding: 8px 16px 8px 10px;
+    gap: 2px;
+
+    padding: 0 16px 0 4px;
     margin-top: 6px;
     border-radius: 6px;
-
-    ${typography()}
-
-    ${breakpoint(
-        'showBottomBar',
-        css`
-            font-size: 20px;
-            font-weight: 700;
-        `,
-    )}
 
     ${transition('background-color', 'color')}
 `;
 
-const CloseButton = styled.button`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
+const Text = styled.span`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    ${typography({ fontSize: '1.1rem', fontWeight: '600' })}
+    ${breakpoint(
+        'showBottomBar',
+        css`
+            font-size: 1.3rem;
+            font-weight: 700;
+        `,
+    )}
+`;
 
+const TextWrapper = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid red;
+    /* flex-shrink: 1; */
+    /* height: 30px; */
+`;
+
+const Title = styled.span`
+    display: inline;
+
+    ${typography({
+        fontWeight: 600,
+        fontSize: '0.85rem',
+        lineHeight: '0.85rem',
+    })}
+    max-width: 100%;
+    text-align: center;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow-wrap: break-word;
+    overflow: hidden;
+
+    ${breakpoint(
+        'twoColumnsInContentGrid',
+        css`
+            font-size: 1rem;
+            line-height: 1rem;
+        `,
+    )}
+
+    ${breakpoint(
+        'oneColumnInContentGrid',
+        css`
+            font-size: 1.3rem;
+            line-height: 1.3rem;
+        `,
+    )}
+
+color: ${({ theme }) => theme.button.secondary.text};
+
+    ${transition('color')}
+`;
+
+const CloseButton = styled(LinkIconButton)<{ $variant: Notification['type'] }>`
+    ${breakpoint(
+        'showBottomBar',
+        css`
+            padding: 4px;
+            svg {
+                stroke-width: 4px;
+            }
+        `,
+    )}
     svg {
-        ${breakpoint(
-            'showBottomBar',
-            css`
-                width: 34px;
-            `,
-        )}
+        color: ${({ theme, $variant }) => theme.notification[$variant].text};
+    }
+    ${({ theme, $variant }) =>
+        hover(css`
+            svg {
+                color: ${theme.notification[$variant].hover.text};
+            }
+        `)};
 
-        width: 16px;
-        stroke-width: 4px;
+    &:active {
+        svg {
+            color: ${({ theme, $variant }) =>
+                theme.notification[$variant].active.text};
+        }
     }
 `;
 
@@ -70,13 +135,14 @@ const NotificationView = ({
     return (
         <NotificationWrapper $variant={type}>
             <CloseButton
+                $variant={type}
                 onClick={() => {
                     close();
                 }}
             >
-                <X />
+                <XIcon />
             </CloseButton>
-            {text}
+            <Text>{text}</Text>
         </NotificationWrapper>
     );
 };

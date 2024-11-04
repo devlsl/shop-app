@@ -5,7 +5,14 @@ import { hover } from '../../shared/utils/styles/hover';
 import { typography } from '../../shared/utils/styles/typography';
 
 export const TextButton = styled.button`
-    ${transition('background-color', 'transform', 'color', 'outline-color')}
+    ${transition(
+        'background-color',
+        'transform',
+        'color',
+        'outline-color',
+        'border-color',
+        'opacity',
+    )}
     ${typography({ fontWeight: 600 })}
 
     border-radius: ${staticStyles.border.radius};
@@ -24,6 +31,10 @@ export const TextButton = styled.button`
             theme.button.secondary.active.background};
     }
 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,5 +42,12 @@ export const TextButton = styled.button`
 
     &:active {
         transform: translateY(1px);
+    }
+
+    &:disabled {
+        &:active {
+            transform: none;
+        }
+        cursor: default;
     }
 `;
