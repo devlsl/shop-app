@@ -1,56 +1,59 @@
 import { ActionError } from 'ts-api-generator';
-import { db } from '../../db/instance';
+import { db } from '../../db';
 import { Handlers } from '../types';
 
-export const getCategoriesPageData: Handlers['getCategoriesPageData'] = async ({
-    categoryId,
-}) => {
-    const categories = await db.categories.get();
+type Options = {
+    staticServerHostname: string;
+};
 
-    const category =
-        categoryId === null
-            ? null
-            : categories.find((c) => c.id === categoryId);
+export default (options: Options): Handlers['getCategoriesPageData'] =>
+    async ({ categoryId }) => {
+        const categories = await db.categories.get();
 
-    if (category === undefined) return new ActionError('CategoryNotFound');
+        const category =
+            categoryId === null
+                ? null
+                : categories.find((c) => c.id === categoryId);
 
-    const backCategoryId =
-        category === null ? undefined : category.parentCategoryId;
+        if (category === undefined) return new ActionError('CategoryNotFound');
 
-    const products = await db.products.get();
+        const backCategoryId =
+            category === null ? undefined : category.parentCategoryId;
 
-    const categoriesHaveProductsMap: Record<string, true | undefined> =
-        Object.fromEntries(
-            products.map((product) => [product.categoryId, true]),
+        const products = await db.products.get();
+
+        const categoriesHaveProductsMap: Record<string, true | undefined> =
+            Object.fromEntries(
+                products.map((product) => [product.categoryId, true]),
+            );
+
+        const withNestedCategories = Object.fromEntries(
+            categories.reduce<[string, true | undefined][]>(
+                (prev, cur) =>
+                    cur.parentCategoryId !== null
+                        ? [[cur.parentCategoryId, true], ...prev]
+                        : prev,
+                [],
+            ),
         );
 
-    const withNestedCategories = Object.fromEntries(
-        categories.reduce<[string, true | undefined][]>(
-            (prev, cur) =>
-                cur.parentCategoryId !== null
-                    ? [[cur.parentCategoryId, true], ...prev]
-                    : prev,
-            [],
-        ),
-    );
+        const catalogCategories = categories.filter(
+            (c) => c.parentCategoryId === categoryId,
+        );
 
-    const catalogCategories = categories.filter(
-        (c) => c.parentCategoryId === categoryId,
-    );
-
-    return {
-        id: categoryId,
-        backCategoryId,
-        haveProducts: categoriesHaveProductsMap[categoryId ?? ''] ?? false,
-        items: catalogCategories.map((c) => ({
-            id: c.id,
-            imageUrl: c.imageUrl,
-            name: c.name,
-            haveProducts: categoriesHaveProductsMap[c.id] ?? false,
-            haveNestedCategories: withNestedCategories[c.id] ?? false,
-        })),
+        return {
+            id: categoryId,
+            backCategoryId,
+            haveProducts: categoriesHaveProductsMap[categoryId ?? ''] ?? false,
+            items: catalogCategories.map((c) => ({
+                id: c.id,
+                imageUrl: `${options.staticServerHostname}/${c.imageId}`,
+                name: c.name,
+                haveProducts: categoriesHaveProductsMap[c.id] ?? false,
+                haveNestedCategories: withNestedCategories[c.id] ?? false,
+            })),
+        };
     };
-};
 // (await db.categories.get()).filter(
 //     (c) => c.parentCategoryId === parentId,
 // );

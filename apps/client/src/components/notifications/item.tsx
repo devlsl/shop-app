@@ -9,6 +9,7 @@ import { typography } from '../../shared/utils/styles/typography';
 import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 import { LinkIconButton } from '../buttons/linkIconButton';
 import { hover } from '../../shared/utils/styles/hover';
+import { useBreakpoint } from '../../hooks/useBreakpoints';
 
 const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
     background-color: ${({ theme, $variant }) =>
@@ -22,12 +23,14 @@ const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
             max-width: 100%;
             width: 100%;
             gap: 6px;
+            grid-template-columns: 1fr auto;
+            padding: 0 4px 0 16px;
         `,
     )}
 
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    justify-content: space-between;
     overflow: hidden;
 
     gap: 2px;
@@ -40,8 +43,8 @@ const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
 `;
 
 const Text = styled.span`
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     ${typography({ fontSize: '1.1rem', fontWeight: '600' })}
     ${breakpoint(
@@ -51,15 +54,13 @@ const Text = styled.span`
             font-weight: 700;
         `,
     )}
-`;
+    align-self: end;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: start; */
 
-const TextWrapper = styled.div`
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border: 1px solid red;
-    /* flex-shrink: 1; */
-    /* height: 30px; */
+    height: 1.95rem;
+    /* border: 1px solid red; */
 `;
 
 const Title = styled.span`
@@ -132,8 +133,11 @@ const NotificationView = ({
     text,
     type,
 }: { close: () => void } & Notification) => {
+    const isShownBottomBar = useBreakpoint('showBottomBar');
     return (
         <NotificationWrapper $variant={type}>
+            {isShownBottomBar && <Text>{text}</Text>}
+
             <CloseButton
                 $variant={type}
                 onClick={() => {
@@ -142,7 +146,8 @@ const NotificationView = ({
             >
                 <XIcon />
             </CloseButton>
-            <Text>{text}</Text>
+
+            {!isShownBottomBar && <Text>{text}</Text>}
         </NotificationWrapper>
     );
 };

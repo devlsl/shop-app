@@ -4,7 +4,7 @@ import { setUser } from '../modules/user';
 import { pushNotification } from './useAppState';
 
 export const { useApi, apiAction } = createUseApi(
-    'http://localhost:3000',
+    __APP_ENV__.SERVER_HOSTNAME,
     apiSchema,
     'refreshAuth',
     (type) => {

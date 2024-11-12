@@ -35,7 +35,7 @@ export const NotificationsView = () => {
                         isFirst={i === 0}
                         length={items.length}
                         maxItems={3}
-                        // duration={7000}
+                        duration={7000}
                         onUnmount={() => removeNotificationById(item.id)}
                     />
                 ))}

@@ -12,7 +12,7 @@ import { Page } from '../../shared/types/page';
 import { Card } from './shared/card';
 import { CardsGrid } from './shared/cardsGrid';
 
-const Title = styled.div`
+const TitleLine = styled.div`
     ${typography({
         fontWeight: 600,
         fontSize: '0.85rem',
@@ -104,8 +104,8 @@ export const CategoriesPage = () => {
                     }
                 >
                     <TitleWrapper>
-                        <Title>Товары</Title>
-                        <Title>этой категории</Title>
+                        <TitleLine>Товары</TitleLine>
+                        <TitleLine>этой категории</TitleLine>
                     </TitleWrapper>
                 </Card>
             )}
@@ -127,7 +127,7 @@ export const CategoriesPage = () => {
                             .split('\n')
                             .slice(0, 2)
                             .map((phrase, i) => (
-                                <Title key={i}>{phrase}</Title>
+                                <TitleLine key={i}>{phrase}</TitleLine>
                             ))}
                     </TitleWrapper>
                 </Card>

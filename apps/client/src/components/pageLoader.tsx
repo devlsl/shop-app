@@ -9,7 +9,15 @@ const Stretch = styled.div`
     align-items: center;
 `;
 
-export const PageLoader = () => {
+export const PageLoader = ({
+    gap = '6px',
+    size = '24px',
+    padding = '0',
+}: {
+    gap?: string;
+    size?: string;
+    padding?: string;
+}) => {
     const theme = useTheme();
 
     return (
@@ -17,9 +25,9 @@ export const PageLoader = () => {
             <Loader
                 startColor={theme.loader.onBackground.start}
                 endColor={theme.loader.onBackground.end}
-                gap={'6px'}
-                padding={'0'}
-                size={'24px'}
+                gap={gap}
+                padding={padding}
+                size={size}
             />
         </Stretch>
     );

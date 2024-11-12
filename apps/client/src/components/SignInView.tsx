@@ -14,7 +14,7 @@ import { IconButton } from './buttons/iconButton';
 import { TextButton } from './buttons/textButton';
 import { Dialog } from './dialog';
 import { ButtonLoader } from './buttonLoader';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApi } from '../hooks/useApi';
 import { apiPayloadSchemas } from '../shared/consts/schemas/api';
 import { setUser } from '../modules/user';
@@ -177,7 +177,8 @@ export const SignInView = () => {
             return;
         } else if (signInStatus === 'success') {
             setUser(signInData);
-            pushNotification('success', 'Вы успешно авторищзываываыв авфыв ыв');
+            pushNotification('success', 'Вы успешно авторизовались');
+            hideSignInView();
         } else if (signInStatus === 'error') {
             pushNotification('error', 'Неверные данные');
         }
@@ -188,7 +189,8 @@ export const SignInView = () => {
             return;
         } else if (signUpStatus === 'success') {
             setUser(signUpData);
-            pushNotification('success', 'Вы успешно авторищзываываыв авфыв ыв');
+            pushNotification('success', 'Вы успешно авторизовались');
+            hideSignInView();
         } else if (signUpStatus === 'error') {
             pushNotification('error', 'Неверные данные');
         }

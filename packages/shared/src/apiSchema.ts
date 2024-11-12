@@ -87,32 +87,14 @@ export const apiSchema = {
         payload: z.object({
             categoryId: z.string().nullable().optional(),
             includeNestedCategories: z.boolean().optional(),
-            limit: z.number().nonnegative().optional(),
-            page: z.number().nonnegative().optional(),
+            startIndex: z.number().nonnegative().optional(),
+            limit: z.number().positive().optional(),
             sort: z
                 .object({ key: z.string(), value: z.enum(['asc', 'desc']) })
                 .array()
                 .optional(),
             filters: z
-                .union([
-                    z.object({
-                        type: z.literal('number'),
-                        key: z.string(),
-                        from: z.string(),
-                        to: z.string(),
-                    }),
-                    z.object({
-                        type: z.literal('string'),
-                        key: z.string(),
-                        value: z.string().array(),
-                    }),
-                    z.object({
-                        type: z.literal('boolean'),
-                        key: z.string(),
-                        value: z.boolean(),
-                    }),
-                ])
-                .array()
+                .record(z.string(), z.string().array().optional())
                 .optional(),
         }),
         return: z.object({
@@ -123,9 +105,12 @@ export const apiSchema = {
                     name: z.string(),
                     price: z.string(),
                     categoryId: z.string(),
-                    imageUrl: z.string(),
+                    leftInStock: z.number(),
+                    features: z.record(z.string(), z.string().optional()),
+                    miniatures: z.object({ url: z.string() }).array(),
                 })
                 .array(),
         }),
     },
+    todo: {},
 } as const satisfies ActionOptionsMap;

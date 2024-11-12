@@ -22,7 +22,7 @@ const needShowCategoryPath = (pathname: string) => {
     return null;
 };
 
-const Styled = styled.div`
+const ContentWrapper = styled.div`
     ${container()}
     overflow: auto;
     height: 100%;
@@ -33,13 +33,21 @@ const Styled = styled.div`
     gap: 8px;
 `;
 
+const CategoryPathWrapper = styled.div`
+    ${container()}
+    align-self: center;
+    padding: 0 8px;
+`;
+
 export const Content = () => {
     const pathname = usePathname();
 
     return (
-        <Styled>
-            {needShowCategoryPath(pathname)}
-            {pathnameToComponent(pathname)}
-        </Styled>
+        <>
+            <CategoryPathWrapper>
+                {needShowCategoryPath(pathname)}
+            </CategoryPathWrapper>
+            <ContentWrapper>{pathnameToComponent(pathname)}</ContentWrapper>
+        </>
     );
 };

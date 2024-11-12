@@ -6,7 +6,7 @@ import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 import { PageLoader } from '../pageLoader';
 import { Header } from './header';
 import { Footer } from './footer';
-import { SignInView } from '../SignInView';
+import { SignInView } from '../signInView';
 
 const Styled = styled.div`
     width: 100%;

@@ -150,6 +150,18 @@ export type FetchState<Error, Data> =
           cash: Data;
       };
 
+export type CallReturn<Error, Data> = Either<Error | 'NotLogicError', Data>;
+// | {
+//       status: 'error';
+//       error: ;
+//       data: null;
+//   }
+// | {
+//       status: 'success';
+//       error: null;
+//       data: Data;
+//   };
+
 export const createUseApi = <Config extends ActionOptionsMap>(
     url: string,
     config: Config,
@@ -164,6 +176,14 @@ export const createUseApi = <Config extends ActionOptionsMap>(
             ? undefined
             : // @ts-expect-error
               z.infer<Config[ActionName]['return']!>,
+        Return = Promise<
+            CallReturn<
+                Config[ActionName]['errors'] extends readonly string[]
+                    ? Config[ActionName]['errors'][number]
+                    : undefined,
+                Data
+            >
+        >,
     >(
         actionName: ActionName,
         refreshCredentialsIfUnauthorized: boolean = true,
@@ -200,15 +220,18 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
-                return onError('network');
+
+                onError('network');
+                return left('NotLogicError');
             }
             if (response.isRight()) {
-                return setFetchState((prev) => ({
+                setFetchState({
                     status: 'success',
                     data: response.value as Data,
                     error: null,
                     cash: response.value as Data,
-                }));
+                });
+                return right(response.value);
             }
             if (response.value === 'Unauthorized') {
                 setFetchState((prev) => ({
@@ -217,7 +240,8 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
-                return onError('unauthorized');
+                onError('unauthorized');
+                return left('NotLogicError');
             }
             if (response.value === 'RequiredUnauthorized') {
                 setFetchState((prev) => ({
@@ -226,7 +250,8 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
-                return onError('requiredUnauthorized');
+                onError('requiredUnauthorized');
+                return left('NotLogicError');
             }
             if (response.value === 'NetworkError') {
                 setFetchState((prev) => ({
@@ -235,22 +260,24 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
-                return onError('network');
+                onError('network');
+                return left('NotLogicError');
             }
 
-            // @ts-expect-error
-            setFetchState((prev) => ({
+            setFetchState({
                 status: 'error',
                 data: null,
+                // @ts-expect-error
                 error: response.value,
                 cash: null,
-            }));
+            });
+            return left(response.value);
         }) as undefined extends Config[ActionName]['payload']
-            ? () => Promise<void>
+            ? () => Return
             : (
                   // @ts-expect-error
                   payload: z.infer<Config[ActionName]['payload']!>,
-              ) => Promise<void>;
+              ) => Return;
 
         return {
             ...fetchState,
@@ -265,7 +292,7 @@ export const createUseApi = <Config extends ActionOptionsMap>(
             : // @ts-expect-error
               z.infer<Config[ActionName]['return']!>,
         Return = Promise<
-            FetchState<
+            CallReturn<
                 Config[ActionName]['errors'] extends readonly string[]
                     ? Config[ActionName]['errors'][number]
                     : undefined,
@@ -289,49 +316,23 @@ export const createUseApi = <Config extends ActionOptionsMap>(
             );
             if (!isEither(response)) {
                 onError('network');
-                return {
-                    status: 'error',
-                    data: null,
-                    error: 'NotLogicError',
-                };
+                return left('NotLogicError');
             }
-            if (response.isRight()) {
-                return {
-                    status: 'success',
-                    data: response.value as Data,
-                    error: null,
-                };
-            }
+            if (response.isRight()) return right(response.value);
             if (response.value === 'Unauthorized') {
                 onError('unauthorized');
-                return {
-                    status: 'error',
-                    data: null,
-                    error: 'NotLogicError',
-                };
+                return left('NotLogicError');
             }
             if (response.value === 'RequiredUnauthorized') {
                 onError('requiredUnauthorized');
-                return {
-                    status: 'error',
-                    data: null,
-                    error: 'NotLogicError',
-                };
+                return left('NotLogicError');
             }
             if (response.value === 'NetworkError') {
                 onError('network');
-                return {
-                    status: 'error',
-                    data: null,
-                    error: 'NotLogicError',
-                };
+                return left('NotLogicError');
             }
 
-            return {
-                status: 'error',
-                data: null,
-                error: response.value,
-            };
+            return left(response.value);
         }) as undefined extends Config[ActionName]['payload']
             ? () => Return
             : (

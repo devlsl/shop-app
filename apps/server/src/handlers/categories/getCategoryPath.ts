@@ -1,5 +1,5 @@
 import { ActionError } from 'ts-api-generator';
-import { db } from '../../db/instance';
+import { db } from '../../db';
 import { Category } from '../../db/types';
 import { Handlers } from '../types';
 
