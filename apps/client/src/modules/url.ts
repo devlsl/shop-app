@@ -22,6 +22,8 @@ export const getUrlState = useUrlState.getState;
 export const usePathname = () => useUrlState((state) => state.pathname);
 export const useHash = () => useUrlState((state) => state.hash);
 export const useSearchParams = () => useUrlState((state) => state.searchParams);
+// export const useUrl = () =>
+//     useUrlState(() => window.location.pathname + window.location.search);
 export const useSearchParam = (key: string) =>
     useUrlState((state) => state.searchParams[key]);
 
@@ -53,6 +55,8 @@ export const setSearchParams = (
             searchParams: Object.fromEntries(url.searchParams.entries()),
         };
     });
+
+
 
 export const setSearchParam = (
     key: string,

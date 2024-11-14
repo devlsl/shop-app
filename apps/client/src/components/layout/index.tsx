@@ -7,6 +7,8 @@ import { PageLoader } from '../pageLoader';
 import { Header } from './header';
 import { Footer } from './footer';
 import { SignInView } from '../signInView';
+import { ProductPreview } from '../productPreview';
+import { OutOfStockDialog } from '../outOfStockDialog';
 
 const Styled = styled.div`
     width: 100%;
@@ -35,6 +37,8 @@ export const Layout = () => {
             <Content />
             <Footer />
 
+            <OutOfStockDialog />
+            <ProductPreview />
             <SignInView />
             <NotificationsView />
         </Styled>

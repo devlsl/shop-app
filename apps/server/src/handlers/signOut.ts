@@ -1,7 +1,7 @@
-import { Handlers } from '../types';
-import { deleteSession } from '../../db/methods';
-import { getCookie } from '../../utils/getCookie';
-import { setCookie } from '../../utils/setCookie';
+import { Handlers } from './types';
+import { getCookie } from '../utils/getCookie';
+import { setCookie } from '../utils/setCookie';
+import { deleteSession } from '../shared/deleteSession';
 
 const signOut: Handlers['signOut'] = async (context, request, response) => {
     const refreshToken = getCookie(request, 'refreshToken');

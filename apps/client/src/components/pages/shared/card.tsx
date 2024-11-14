@@ -3,20 +3,21 @@ import { transition } from '../../../shared/utils/styles/transition';
 import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
 import { css } from 'styled-components';
 import { hover } from '../../../shared/utils/styles/hover';
+import { Link, LinkProps } from '../../link';
 
-const CardWrapper = styled.button<{ $aspectRatio: string }>`
+export const CardWrapper = styled(Link)`
     border-radius: 8px;
     background-color: ${({ theme }) => theme.button.secondary.background};
-
     ${transition('background-color', 'color', 'transform')}
-    width: 100%;
-    aspect-ratio: ${({ $aspectRatio }) => $aspectRatio};
+
     display: flex;
     gap: 16px;
-    padding: 18px;
+    padding: 16px;
     align-items: center;
     flex-direction: column;
     overflow: hidden;
+    /* border: 1px solid red; */
+    aspect-ratio: 1;
 
     ${breakpoint(
         'twoColumnsInContentGrid',
@@ -29,8 +30,8 @@ const CardWrapper = styled.button<{ $aspectRatio: string }>`
     ${breakpoint(
         'oneColumnInContentGrid',
         css`
-            padding: 36px;
-            gap: 30px;
+            padding: 24px;
+            gap: 20px;
         `,
     )}
 
@@ -67,23 +68,24 @@ const Image = styled.div<{ $imageUrl: string }>`
 `;
 
 export const Card = (
-    props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-        children?: React.ReactNode;
-        imageUrlOrSlot?: React.ReactNode;
-        aspectRatio?: string;
-    },
+    props: LinkProps<
+        React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+            children?: React.ReactNode;
+            imageUrlOrSlot?: React.ReactNode;
+            aspectRatio?: string;
+        }
+    >,
 ) => {
-    const {
-        children,
-        imageUrlOrSlot,
-        aspectRatio = '1',
-        ...otherProps
-    } = props;
+    const { children, imageUrlOrSlot, aspectRatio, ...otherProps } = props;
     return (
-        <CardWrapper $aspectRatio={aspectRatio} {...otherProps}>
+        <CardWrapper {...otherProps}>
             <ImageWrapper>
                 {typeof imageUrlOrSlot === 'string' ? (
-                    <Image $imageUrl={imageUrlOrSlot} />
+                    aspectRatio === undefined ? (
+                        <img src={imageUrlOrSlot} />
+                    ) : (
+                        <Image $imageUrl={imageUrlOrSlot} />
+                    )
                 ) : (
                     imageUrlOrSlot
                 )}

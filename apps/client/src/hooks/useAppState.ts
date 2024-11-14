@@ -9,11 +9,15 @@ export type Notification = {
 type AppState = {
     notifications: Notification[];
     isShownSignInView: boolean;
+    shownProductPreview: null | string;
+    isShownOutOfStockDialog: boolean;
 };
 
 const useAppState = create<AppState>(() => ({
     notifications: [],
     isShownSignInView: false,
+    shownProductPreview: null,
+    isShownOutOfStockDialog: false,
 }));
 
 export const useIsShownSignInView = () =>
@@ -46,11 +50,6 @@ export const removeNotificationById = (id: string) =>
         notifications: prev.notifications.filter((item) => item.id !== id),
     }));
 
-export const setIsShownSignInView = (value: boolean) =>
-    useAppState.setState({
-        isShownSignInView: value,
-    });
-
 export const showSignInView = () =>
     useAppState.setState({
         isShownSignInView: true,
@@ -59,4 +58,30 @@ export const showSignInView = () =>
 export const hideSignInView = () =>
     useAppState.setState({
         isShownSignInView: false,
+    });
+
+export const useShownProductPreview = () =>
+    useAppState((state) => state.shownProductPreview);
+
+export const showProductPreview = (productId: string) =>
+    useAppState.setState({
+        shownProductPreview: productId,
+    });
+
+export const hideProductPreview = () =>
+    useAppState.setState({
+        shownProductPreview: null,
+    });
+
+export const useIsShownOutOfStockDialog = () =>
+    useAppState((state) => state.isShownOutOfStockDialog);
+
+export const showOutOfStockDialog = () =>
+    useAppState.setState({
+        isShownOutOfStockDialog: true,
+    });
+
+export const hideOutOfStockDialog = () =>
+    useAppState.setState({
+        isShownOutOfStockDialog: false,
     });

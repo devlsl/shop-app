@@ -1,6 +1,4 @@
-import { Products } from '../../db/types';
-import { generateId } from '../../utils/generateId';
-import { Handlers } from '../types';
+import { Handlers } from './types';
 
 export const todo: Handlers['todo'] = async () => {
     // const products: Products = [

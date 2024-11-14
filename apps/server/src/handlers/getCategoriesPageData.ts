@@ -1,6 +1,6 @@
 import { ActionError } from 'ts-api-generator';
-import { db } from '../../db';
-import { Handlers } from '../types';
+import { db } from '../db';
+import { Handlers } from './types';
 
 type Options = {
     staticServerHostname: string;

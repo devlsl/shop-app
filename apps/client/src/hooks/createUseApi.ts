@@ -12,9 +12,13 @@ const parseResponse = (
 > => {
     if (json.error !== undefined && typeof json.error === 'string') {
         if (json.error === 'Unauthorized') {
+            console.log('a');
+
             return left('Unauthorized');
         }
         if (json.error === 'RequiredUnauthorized') {
+            console.log('b');
+
             return left('RequiredUnauthorized');
         }
     }
@@ -32,6 +36,7 @@ const parseResponse = (
         .object({ success: z.boolean() })
         .safeParse(json);
     if (!maybeReplyWithStatus.success) {
+        console.log('c');
         return left('NetworkError');
     }
     if (maybeReplyWithStatus.data.success === false) {
@@ -40,19 +45,26 @@ const parseResponse = (
             typeof json.error === 'string' &&
             serviceErrors.includes(json.error)
         ) {
+            console.log('d');
             return left('NetworkError');
         }
 
         if (options.errors instanceof Array && options.errors.length > 0) {
             if (json.error === undefined || typeof json.error !== 'string') {
+                console.log('e');
                 return left('NetworkError');
             }
             if (options.errors.includes(json.error)) {
+                console.log('f');
+
                 return left(json.error);
             } else {
+                console.log('g');
+
                 return left('NetworkError');
             }
         } else {
+            console.log('h');
             return left(undefined);
         }
     }
@@ -60,10 +72,13 @@ const parseResponse = (
         return right(undefined);
     } else {
         if (json.data === undefined) {
+            console.log('i');
+
             return left('NetworkError');
         }
         const maybeData = options.return.safeParse(json.data);
         if (!maybeData.success) {
+            console.log('j', maybeData.error);
             return left('NetworkError');
         }
         return right(maybeData.data);
@@ -82,6 +97,7 @@ const invoke = async (
         ...(payload ? { body: JSON.stringify(payload) } : {}),
     });
     if (!response.ok) {
+        console.log('1.1.1');
         return left('NetworkError');
     }
     const json = await response.json();
@@ -120,6 +136,7 @@ const invokeWithRefreshing = async (
         }
         return maybeResponse;
     } catch (error) {
+        console.log(error);
         return left('NetworkError');
     }
 };
@@ -151,16 +168,6 @@ export type FetchState<Error, Data> =
       };
 
 export type CallReturn<Error, Data> = Either<Error | 'NotLogicError', Data>;
-// | {
-//       status: 'error';
-//       error: ;
-//       data: null;
-//   }
-// | {
-//       status: 'success';
-//       error: null;
-//       data: Data;
-//   };
 
 export const createUseApi = <Config extends ActionOptionsMap>(
     url: string,
@@ -220,7 +227,7 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
-
+                console.log(1);
                 onError('network');
                 return left('NotLogicError');
             }
@@ -240,6 +247,7 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
+                console.log(2);
                 onError('unauthorized');
                 return left('NotLogicError');
             }
@@ -250,6 +258,8 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
+                console.log(3);
+
                 onError('requiredUnauthorized');
                 return left('NotLogicError');
             }
@@ -260,6 +270,7 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                     error: 'NotLogicError',
                     cash: prev.cash,
                 }));
+                console.log(4.421);
                 onError('network');
                 return left('NotLogicError');
             }
@@ -315,19 +326,27 @@ export const createUseApi = <Config extends ActionOptionsMap>(
                 refreshCredentialsIfUnauthorized,
             );
             if (!isEither(response)) {
+                console.log(5);
+
                 onError('network');
                 return left('NotLogicError');
             }
             if (response.isRight()) return right(response.value);
             if (response.value === 'Unauthorized') {
+                console.log(6);
+
                 onError('unauthorized');
                 return left('NotLogicError');
             }
             if (response.value === 'RequiredUnauthorized') {
+                console.log(7);
+
                 onError('requiredUnauthorized');
                 return left('NotLogicError');
             }
             if (response.value === 'NetworkError') {
+                console.log(8);
+
                 onError('network');
                 return left('NotLogicError');
             }

@@ -32,13 +32,14 @@ export const TextButton = styled.button`
     }
 
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    word-break: break-all;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 14px;
+    height: 100%;
+
+    /* align-items: center; */
+
+    padding: 0 14px;
 
     &:active {
         transform: translateY(1px);

@@ -28,7 +28,7 @@ export const IconButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
+    height: 100%;
     padding: 8px;
     aspect-ratio: 1;
 

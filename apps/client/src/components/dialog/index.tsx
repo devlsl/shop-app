@@ -1,9 +1,9 @@
 import styled, { css, keyframes } from 'styled-components';
-import { Portal } from './portal';
+import { Portal } from '../portal';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { useMountAnim } from '../hooks/useMountAnim';
-import { staticStyles } from '../shared/consts/styles/static';
-import { transition } from '../shared/utils/styles/transition';
+import { useMountAnim } from '../../hooks/useMountAnim';
+import { staticStyles } from '../../shared/consts/styles/static';
+import { transition } from '../../shared/utils/styles/transition';
 
 const Overlay = styled(RadixDialog.Overlay).attrs({ forceMount: true })<{
     $animationDuration: string;
@@ -52,6 +52,7 @@ const Paper = styled(RadixDialog.Content).attrs({ forceMount: true })<{
     $animationDuration: string;
     $animationFillMode: string;
     $unmounting: boolean;
+    $maxWidth?: string;
 }>`
     ${transition('background', 'color', 'border-color')}
     background-color: ${({ theme }) => theme.dialog.paper};
@@ -59,6 +60,13 @@ const Paper = styled(RadixDialog.Content).attrs({ forceMount: true })<{
     padding: ${staticStyles.paddings.square};
     overflow: auto;
     max-height: 100%;
+
+    ${({ $maxWidth }) =>
+        $maxWidth &&
+        css`
+            width: 100%;
+            max-width: ${$maxWidth};
+        `}
 
     &::-webkit-scrollbar-thumb {
         background-color: ${({ theme }) => theme.dialog.foreground.background};
@@ -106,17 +114,18 @@ const Paper = styled(RadixDialog.Content).attrs({ forceMount: true })<{
 
 export const Dialog = ({
     isOpen,
-    setIsOpen,
+    onClose,
     contentSlot,
     title,
     description,
+    maxWidth,
 }: {
     isOpen: boolean;
-    setIsOpen: (value: boolean) => void;
-    closeSlot: React.ReactNode;
+    onClose: () => void;
     contentSlot: React.ReactNode;
     title: string;
     description: string;
+    maxWidth?: string;
 }) => {
     const {
         mounted,
@@ -127,7 +136,7 @@ export const Dialog = ({
 
     return (
         <Portal asChild container={document.querySelector('#dialogs')}>
-            <RadixDialog.Root open={mounted} onOpenChange={setIsOpen}>
+            <RadixDialog.Root open={mounted} onOpenChange={onClose}>
                 {mounted ? (
                     <>
                         <RadixDialog.DialogTitle>
@@ -149,6 +158,7 @@ export const Dialog = ({
                                     animStyles.animationFillMode
                                 }
                                 $unmounting={unmounting}
+                                $maxWidth={maxWidth}
                             >
                                 {contentSlot}
                             </Paper>

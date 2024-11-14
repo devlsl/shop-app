@@ -1,7 +1,7 @@
 import { ActionError } from 'ts-api-generator';
-import { db } from '../../db';
-import { Category } from '../../db/types';
-import { Handlers } from '../types';
+import { db } from '../db';
+import { Handlers } from './types';
+import { Category } from '../db/schemas';
 
 export const getCategoryPath: Handlers['getCategoryPath'] = async ({
     categoryId,

@@ -20,7 +20,7 @@ import { setUser, useUser } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
-import { showSignInView } from '../../hooks/useAppState';
+import { pushNotification, showSignInView } from '../../hooks/useAppState';
 
 const Styled = styled.div`
     ${container()}
@@ -89,7 +89,16 @@ export const Header = () => {
                         <IconButton
                             onClick={() => {
                                 setUser(null);
-                                apiAction('signOut').call();
+                                apiAction('signOut')
+                                    .call()
+                                    .then(
+                                        (res) =>
+                                            res.isRight() &&
+                                            pushNotification(
+                                                'info',
+                                                'Вы вышли из аккаунта',
+                                            ),
+                                    );
                             }}
                         >
                             <LogOutIcon />

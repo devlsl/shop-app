@@ -1,13 +1,11 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Handlers } from '../types';
+import { Handlers } from './types';
 import { ActionError, AuthContext } from 'ts-api-generator';
-import { setCookie } from '../../utils/setCookie';
-import {
-    createSession,
-    createUserByEmailAndPassword,
-    getUserByEmail,
-} from '../../db/methods';
+import { setCookie } from '../utils/setCookie';
+import { getUserByEmail } from '../shared/getUserByEmail';
+import { createUserByEmailAndPassword } from '../shared/createUserByEmailAndPassword';
+import { createSession } from '../shared/createSession';
 
 type Options = {
     secret: string;

@@ -1,4 +1,4 @@
-import { ActionOptionsMap, createDefaultHttpClient } from 'ts-api-generator';
+import { ActionOptionsMap } from 'ts-api-generator';
 import { z } from 'zod';
 
 const emailSchema = z.string().email();
@@ -74,7 +74,7 @@ export const apiSchema = {
         errors: ['CategoryNotFound'],
     },
     getCategoryPath: {
-        payload: z.object({ categoryId: z.string().nullable() }),
+        payload: z.object({ categoryId: z.string().uuid().nullable() }),
         return: z
             .object({
                 id: z.string(),
@@ -83,9 +83,35 @@ export const apiSchema = {
             .array(),
         errors: ['CategoryNotFound'],
     },
+    getProductPreviewForUser: {
+        roles: true,
+        payload: z.object({ productId: z.string().uuid() }),
+        return: z
+            .object({
+                id: z.string(),
+                name: z.string(),
+                price: z.string(),
+                leftInStock: z.number(),
+                media: z.object({ url: z.string() }).array(),
+                isLiked: z.boolean(),
+            })
+            .optional(),
+    },
+    getProductPreview: {
+        payload: z.object({ productId: z.string().uuid() }),
+        return: z
+            .object({
+                id: z.string(),
+                name: z.string(),
+                price: z.string(),
+                leftInStock: z.number(),
+                media: z.object({ url: z.string() }).array(),
+            })
+            .optional(),
+    },
     getProductsForProductPage: {
         payload: z.object({
-            categoryId: z.string().nullable().optional(),
+            categoryId: z.string().uuid().nullable().optional(),
             includeNestedCategories: z.boolean().optional(),
             startIndex: z.number().nonnegative().optional(),
             limit: z.number().positive().optional(),
@@ -104,13 +130,49 @@ export const apiSchema = {
                     id: z.string(),
                     name: z.string(),
                     price: z.string(),
-                    categoryId: z.string(),
                     leftInStock: z.number(),
-                    features: z.record(z.string(), z.string().optional()),
                     miniatures: z.object({ url: z.string() }).array(),
+                    isLiked: z.boolean(),
                 })
                 .array(),
         }),
+    },
+    getProductsForProductPageForUser: {
+        roles: true,
+        payload: z.object({
+            categoryId: z.string().uuid().nullable().optional(),
+            includeNestedCategories: z.boolean().optional(),
+            startIndex: z.number().nonnegative().optional(),
+            limit: z.number().positive().optional(),
+            sort: z
+                .object({ key: z.string(), value: z.enum(['asc', 'desc']) })
+                .array()
+                .optional(),
+            filters: z
+                .record(z.string(), z.string().array().optional())
+                .optional(),
+        }),
+        return: z.object({
+            totalProductsCount: z.number(),
+            items: z
+                .object({
+                    id: z.string(),
+                    name: z.string(),
+                    price: z.string(),
+                    leftInStock: z.number(),
+                    miniatures: z.object({ url: z.string() }).array(),
+                    isLiked: z.boolean(),
+                })
+                .array(),
+        }),
+    },
+    addProductToCart: {
+        roles: true,
+        payload: z.object({
+            productId: z.string().uuid(),
+            count: z.number().positive(),
+        }),
+        errors: ['OutOfStock'],
     },
     todo: {},
 } as const satisfies ActionOptionsMap;

@@ -17,7 +17,7 @@ const writeJson = async (filepath: string, data: unknown) => {
 const readJson = async <T extends z.ZodTypeAny>(
     filepath: string,
     schema: T,
-    defaultFalue: z.infer<T>,
+    defaultValue: z.infer<T>,
 ): Promise<z.infer<T>> => {
     try {
         const data = await readFile(filepath, 'utf-8');
@@ -25,7 +25,7 @@ const readJson = async <T extends z.ZodTypeAny>(
         return schema.parse(json) as z.infer<T>;
     } catch {
         await writeJson(filepath, '');
-        return defaultFalue;
+        return defaultValue;
     }
 };
 

@@ -1,9 +1,11 @@
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Handlers } from '../types';
+import { Handlers } from './types';
 import { ActionError, AuthContext } from 'ts-api-generator';
-import { setCookie } from '../../utils/setCookie';
-import { createSession, getUserByEmail } from '../../db/methods';
+import { setCookie } from '../utils/setCookie';
+import { getCookie } from '../utils/getCookie';
+import { getSession } from '../shared/getSession';
+import { getUserById } from '../shared/getUserById';
+import { createSession } from '../shared/createSession';
 
 type Options = {
     secret: string;
@@ -11,24 +13,24 @@ type Options = {
     refreshTokenExpInSec: number;
 };
 
-export default (options: Options): Handlers['signInByEmailAndPassword'] =>
-    async (payload, _, response) => {
+export default (options: Options): Handlers['refreshAuth'] =>
+    async (request, response) => {
         const refreshTokenExpDate = new Date(
             Date.now() + options.refreshTokenExpInSec * 1000,
         );
-        const maybeUser = await getUserByEmail(payload.email);
-        if (maybeUser.isLeft()) return new ActionError('BadAuthData');
+        const refreshToken = getCookie(request, 'refreshToken');
+        if (!refreshToken) return new ActionError('Unauthorized');
+        const maybeSession = await getSession(refreshToken);
+        if (maybeSession.isLeft()) return new ActionError('Unauthorized');
+        const session = maybeSession.value;
+        const maybeUser = await getUserById(session.userId);
+        if (maybeUser.isLeft()) return new ActionError('Unauthorized');
         const user = maybeUser.value;
-        const isPasswordRight = await bcrypt.compare(
-            payload.password,
-            user.passwordHash,
-        );
-        if (!isPasswordRight) return new ActionError('BadAuthData');
         const maybeNewSession = await createSession(
             user.id,
             refreshTokenExpDate.toISOString(),
         );
-        if (maybeNewSession.isLeft()) return new ActionError('BadAuthData');
+        if (maybeNewSession.isLeft()) return new ActionError('Unauthorized');
         const newSession = maybeNewSession.value;
         const authContext: AuthContext = { id: user.id, role: user.role };
         const accessToken = jwt.sign(authContext, options.secret, {
@@ -36,14 +38,12 @@ export default (options: Options): Handlers['signInByEmailAndPassword'] =>
         });
         setCookie(response, 'accessToken', accessToken, {
             maxAge: options.accessTokenExpInSec,
-            httpOnly: true,
             path: '/',
             sameSite: 'None',
             secure: true,
         });
         setCookie(response, 'refreshToken', newSession.id, {
             maxAge: options.refreshTokenExpInSec,
-            httpOnly: true,
             path: '/',
             sameSite: 'None',
             secure: true,

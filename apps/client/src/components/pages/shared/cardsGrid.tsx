@@ -5,6 +5,7 @@ import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
 export const CardsGrid = styled.div`
     ${container()}
     display: grid;
+
     gap: 8px;
     grid-template-columns: repeat(4, 1fr);
     ${breakpoint(

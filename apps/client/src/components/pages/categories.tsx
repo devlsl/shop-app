@@ -84,24 +84,16 @@ export const CategoriesPage = () => {
         <CardsGrid>
             {cash.backCategoryId !== undefined ? (
                 <Card
+                    to={['/categories', { categoryId: cash.backCategoryId }]}
+                    aspectRatio='1'
                     imageUrlOrSlot={<ChevronLeftIcon width='50%' />}
-                    onClick={() =>
-                        setSearchParam(
-                            'categoryId',
-                            cash.backCategoryId ?? null,
-                        )
-                    }
                 />
             ) : null}
             {cash.haveProducts && (
                 <Card
+                    aspectRatio='1'
                     imageUrlOrSlot={<TextSearchIcon width='50%' />}
-                    onClick={() =>
-                        navigate(
-                            ('/products' satisfies Page) +
-                                `?categoryId=${cash.id}`,
-                        )
-                    }
+                    to={['/products', { categoryId: cash.id }]}
                 >
                     <TitleWrapper>
                         <TitleLine>Товары</TitleLine>
@@ -111,15 +103,13 @@ export const CategoriesPage = () => {
             )}
             {cash.items.map((item) => (
                 <Card
+                    aspectRatio='1'
                     imageUrlOrSlot={item.imageUrl}
                     key={item.id}
-                    onClick={() =>
+                    to={
                         item.haveNestedCategories
-                            ? setSearchParam('categoryId', item.id)
-                            : navigate(
-                                  ('/products' satisfies Page) +
-                                      `?categoryId=${item.id}`,
-                              )
+                            ? ['/categories', { categoryId: item.id }]
+                            : ['/products', { categoryId: item.id }]
                     }
                 >
                     <TitleWrapper>

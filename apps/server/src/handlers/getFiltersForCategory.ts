@@ -1,4 +1,4 @@
-import { Handlers } from '../types';
+import { Handlers } from './types';
 
 export const getFiltersForCategory: Handlers['getFiltersForCategory'] = async (
     payload,

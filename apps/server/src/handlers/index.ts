@@ -1,14 +1,18 @@
 import { Handlers } from './types';
-import checkAuth from './auth/checkAuth';
-import refreshAuth from './auth/refreshAuth';
-import signInByEmailAndPassword from './auth/signInByEmailAndPassword';
-import signOut from './auth/signOut';
-import signUpByEmailAndPassword from './auth/signUpByEmailAndPassword';
-import getCategoriesPageData from './categories/getCategoriesPageData';
-import getProductsForProductPage from './products/getProductsForProductPage';
-import { getFiltersForCategory } from './filters/getFiltersForCategory';
-import { getCategoryPath } from './categories/getCategoryPath';
-import { todo } from './common/todo';
+import checkAuth from './checkAuth';
+import refreshAuth from './refreshAuth';
+import signInByEmailAndPassword from './signInByEmailAndPassword';
+import signOut from './signOut';
+import signUpByEmailAndPassword from './signUpByEmailAndPassword';
+import getCategoriesPageData from './getCategoriesPageData';
+import getProductsForProductPage from './getProductsForProductPage';
+import { getFiltersForCategory } from './getFiltersForCategory';
+import { getCategoryPath } from './getCategoryPath';
+import { todo } from './todo';
+import getProductsForProductPageForUser from './getProductsForProductPageForUser';
+import getProductPreview from './getProductPreview';
+import getProductPreviewForUser from './getProductPreviewForUser';
+import { addProductToCart } from './addProductToCart';
 
 type Options = {
     jwtSecret: string;
@@ -48,8 +52,18 @@ export const createHandlers = (options: Options): Handlers => {
         getProductsForProductPage: getProductsForProductPage({
             staticServerHostname,
         }),
+        getProductsForProductPageForUser: getProductsForProductPageForUser({
+            staticServerHostname,
+        }),
+        getProductPreview: getProductPreview({
+            staticServerHostname,
+        }),
+        getProductPreviewForUser: getProductPreviewForUser({
+            staticServerHostname,
+        }),
         getFiltersForCategory,
         getCategoryPath,
+        addProductToCart,
         todo,
     };
 };

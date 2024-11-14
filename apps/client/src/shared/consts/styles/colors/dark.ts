@@ -11,6 +11,19 @@ const palette = {
 };
 
 export const darkColors = {
+    new: {
+        '0': '#f4f4f4',
+        '1': '#d7d7d7',
+        '2': '#d6d6d6',
+        '3': '#bababa',
+        '4': '#a4a4a4',
+        '5': '#707070',
+        '6': '#4c4c4c',
+        '7': '#494949',
+        '8': '#414141',
+        '9': '#2b2b2b',
+        '250': '#4543c4',
+    },
     body: {
         background: palette.background,
     },

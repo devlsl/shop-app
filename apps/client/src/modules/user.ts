@@ -16,3 +16,6 @@ export const setUser = (user: AuthContext | null | undefined) =>
 export const getUser = () => useUserState.getState().user;
 
 export const useUser = () => useUserState((state) => state.user);
+
+export const useIsAuthorized = () =>
+    useUserState((state) => state.user !== null && state.user !== undefined);

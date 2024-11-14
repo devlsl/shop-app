@@ -5,11 +5,7 @@
     "type": "commonjs",
     "scripts": {
         "build:w": "tsc -w",
-        "dev": "node --env-file ../../.env --watch ./dist/main.js",
-        "build": "npm run clear && tsc",
-        "start": "node --env-file ../../.env ./dist/main.js",
-        "format": "prettier --write .",
-        "clear": "rm -rf dist/*"
+        "dev": "node --env-file ../../.env --watch ./dist/main.js"
     },
     "keywords": [],
     "author": "",

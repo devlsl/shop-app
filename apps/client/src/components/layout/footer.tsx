@@ -17,7 +17,7 @@ import { Page } from '../../shared/types/page';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
-import { showSignInView } from '../../hooks/useAppState';
+import { pushNotification, showSignInView } from '../../hooks/useAppState';
 
 const Styled = styled.div`
     ${container()}
@@ -63,7 +63,16 @@ export const Footer = () => {
                 <FooterButton
                     onClick={() => {
                         setUser(null);
-                        apiAction('signOut').call();
+                        apiAction('signOut')
+                            .call()
+                            .then(
+                                (res) =>
+                                    res.isRight() &&
+                                    pushNotification(
+                                        'info',
+                                        'Вы вышли из аккаунта',
+                                    ),
+                            );
                     }}
                 >
                     <LogOutIcon />

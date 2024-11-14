@@ -12,11 +12,7 @@
         }
     },
     "scripts": {
-        "build": "npm run clear && npm run build:cjs && npm run build:esm && npm run build:types",
-        "build:types": "tsc -p ./tsconfig.types.json",
-        "build:esm": "tsc -p ./tsconfig.esm.json",
-        "build:cjs": "tsc -p ./tsconfig.cjs.json",
-        "clear": "rm -rf dist/*"
+        "build": "rm -rf dist/* && tsc -p ./tsconfig.cjs.json && tsc -p ./tsconfig.esm.json && tsc -p ./tsconfig.types.json"
     },
     "devDependencies": {
         "typescript": "^5.6.2"

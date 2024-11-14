@@ -5,8 +5,9 @@ import { hover } from '../../../shared/utils/styles/hover';
 import { transition } from '../../../shared/utils/styles/transition';
 import { navigate, useSearchParam } from '../../../modules/url';
 import { useApi } from '../../../hooks/useApi';
-import React, { useEffect } from 'react';
+import React, { forwardRef, HtmlHTMLAttributes, useEffect } from 'react';
 import { Page } from '../../../shared/types/page';
+import { Link } from '../../link';
 
 const Styled = styled.div`
     ${container()}
@@ -29,7 +30,7 @@ const Wrapper = styled.div`
     color: ${({ theme }) => theme.input.placeholder};
 `;
 
-const CategoryPathItem = styled.button`
+const CategoryPathItem = styled(Link)<{ $disabled: boolean }>`
     color: ${({ theme }) => theme.categoryPath.text};
 
     ${hover(css`
@@ -39,10 +40,13 @@ const CategoryPathItem = styled.button`
     &:active {
         color: ${({ theme }) => theme.categoryPath.active.text};
     }
-    &:disabled {
-        color: ${({ theme }) => theme.categoryPath.active.text};
-        cursor: default;
-    }
+    ${({ $disabled }) =>
+        $disabled &&
+        css`
+            color: ${({ theme }) => theme.categoryPath.active.text};
+            cursor: default;
+        `}
+
     ${typography({
         fontSize: '0.8rem',
         lineHeight: '1.2rem',
@@ -77,8 +81,8 @@ export const CategoryPath = () => {
         <Styled>
             <Wrapper>
                 <CategoryPathItem
-                    disabled={categoryId === null}
-                    onClick={() => navigate('/categories')}
+                    $disabled={categoryId === null}
+                    to={'/categories'}
                 >
                     Категории
                 </CategoryPathItem>
@@ -87,13 +91,8 @@ export const CategoryPath = () => {
                         <React.Fragment key={item.id}>
                             <CategoryPathDivider>{'/'}</CategoryPathDivider>
                             <CategoryPathItem
-                                disabled={categoryId === item.id}
-                                onClick={() =>
-                                    navigate(
-                                        ('/categories' satisfies Page) +
-                                            `?categoryId=${item.id}`,
-                                    )
-                                }
+                                $disabled={categoryId === item.id}
+                                to={['/categories', { categoryId: item.id }]}
                             >
                                 {item.name}
                             </CategoryPathItem>
