@@ -1,17 +1,18 @@
 import styled, { css } from 'styled-components';
-import { useApi } from '../../hooks/useApi';
+import { useApi } from '../../../hooks/useApi';
 import {
     hideProductPreview,
     useShownProductPreview,
-} from '../../hooks/useAppState';
-import { hover } from '../../shared/utils/styles/hover';
-import { transition } from '../../shared/utils/styles/transition';
-import { Dialog } from '../popups/shared';
-import { DialogOutlineButton } from '../popups/shared/outlineButton';
-import { DialogContentWrapper } from '../popups/shared/wrapper';
-import { PageLoader } from '../pageLoader';
-import { Link } from '../link';
+} from '../../../hooks/useAppState';
+import { hover } from '../../../shared/utils/styles/hover';
+import { transition } from '../../../shared/utils/styles/transition';
+import { Dialog } from '../shared';
+import { DialogOutlineButton } from '../shared/outlineButton';
+import { DialogContentWrapper } from '../shared/wrapper';
+import { PageLoader } from '../../pageLoader';
+import { Link } from '../../link';
 import { useEffect } from 'react';
+import { ButtonText } from '../../buttonText';
 
 const ProductImage = styled(Link)<{ $url: string }>`
     border-radius: 8px;
@@ -64,7 +65,7 @@ export const NotAuthorizedProductPreview = () => {
                                 to={['/product', { productId: shownProduct }]}
                             />
                             <DialogOutlineButton onClick={hideProductPreview}>
-                                Отменить
+                                <ButtonText $size='l'>Отменить</ButtonText>
                             </DialogOutlineButton>
                         </>
                     ) : (

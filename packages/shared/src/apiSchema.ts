@@ -51,26 +51,26 @@ export const apiSchema = {
         errors: ['CategoryNotFound'],
     },
     getFiltersForCategory: {
-        payload: z.object({ categoryId: z.string() }),
-        return: z
-            .union([
-                z.object({
-                    type: z.literal('number'),
-                    key: z.string(),
-                    from: z.number(),
-                    to: z.number(),
-                }),
-                z.object({
-                    type: z.literal('string'),
-                    key: z.string(),
-                    values: z.string().array(),
-                }),
-                z.object({
-                    type: z.literal('boolean'),
-                    key: z.string(),
-                }),
-            ])
-            .array(),
+        payload: z.object({ categoryId: z.string().uuid().nullable() }),
+        return: z.record(z.string(), z.string().array().optional()),
+        // [
+        //     z.object({
+        //         type: z.literal('number'),
+        //         key: z.string(),
+        //         from: z.number(),
+        //         to: z.number(),
+        //     }),
+        //     z.object({
+        //         type: z.literal('string'),
+        //         key: z.string(),
+        //         values: z.string().array(),
+        //     }),
+        //     z.object({
+        //         type: z.literal('boolean'),
+        //         key: z.string(),
+        //     }),
+        // ])
+        // .array(),
         errors: ['CategoryNotFound'],
     },
     getCategoryPath: {
@@ -115,9 +115,9 @@ export const apiSchema = {
             includeNestedCategories: z.boolean().optional(),
             startIndex: z.number().nonnegative().optional(),
             limit: z.number().positive().optional(),
+            search: z.string().optional(),
             sort: z
-                .object({ key: z.string(), value: z.enum(['asc', 'desc']) })
-                .array()
+                .record(z.string(), z.enum(['asc', 'desc']).optional())
                 .optional(),
             filters: z
                 .record(z.string(), z.string().array().optional())
@@ -144,9 +144,9 @@ export const apiSchema = {
             includeNestedCategories: z.boolean().optional(),
             startIndex: z.number().nonnegative().optional(),
             limit: z.number().positive().optional(),
+            search: z.string().optional(),
             sort: z
-                .object({ key: z.string(), value: z.enum(['asc', 'desc']) })
-                .array()
+                .record(z.string(), z.enum(['asc', 'desc']).optional())
                 .optional(),
             filters: z
                 .record(z.string(), z.string().array().optional())
@@ -174,5 +174,16 @@ export const apiSchema = {
         }),
         errors: ['OutOfStock'],
     },
-    todo: {},
+    addProductToFavorites: {
+        roles: true,
+        payload: z.object({
+            productId: z.string().uuid(),
+        }),
+    },
+    deleteProductFromFavorites: {
+        roles: true,
+        payload: z.object({
+            productId: z.string().uuid(),
+        }),
+    },
 } as const satisfies ActionOptionsMap;

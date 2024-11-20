@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { transition } from '../../shared/utils/styles/transition';
-import { typography } from '../../shared/utils/styles/typography';
-import { staticStyles } from '../../shared/consts/styles/static';
+import { transition } from '../../../shared/utils/styles/transition';
+import { typography } from '../../../shared/utils/styles/typography';
+import { staticStyles } from '../../../shared/consts/styles/static';
 
 export const DialogInput = styled.input`
     ${transition('border-color', 'outline-color', 'color')}

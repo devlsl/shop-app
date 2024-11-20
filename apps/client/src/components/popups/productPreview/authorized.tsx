@@ -1,17 +1,19 @@
 import styled, { css } from 'styled-components';
-import { useApi } from '../../hooks/useApi';
+import { useApi } from '../../../hooks/useApi';
 import {
     hideProductPreview,
     useShownProductPreview,
-} from '../../hooks/useAppState';
-import { hover } from '../../shared/utils/styles/hover';
-import { transition } from '../../shared/utils/styles/transition';
-import { Dialog } from '../popups/shared';
-import { DialogOutlineButton } from '../popups/shared/outlineButton';
-import { DialogContentWrapper } from '../popups/shared/wrapper';
-import { PageLoader } from '../pageLoader';
-import { Link } from '../link';
+} from '../../../hooks/useAppState';
+import { hover } from '../../../shared/utils/styles/hover';
+import { transition } from '../../../shared/utils/styles/transition';
+
+import { PageLoader } from '../../pageLoader';
+import { Link } from '../../link';
 import { useEffect } from 'react';
+import { DialogContentWrapper } from '../shared/wrapper';
+import { DialogOutlineButton } from '../shared/outlineButton';
+import { Dialog } from '../shared';
+import { ButtonText } from '../../buttonText';
 
 const ProductImage = styled(Link)<{ $url: string }>`
     border-radius: 8px;
@@ -21,26 +23,26 @@ const ProductImage = styled(Link)<{ $url: string }>`
     cursor: pointer;
     aspect-ratio: 4/5;
     background-image: url(${({ $url }) => $url});
-    background-color: ${({ theme }) => theme.button.secondary.background};
+    background-color: ${({ theme }) => theme.dialog.foreground.background};
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
 
     ${hover(css`
         background-color: ${({ theme }) =>
-            theme.button.secondary.hover.background};
+            theme.dialog.foreground.hover.background};
     `)}
 
     &:active {
         background-color: ${({ theme }) =>
-            theme.button.secondary.active.background};
+            theme.dialog.foreground.active.background};
         transform: translateY(1px);
     }
 `;
 
-export const NotAuthorizedProductPreview = () => {
+export const AuthorizedProductPreview = () => {
     const shownProduct = useShownProductPreview();
-    const { call, status, cash } = useApi('getProductPreview');
+    const { call, status, cash } = useApi('getProductPreviewForUser');
 
     useEffect(() => {
         if (shownProduct === null) return;
@@ -59,12 +61,12 @@ export const NotAuthorizedProductPreview = () => {
                     {status === 'success' && cash !== undefined ? (
                         <>
                             <ProductImage
-                                onWillRedirect={hideProductPreview}
                                 $url={cash.media[0]?.url ?? ''}
+                                onWillRedirect={hideProductPreview}
                                 to={['/product', { productId: shownProduct }]}
                             />
                             <DialogOutlineButton onClick={hideProductPreview}>
-                                Отменить
+                                <ButtonText $size='l'>Отменить</ButtonText>
                             </DialogOutlineButton>
                         </>
                     ) : (

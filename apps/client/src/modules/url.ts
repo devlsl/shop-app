@@ -19,6 +19,9 @@ const setUrlState = useUrlState.setState;
 
 export const getUrlState = useUrlState.getState;
 
+export const getSearchParam = (key: string) =>
+    useUrlState.getState().searchParams[key];
+
 export const usePathname = () => useUrlState((state) => state.pathname);
 export const useHash = () => useUrlState((state) => state.hash);
 export const useSearchParams = () => useUrlState((state) => state.searchParams);
@@ -55,8 +58,6 @@ export const setSearchParams = (
             searchParams: Object.fromEntries(url.searchParams.entries()),
         };
     });
-
-
 
 export const setSearchParam = (
     key: string,

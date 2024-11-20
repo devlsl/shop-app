@@ -1,29 +1,39 @@
-import { db } from '../db';
-import { Handlers } from './types';
+import { DbService, Handlers } from '../types';
 
 type Options = {
     staticServerHostname: string;
 };
 
-export default (options: Options): Handlers['getProductPreviewForUser'] =>
+type Dependencies = {
+    db: DbService;
+};
+
+export default (
+        { staticServerHostname }: Options,
+        { db }: Dependencies,
+    ): Handlers['getProductPreviewForUser'] =>
     async (context, payload) => {
-        const product = (await db.products.get()).find(
+        const product = (await db.product.get()).find(
             (p) => p.id === payload.productId,
         );
 
         if (product === undefined) return undefined;
 
-        const isLiked = (
-            (await db.favoritesItems.get()).find((f) => f.userId === context.id)
-                ?.productIds ?? []
-        ).includes(product.id);
+        const isLiked =
+            (await db.favoriteItem.get()).find(
+                (i) =>
+                    i.userId === context.id &&
+                    i.productId === payload.productId,
+            ) === undefined
+                ? false
+                : true;
 
         return {
             id: product.id,
             media: product.media
                 .filter((m) => m.type === 'image')
                 .map((m) => ({
-                    url: `${options.staticServerHostname}/${m.sizes.main}`,
+                    url: `${staticServerHostname}/${m.sizes.main}`,
                 })),
             leftInStock: product.leftInStock,
             name: product.name,

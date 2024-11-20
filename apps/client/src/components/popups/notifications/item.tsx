@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { useMountAnim } from '../../hooks/useMountAnim';
+import { useMountAnim } from '../../../hooks/useMountAnim';
 import styled, { css, keyframes } from 'styled-components';
-import { animateUnmount } from '../../shared/utils/styles/animateUnmount';
-import { Notification } from '../../hooks/useAppState';
-import { transition } from '../../shared/utils/styles/transition';
+import { animateUnmount } from '../../../shared/utils/styles/animateUnmount';
+import { Notification } from '../../../hooks/useAppState';
+import { transition } from '../../../shared/utils/styles/transition';
 import { XIcon } from 'lucide-react';
-import { typography } from '../../shared/utils/styles/typography';
-import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
-import { LinkIconButton } from '../buttons/linkIconButton';
-import { hover } from '../../shared/utils/styles/hover';
-import { useBreakpoint } from '../../hooks/useBreakpoints';
+import { typography } from '../../../shared/utils/styles/typography';
+import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
+import { LinkIconButton } from '../../buttons/linkIconButton';
+import { hover } from '../../../shared/utils/styles/hover';
+import { useBreakpoint } from '../../../hooks/useBreakpoints';
 
 const NotificationWrapper = styled.div<{ $variant: Notification['type'] }>`
     background-color: ${({ theme, $variant }) =>

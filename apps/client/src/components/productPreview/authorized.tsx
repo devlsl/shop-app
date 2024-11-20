@@ -6,12 +6,13 @@ import {
 } from '../../hooks/useAppState';
 import { hover } from '../../shared/utils/styles/hover';
 import { transition } from '../../shared/utils/styles/transition';
-import { Dialog } from '../dialog';
-import { DialogOutlineButton } from '../dialog/outlineButton';
-import { DialogContentWrapper } from '../dialog/wrapper';
+import { Dialog } from '../popups/shared';
+import { DialogOutlineButton } from '../popups/shared/outlineButton';
+import { DialogContentWrapper } from '../popups/shared/wrapper';
 import { PageLoader } from '../pageLoader';
 import { Link } from '../link';
 import { useEffect } from 'react';
+import { ButtonText } from '../buttonText';
 
 const ProductImage = styled(Link)<{ $url: string }>`
     border-radius: 8px;
@@ -64,7 +65,7 @@ export const AuthorizedProductPreview = () => {
                                 to={['/product', { productId: shownProduct }]}
                             />
                             <DialogOutlineButton onClick={hideProductPreview}>
-                                Отменить
+                                <ButtonText $size='l'>Отменить</ButtonText>
                             </DialogOutlineButton>
                         </>
                     ) : (

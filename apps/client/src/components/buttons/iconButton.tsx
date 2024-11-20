@@ -4,6 +4,8 @@ import { staticStyles } from '../../shared/consts/styles/static';
 import { hover } from '../../shared/utils/styles/hover';
 
 export const IconButton = styled.button`
+    overflow: hidden;
+    position: relative;
     ${transition('background-color', 'transform', 'outline-color')}
     svg {
         ${transition('color')}

@@ -29,23 +29,34 @@ const readJson = async <T extends z.ZodTypeAny>(
     }
 };
 
-export const createDb = <Config extends Record<string, z.ZodTypeAny>>(
-    dirname: string,
-    config: Config,
-) =>
-    Object.fromEntries(
-        Object.entries(config).map(([name, schema]) => [
-            name,
-            {
-                get: async () =>
-                    readJson(path.join(dirname, `${name}.json`), schema, []),
-                set: async (data: z.infer<typeof schema>) =>
-                    writeJson(path.join(dirname, `${name}.json`), data),
-            },
-        ]),
-    ) as {
-        [Key in keyof Config]: {
-            get: () => Promise<z.infer<Config[Key]>>;
-            set: (value: z.infer<Config[Key]>) => Promise<void>;
-        };
+type DbSchema = Record<string, z.ZodTypeAny>;
+
+export type DbServiceTypeGenerate<T extends DbSchema> = {
+    [Key in keyof T]: {
+        get: () => Promise<z.infer<T[Key]>[]>;
+        set: (value: z.infer<T[Key]>[]) => Promise<void>;
     };
+};
+
+export type DbEntitiesTypeGenerate<T extends DbSchema> = {
+    [Key in keyof T]: z.infer<T[Key]>;
+};
+
+export const createDb = <T extends DbSchema>(dirname: string, schema: T) =>
+    Object.fromEntries(
+        Object.entries(schema).map(([name, entitySchema]) => {
+            return [
+                name,
+                {
+                    get: async () =>
+                        readJson(
+                            path.join(dirname, `${name}.json`),
+                            entitySchema.array(),
+                            [],
+                        ),
+                    set: async (data: z.infer<typeof entitySchema>[]) =>
+                        writeJson(path.join(dirname, `${name}.json`), data),
+                },
+            ];
+        }),
+    ) as DbServiceTypeGenerate<T>;

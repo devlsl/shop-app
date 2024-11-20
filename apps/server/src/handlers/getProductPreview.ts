@@ -1,13 +1,19 @@
-import { db } from '../db';
-import { Handlers } from './types';
+import { DbService, Handlers } from '../types';
 
 type Options = {
     staticServerHostname: string;
 };
 
-export default (options: Options): Handlers['getProductPreview'] =>
+type Dependencies = {
+    db: DbService;
+};
+
+export default (
+        { staticServerHostname }: Options,
+        { db }: Dependencies,
+    ): Handlers['getProductPreview'] =>
     async (payload) => {
-        const product = (await db.products.get()).find(
+        const product = (await db.product.get()).find(
             (p) => p.id === payload.productId,
         );
 
@@ -18,7 +24,7 @@ export default (options: Options): Handlers['getProductPreview'] =>
             media: product.media
                 .filter((m) => m.type === 'image')
                 .map((m) => ({
-                    url: `${options.staticServerHostname}/${m.sizes.main}`,
+                    url: `${staticServerHostname}/${m.sizes.main}`,
                 })),
             leftInStock: product.leftInStock,
             name: product.name,

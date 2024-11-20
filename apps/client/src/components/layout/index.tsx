@@ -1,4 +1,3 @@
-import { NotificationsView } from '../notifications/list';
 import styled, { css } from 'styled-components';
 import { useUser } from '../../modules/user';
 import { Content } from './content';
@@ -6,11 +5,9 @@ import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 import { PageLoader } from '../pageLoader';
 import { Header } from './header';
 import { Footer } from './footer';
-import { SignInView } from '../signInView';
-import { ProductPreview } from '../productPreview';
-import { OutOfStockDialog } from '../outOfStockDialog';
+import { Popups } from '../popups';
 
-const Styled = styled.div`
+const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
@@ -32,15 +29,12 @@ export const Layout = () => {
     if (user === undefined) return <PageLoader />;
 
     return (
-        <Styled>
+        <Wrapper>
             <Header />
             <Content />
             <Footer />
 
-            <OutOfStockDialog />
-            <ProductPreview />
-            <SignInView />
-            <NotificationsView />
-        </Styled>
+            <Popups />
+        </Wrapper>
     );
 };

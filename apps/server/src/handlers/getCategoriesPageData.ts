@@ -1,14 +1,20 @@
 import { ActionError } from 'ts-api-generator';
-import { db } from '../db';
-import { Handlers } from './types';
+import { DbService, Handlers } from '../types';
 
 type Options = {
     staticServerHostname: string;
 };
 
-export default (options: Options): Handlers['getCategoriesPageData'] =>
+type Dependencies = {
+    db: DbService;
+};
+
+export default (
+        { staticServerHostname }: Options,
+        { db }: Dependencies,
+    ): Handlers['getCategoriesPageData'] =>
     async ({ categoryId }) => {
-        const categories = await db.categories.get();
+        const categories = await db.category.get();
 
         const category =
             categoryId === null
@@ -20,7 +26,7 @@ export default (options: Options): Handlers['getCategoriesPageData'] =>
         const backCategoryId =
             category === null ? undefined : category.parentCategoryId;
 
-        const products = await db.products.get();
+        const products = await db.product.get();
 
         const categoriesHaveProductsMap: Record<string, true | undefined> =
             Object.fromEntries(
@@ -47,7 +53,7 @@ export default (options: Options): Handlers['getCategoriesPageData'] =>
             haveProducts: categoriesHaveProductsMap[categoryId ?? ''] ?? false,
             items: catalogCategories.map((c) => ({
                 id: c.id,
-                imageUrl: `${options.staticServerHostname}/${c.imageId}`,
+                imageUrl: `${staticServerHostname}/${c.imageId}`,
                 name: c.name,
                 haveProducts: categoriesHaveProductsMap[c.id] ?? false,
                 haveNestedCategories: withNestedCategories[c.id] ?? false,

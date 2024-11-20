@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import {
     hideOutOfStockDialog,
     useIsShownOutOfStockDialog,
-} from '../hooks/useAppState';
-import { typography } from '../shared/utils/styles/typography';
-import { Dialog } from './dialog';
-import { DialogOutlineButton } from './dialog/outlineButton';
-import { DialogContentWrapper } from './dialog/wrapper';
+} from '../../hooks/useAppState';
+import { typography } from '../../shared/utils/styles/typography';
+import { Dialog } from './shared';
+import { DialogOutlineButton } from './shared/outlineButton';
+import { DialogContentWrapper } from './shared/wrapper';
+import { ButtonText } from '../buttonText';
 
 const Center = styled.div`
     width: 100%;
@@ -25,9 +26,9 @@ export const OutOfStockDialog = () => {
         <Dialog
             contentSlot={
                 <DialogContentWrapper>
-                    <Center>Такой категории нет &#x1F622;</Center>
+                    <Center>Такой категории нет 😢</Center>
                     <DialogOutlineButton onClick={hideOutOfStockDialog}>
-                        Закрыть
+                        <ButtonText $size='l'>Закрыть</ButtonText>
                     </DialogOutlineButton>
                 </DialogContentWrapper>
             }

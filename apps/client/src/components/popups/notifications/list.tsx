@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { Portal } from '../portal';
+import { Portal } from '../../portal';
 import {
     removeNotificationById,
     useNotifications,
-} from '../../hooks/useAppState';
+} from '../../../hooks/useAppState';
 import { NotificationItem } from './item';
-import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
+import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
 import { css } from 'styled-components';
 
 const NotificationsWrapper = styled.div`

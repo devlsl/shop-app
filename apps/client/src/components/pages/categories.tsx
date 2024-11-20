@@ -11,6 +11,7 @@ import { PageLoader } from '../pageLoader';
 import { Page } from '../../shared/types/page';
 import { Card } from './shared/card';
 import { CardsGrid } from './shared/cardsGrid';
+import { useSearchInputValue } from '../search';
 
 const TitleLine = styled.div`
     ${typography({
@@ -68,6 +69,8 @@ const TitleWrapper = styled.div`
 export const CategoriesPage = () => {
     const categoryId = useSearchParam('categoryId') ?? null;
 
+    const searchQuery = useSearchParam('search');
+
     const { call, cash, status } = useApi('getCategoriesPageData');
 
     useEffect(() => {
@@ -77,8 +80,15 @@ export const CategoriesPage = () => {
 
     if (cash === null) return <PageLoader />;
 
-    if (status === 'error')
-        return <Center>Такой категории нет &#x1F622;</Center>;
+    if (status === 'error') return <Center>Такой категории нет 😢</Center>;
+
+    let items = cash.items;
+
+    if (searchQuery) {
+        items = items.filter((i) =>
+            i.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+    }
 
     return (
         <CardsGrid>
@@ -101,7 +111,7 @@ export const CategoriesPage = () => {
                     </TitleWrapper>
                 </Card>
             )}
-            {cash.items.map((item) => (
+            {items.map((item) => (
                 <Card
                     aspectRatio='1'
                     imageUrlOrSlot={item.imageUrl}

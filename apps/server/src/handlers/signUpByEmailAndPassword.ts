@@ -1,11 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Handlers } from './types';
+import { DbEntities, DbService, Handlers } from '../types';
 import { ActionError, AuthContext } from 'ts-api-generator';
 import { setCookie } from '../utils/setCookie';
-import { getUserByEmail } from '../shared/getUserByEmail';
-import { createUserByEmailAndPassword } from '../shared/createUserByEmailAndPassword';
-import { createSession } from '../shared/createSession';
+import { generateId } from '../utils/generateId';
 
 type Options = {
     secret: string;
@@ -13,29 +11,39 @@ type Options = {
     refreshTokenExpInSec: number;
 };
 
-export default (options: Options): Handlers['signUpByEmailAndPassword'] =>
+type Dependencies = {
+    db: DbService;
+};
+
+export default (
+        options: Options,
+        { db }: Dependencies,
+    ): Handlers['signUpByEmailAndPassword'] =>
     async (payload, _, response) => {
+        const dbUsers = await db.user.get();
         const refreshTokenExpDate = new Date(
             Date.now() + options.refreshTokenExpInSec * 1000,
         );
-        const maybeUser = await getUserByEmail(payload.email);
-        if (maybeUser.isRight()) return new ActionError('BadAuthData');
+        const alreadyExistUser = dbUsers.find((u) => u.email === payload.email);
+        if (alreadyExistUser !== undefined)
+            return new ActionError('BadAuthData');
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(payload.password, salt);
-        const maybeNewUser = await createUserByEmailAndPassword(
-            payload.email,
-            salt,
-            passwordHash,
-            'user',
-        );
-        if (maybeNewUser.isLeft()) return new ActionError('BadAuthData');
-        const newUser = maybeNewUser.value;
-        const maybeNewSession = await createSession(
-            newUser.id,
-            refreshTokenExpDate.toISOString(),
-        );
-        if (maybeNewSession.isLeft()) return new ActionError('BadAuthData');
-        const newSession = maybeNewSession.value;
+
+        const newUser = {
+            id: generateId(),
+            email: payload.email,
+            passwordHash: passwordHash,
+            passwordHashSalt: salt,
+            role: 'user',
+        } satisfies DbEntities['user'];
+        await db.user.set(dbUsers.concat(newUser));
+        const newSession = {
+            id: generateId(),
+            userId: newUser.id,
+            expirationDate: refreshTokenExpDate.toISOString(),
+        } satisfies DbEntities['session'];
+        await db.session.set((await db.session.get()).concat(newSession));
         const authContext: AuthContext = { id: newUser.id, role: newUser.role };
         const accessToken = jwt.sign(authContext, options.secret, {
             expiresIn: options.accessTokenExpInSec,

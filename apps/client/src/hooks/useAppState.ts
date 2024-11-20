@@ -11,6 +11,7 @@ type AppState = {
     isShownSignInView: boolean;
     shownProductPreview: null | string;
     isShownOutOfStockDialog: boolean;
+    areShownProductFilters: boolean;
 };
 
 const useAppState = create<AppState>(() => ({
@@ -18,6 +19,7 @@ const useAppState = create<AppState>(() => ({
     isShownSignInView: false,
     shownProductPreview: null,
     isShownOutOfStockDialog: false,
+    areShownProductFilters: false,
 }));
 
 export const useIsShownSignInView = () =>
@@ -85,3 +87,12 @@ export const hideOutOfStockDialog = () =>
     useAppState.setState({
         isShownOutOfStockDialog: false,
     });
+
+export const useAreShownProductFilters = () =>
+    useAppState((state) => state.areShownProductFilters);
+
+export const toggleAreShownProductFilters = () =>
+    useAppState.setState((prev) => ({
+        ...prev,
+        areShownProductFilters: !prev.areShownProductFilters,
+    }));

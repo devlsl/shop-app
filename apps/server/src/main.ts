@@ -1,8 +1,11 @@
 import { createServer } from 'http';
 import { createVerifyAccess } from './utils/verifyAccess';
 import { apiSchema } from '@shop/shared';
-import { createHandlers } from './handlers';
 import { bindActions } from 'ts-api-generator';
+import path from 'path';
+import { createDb } from './utils/createDb';
+import { dbSchema } from './dbSchema';
+import { createHandlers } from './utils/createHandlers';
 
 const jwtSecret = 'secret';
 const accessTokenExpInSec = 60 * 15;
@@ -16,15 +19,22 @@ const verifyAccess = createVerifyAccess({
     accessTokenExpInSec,
 });
 
-const handlers = createHandlers({
-    jwtSecret,
-    accessTokenExpInSec,
-    refreshTokenExpInSec,
-    staticServerHostname,
-});
+export const db = createDb(path.join(path.resolve(), 'db'), dbSchema);
 
 const requestHandler = bindActions(apiSchema)
-    .bindHandlers(handlers)
+    .bindHandlers(
+        createHandlers(
+            {
+                accessTokenExpInSec,
+                jwtSecret,
+                refreshTokenExpInSec,
+                staticServerHostname,
+            },
+            {
+                db,
+            },
+        ),
+    )
     .createDefaultHttpRequestHandler(verifyAccess, clientHostname);
 
 const server = createServer(requestHandler);

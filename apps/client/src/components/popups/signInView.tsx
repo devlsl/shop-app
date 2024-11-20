@@ -2,17 +2,18 @@ import {
     useIsShownSignInView,
     hideSignInView,
     pushNotification,
-} from '../hooks/useAppState';
-import { Dialog } from './dialog';
+} from '../../hooks/useAppState';
+import { Dialog } from './shared';
 import { useEffect, useState } from 'react';
-import { useApi } from '../hooks/useApi';
-import { apiPayloadSchemas } from '../shared/consts/schemas/api';
-import { setUser } from '../modules/user';
-import { DialogContentWrapper } from './dialog/wrapper';
-import { DialogInput } from './dialog/input';
-import { DialogRow } from './dialog/row';
-import { DialogSecondaryButton } from './dialog/secondaryButton';
-import { DialogOutlineButton } from './dialog/outlineButton';
+import { useApi } from '../../hooks/useApi';
+import { apiPayloadSchemas } from '../../shared/consts/schemas/api';
+import { setUser } from '../../modules/user';
+import { DialogContentWrapper } from './shared/wrapper';
+import { DialogInput } from './shared/input';
+import { DialogRow } from './shared/row';
+import { DialogSecondaryButton } from './shared/secondaryButton';
+import { DialogOutlineButton } from './shared/outlineButton';
+import { ButtonText } from '../buttonText';
 
 export const SignInView = () => {
     const isShownSignInView = useIsShownSignInView();
@@ -92,18 +93,20 @@ export const SignInView = () => {
                             disabled={disabled}
                             onClick={handleSignInButtonClick}
                         >
-                            Войти
+                            <ButtonText $size='l'>Войти</ButtonText>
                         </DialogSecondaryButton>
                         <DialogSecondaryButton
                             loading={loading}
                             disabled={disabled}
                             onClick={handleSignUpButtonClick}
                         >
-                            Зарегистрироваться
+                            <ButtonText $size='l'>
+                                Зарегистрироваться
+                            </ButtonText>
                         </DialogSecondaryButton>
                     </DialogRow>
                     <DialogOutlineButton onClick={hideSignInView}>
-                        Отменить
+                        <ButtonText $size='l'>Отменить</ButtonText>
                     </DialogOutlineButton>
                 </DialogContentWrapper>
             }

@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Handlers } from './types';
+import { DbEntities, DbService, Handlers } from '../types';
 import { ActionError, AuthContext } from 'ts-api-generator';
 import { setCookie } from '../utils/setCookie';
-import { getUserByEmail } from '../shared/getUserByEmail';
-import { createSession } from '../shared/createSession';
+import { generateId } from '../utils/generateId';
 
 type Options = {
     secret: string;
@@ -12,25 +11,32 @@ type Options = {
     refreshTokenExpInSec: number;
 };
 
-export default (options: Options): Handlers['signInByEmailAndPassword'] =>
+type Dependencies = {
+    db: DbService;
+};
+
+export default (
+        options: Options,
+        { db }: Dependencies,
+    ): Handlers['signInByEmailAndPassword'] =>
     async (payload, _, response) => {
+        const dbUsers = await db.user.get();
         const refreshTokenExpDate = new Date(
             Date.now() + options.refreshTokenExpInSec * 1000,
         );
-        const maybeUser = await getUserByEmail(payload.email);
-        if (maybeUser.isLeft()) return new ActionError('BadAuthData');
-        const user = maybeUser.value;
+        const user = dbUsers.find((u) => u.email === payload.email);
+        if (user === undefined) return new ActionError('BadAuthData');
         const isPasswordRight = await bcrypt.compare(
             payload.password,
             user.passwordHash,
         );
         if (!isPasswordRight) return new ActionError('BadAuthData');
-        const maybeNewSession = await createSession(
-            user.id,
-            refreshTokenExpDate.toISOString(),
-        );
-        if (maybeNewSession.isLeft()) return new ActionError('BadAuthData');
-        const newSession = maybeNewSession.value;
+        const newSession = {
+            id: generateId(),
+            userId: user.id,
+            expirationDate: refreshTokenExpDate.toISOString(),
+        } satisfies DbEntities['session'];
+        await db.session.set((await db.session.get()).concat(newSession));
         const authContext: AuthContext = { id: user.id, role: user.role };
         const accessToken = jwt.sign(authContext, options.secret, {
             expiresIn: options.accessTokenExpInSec,

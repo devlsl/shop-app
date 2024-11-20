@@ -1,9 +1,9 @@
 import styled, { css, keyframes } from 'styled-components';
-import { Portal } from '../portal';
+import { Portal } from '../../portal';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { useMountAnim } from '../../hooks/useMountAnim';
-import { staticStyles } from '../../shared/consts/styles/static';
-import { transition } from '../../shared/utils/styles/transition';
+import { useMountAnim } from '../../../hooks/useMountAnim';
+import { staticStyles } from '../../../shared/consts/styles/static';
+import { transition } from '../../../shared/utils/styles/transition';
 
 const Overlay = styled(RadixDialog.Overlay).attrs({ forceMount: true })<{
     $animationDuration: string;
@@ -53,6 +53,7 @@ const Paper = styled(RadixDialog.Content).attrs({ forceMount: true })<{
     $animationFillMode: string;
     $unmounting: boolean;
     $maxWidth?: string;
+    $maxHeight?: string;
 }>`
     ${transition('background', 'color', 'border-color')}
     background-color: ${({ theme }) => theme.dialog.paper};
@@ -60,12 +61,20 @@ const Paper = styled(RadixDialog.Content).attrs({ forceMount: true })<{
     padding: ${staticStyles.paddings.square};
     overflow: auto;
     max-height: 100%;
+    max-width: 100%;
 
     ${({ $maxWidth }) =>
         $maxWidth &&
         css`
             width: 100%;
             max-width: ${$maxWidth};
+        `}
+
+    ${({ $maxHeight }) =>
+        $maxHeight &&
+        css`
+            height: 100%;
+            max-height: ${$maxHeight};
         `}
 
     &::-webkit-scrollbar-thumb {
@@ -119,6 +128,7 @@ export const Dialog = ({
     title,
     description,
     maxWidth,
+    maxHeight,
 }: {
     isOpen: boolean;
     onClose: () => void;
@@ -126,6 +136,7 @@ export const Dialog = ({
     title: string;
     description: string;
     maxWidth?: string;
+    maxHeight?: string;
 }) => {
     const {
         mounted,
@@ -159,6 +170,7 @@ export const Dialog = ({
                                 }
                                 $unmounting={unmounting}
                                 $maxWidth={maxWidth}
+                                $maxHeight={maxHeight}
                             >
                                 {contentSlot}
                             </Paper>

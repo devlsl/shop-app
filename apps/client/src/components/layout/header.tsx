@@ -10,17 +10,21 @@ import {
     SunIcon,
     UserRoundIcon,
 } from 'lucide-react';
-import { navigate, usePathname } from '../../modules/url';
+import { navigate, setSearchParam, usePathname } from '../../modules/url';
 import { TextButton } from '../buttons/textButton';
 import { Page } from '../../shared/types/page';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
-import { Search } from '../search';
+import { getSearchInputValue, Search } from '../search';
 import { toggleTheme, useTheme } from '../../modules/theme';
 import { setUser, useUser } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
-import { pushNotification, showSignInView } from '../../hooks/useAppState';
+import {
+    pushNotification,
+    showSignInView,
+    toggleAreShownProductFilters,
+} from '../../hooks/useAppState';
 
 const Styled = styled.div`
     ${container()}
@@ -40,28 +44,24 @@ export const Header = () => {
     return (
         <Styled>
             {!isBottomBarShowed && (
-                <>
-                    <TextButton
-                        onClick={() => navigate('/categories' satisfies Page)}
-                    >
-                        Каталог
-                    </TextButton>
-                    {pathname.startsWith('/products' satisfies Page) && (
-                        <IconButton>
-                            <FilterIcon />
-                        </IconButton>
-                    )}
-                </>
+                <TextButton
+                    onClick={() => navigate('/categories' satisfies Page)}
+                >
+                    Каталог
+                </TextButton>
+            )}
+            {pathname.startsWith('/products' satisfies Page) && (
+                <IconButton onClick={toggleAreShownProductFilters}>
+                    <FilterIcon />
+                </IconButton>
             )}
             <>
-                {pathname.startsWith('/products' satisfies Page) &&
-                    isBottomBarShowed && (
-                        <IconButton>
-                            <FilterIcon />
-                        </IconButton>
-                    )}
                 <Search />
-                <IconButton>
+                <IconButton
+                    onClick={() =>
+                        setSearchParam('search', getSearchInputValue())
+                    }
+                >
                     <SearchIcon />
                 </IconButton>
             </>

@@ -4,7 +4,16 @@ import { transition } from '../shared/utils/styles/transition';
 import { typography } from '../shared/utils/styles/typography';
 import { useTyping } from '../shared/hooks/useTyping';
 import { useEffect, useState } from 'react';
-import { setSearchParam, useSearchParam } from '../modules/url';
+import { getSearchParam, setSearchParam } from '../modules/url';
+import { create } from 'zustand';
+
+const useSearchInputState = create<string>(
+    () => getSearchParam('search') ?? '',
+);
+export const useSearchInputValue = () => useSearchInputState((state) => state);
+export const setSearchInputValue = (value: string) =>
+    useSearchInputState.setState(value);
+export const getSearchInputValue = () => useSearchInputState.getState();
 
 const Wrapper = styled.input`
     ${transition('border-color', 'outline-color', 'color')}
@@ -63,19 +72,17 @@ export const Search = () => {
         start();
     }, []);
 
-    const searchValue = useSearchParam('search');
+    const searchInputValue = useSearchInputValue();
+
+    useEffect(() => {
+        if (searchInputValue === '') setSearchParam('search', null);
+    }, [searchInputValue]);
 
     return (
         <Wrapper
             placeholder={searchPlaceholder}
-            value={searchValue ?? ''}
-            onChange={(e) =>
-                setSearchParam(
-                    'search',
-                    e.target.value === '' ? null : e.target.value,
-                    true,
-                )
-            }
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
             onFocus={stop}
         />
     );
