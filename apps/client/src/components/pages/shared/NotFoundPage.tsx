@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import { typography } from '../../../../shared/utils/styles/typography';
+import { typography } from '../../../shared/utils/styles/typography';
 
-export const CategoryNotFoundPage = styled.div.attrs({
-    children: 'Такой категории нет 😢',
-})`
+export const NotFoundPage = styled.div`
     width: 100%;
     height: 100%;
     display: flex;

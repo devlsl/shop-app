@@ -1,11 +1,8 @@
-import { DbService, Handlers } from '../types';
+import { Handlers, HandlersProps } from '../types';
 
-type Dependencies = {
-    db: DbService;
-};
-export default ({ db }: Dependencies): Handlers['getFiltersForCategory'] =>
+export default (props: HandlersProps): Handlers['getFilters'] =>
     async (payload) =>
-        (await db.product.get())
+        (await props.storage.product.get())
             .filter((p) => p.categoryId === payload.categoryId)
             .flatMap((p) => Object.entries(p.features))
             .reduce<Record<string, string[] | undefined>>(

@@ -21,12 +21,12 @@ export const SignInView = () => {
         call: callSignIn,
         status: signInStatus,
         data: signInData,
-    } = useApi('signInByEmailAndPassword');
+    } = useApi('signIn');
     const {
         call: callSignUp,
         status: signUpStatus,
         data: signUpData,
-    } = useApi('signUpByEmailAndPassword');
+    } = useApi('signUp');
 
     const loading = signInStatus === 'loading' || signUpStatus === 'loading';
 
@@ -39,11 +39,10 @@ export const SignInView = () => {
     const [disabled, setDisabled] = useState(true);
 
     useEffect(() => {
-        const maybePayload =
-            apiPayloadSchemas.signInByEmailAndPassword.safeParse({
-                email,
-                password,
-            });
+        const maybePayload = apiPayloadSchemas.signIn.safeParse({
+            email,
+            password,
+        });
         setDisabled(!maybePayload.success);
     }, [email, password]);
 

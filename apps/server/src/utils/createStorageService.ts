@@ -29,20 +29,23 @@ const readJson = async <T extends z.ZodTypeAny>(
     }
 };
 
-type DbSchema = Record<string, z.ZodTypeAny>;
+type StorageSchema = Record<string, z.ZodTypeAny>;
 
-export type DbServiceTypeGenerate<T extends DbSchema> = {
+export type StorageServiceTypeGenerate<T extends StorageSchema> = {
     [Key in keyof T]: {
         get: () => Promise<z.infer<T[Key]>[]>;
         set: (value: z.infer<T[Key]>[]) => Promise<void>;
     };
 };
 
-export type DbEntitiesTypeGenerate<T extends DbSchema> = {
+export type StorageEntitiesTypeGenerate<T extends StorageSchema> = {
     [Key in keyof T]: z.infer<T[Key]>;
 };
 
-export const createDb = <T extends DbSchema>(dirname: string, schema: T) =>
+export const createStorageService = <T extends StorageSchema>(
+    dirname: string,
+    schema: T,
+) =>
     Object.fromEntries(
         Object.entries(schema).map(([name, entitySchema]) => {
             return [
@@ -59,4 +62,4 @@ export const createDb = <T extends DbSchema>(dirname: string, schema: T) =>
                 },
             ];
         }),
-    ) as DbServiceTypeGenerate<T>;
+    ) as StorageServiceTypeGenerate<T>;

@@ -100,9 +100,7 @@ export const ProductFiltersDialog = () => {
         Record<string, 'desc' | 'asc' | undefined>
     >({});
     const [filters, setFilters] = useState<
-        NonNullable<
-            z.infer<(typeof apiSchema)['getFiltersForCategory']['return']>
-        >
+        NonNullable<z.infer<(typeof apiSchema)['getFilters']['return']>>
     >({});
 
     useEffect(() => {
@@ -135,7 +133,7 @@ export const ProductFiltersDialog = () => {
     }, [areShownProductFilters]);
 
     const categoryId = useSearchParam('categoryId') ?? null;
-    const { call, data, status } = useApi('getFiltersForCategory');
+    const { call, data, status } = useApi('getFilters');
 
     useEffect(() => {
         call({ categoryId });

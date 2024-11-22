@@ -1,19 +1,10 @@
-import { DbService, Handlers } from '../types';
-
-type Options = {
-    staticServerHostname: string;
-};
-
-type Dependencies = {
-    db: DbService;
-};
+import { Handlers, HandlersProps } from '../types';
 
 export default (
-        { staticServerHostname }: Options,
-        { db }: Dependencies,
-    ): Handlers['getProductsForProductPage'] =>
+        props: HandlersProps,
+    ): Handlers['getProductsPageItemsForGuest'] =>
     async (payload) => {
-        const products = (await db.product.get()).filter((p) => {
+        const products = (await props.storage.product.get()).filter((p) => {
             if (p.categoryId !== payload.categoryId) return false;
             const searchQuery = payload.search;
             const productNameInLowerCase = p.name.toLowerCase();
@@ -56,7 +47,7 @@ export default (
                 miniatures: p.media
                     .filter((m) => m.type === 'image')
                     .map((m) => ({
-                        url: `${staticServerHostname}/${m.sizes.preview}`,
+                        url: `${props.STATIC_SERVER_HOSTNAME}/${m.sizes.preview}`,
                     })),
             }))
             .slice(startIndex, startIndex + limit);

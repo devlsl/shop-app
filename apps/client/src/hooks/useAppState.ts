@@ -10,7 +10,6 @@ type AppState = {
     notifications: Notification[];
     isShownSignInView: boolean;
     shownProductPreview: null | string;
-    isShownOutOfStockDialog: boolean;
     areShownProductFilters: boolean;
 };
 
@@ -18,7 +17,6 @@ const useAppState = create<AppState>(() => ({
     notifications: [],
     isShownSignInView: false,
     shownProductPreview: null,
-    isShownOutOfStockDialog: false,
     areShownProductFilters: false,
 }));
 
@@ -73,19 +71,6 @@ export const showProductPreview = (productId: string) =>
 export const hideProductPreview = () =>
     useAppState.setState({
         shownProductPreview: null,
-    });
-
-export const useIsShownOutOfStockDialog = () =>
-    useAppState((state) => state.isShownOutOfStockDialog);
-
-export const showOutOfStockDialog = () =>
-    useAppState.setState({
-        isShownOutOfStockDialog: true,
-    });
-
-export const hideOutOfStockDialog = () =>
-    useAppState.setState({
-        isShownOutOfStockDialog: false,
     });
 
 export const useAreShownProductFilters = () =>

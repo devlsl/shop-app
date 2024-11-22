@@ -1,16 +1,12 @@
 import { ActionError } from 'ts-api-generator';
-import { DbEntities, DbService, Handlers } from '../types';
+import { Handlers, HandlersProps, StorageEntities } from '../types';
 import { minutesSince } from '../utils/minutesSince';
 
-type Dependencies = {
-    db: DbService;
-};
-
-export default ({ db }: Dependencies): Handlers['addProductToCart'] =>
+export default (props: HandlersProps): Handlers['addProductToCart'] =>
     async (context, payload) => {
-        const cartItems = await db.cartItem.get();
+        const cartItems = await props.storage.cartItem.get();
 
-        const productsInStock = await db.product.get();
+        const productsInStock = await props.storage.product.get();
 
         const holdLimit = 15; // minutes
 
@@ -37,13 +33,13 @@ export default ({ db }: Dependencies): Handlers['addProductToCart'] =>
             return new ActionError('OutOfStock');
         }
 
-        return db.cartItem.set(
+        return props.storage.cartItem.set(
             cartItems.concat(
                 Array(payload.count).fill({
                     productId: payload.productId,
                     userId: context.id,
                     addedAt: new Date().toISOString(),
-                } satisfies DbEntities['cartItem']),
+                } satisfies StorageEntities['cartItem']),
             ),
         );
     };

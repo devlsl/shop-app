@@ -28,8 +28,9 @@ const Styled = styled.div`
 
 export const Footer = () => {
     const isBottomBarShowed = useBreakpoint('showBottomBar');
-    const user = useUser();
+
     const theme = useTheme();
+    const isAuthorized = useUser();
 
     if (!isBottomBarShowed) return null;
 
@@ -41,25 +42,43 @@ export const Footer = () => {
                 <LayoutDashboardIcon />
             </FooterButton>
 
-            <FooterButton>
+            <FooterButton
+                onClick={() =>
+                    isAuthorized
+                        ? navigate('/favorites' satisfies Page)
+                        : showSignInView()
+                }
+            >
                 <HeartIcon />
             </FooterButton>
-            <FooterButton>
+            <FooterButton
+                onClick={() =>
+                    isAuthorized
+                        ? navigate('/cart' satisfies Page)
+                        : showSignInView()
+                }
+            >
                 <ShoppingBagIcon />
             </FooterButton>
-            <FooterButton>
+            <FooterButton
+                onClick={() =>
+                    isAuthorized
+                        ? navigate('/orders' satisfies Page)
+                        : showSignInView()
+                }
+            >
                 <ClipboardListIcon />
             </FooterButton>
             <FooterButton onClick={toggleTheme}>
                 {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
             </FooterButton>
 
-            {user === null && (
+            {!isAuthorized && (
                 <FooterButton onClick={showSignInView}>
                     <UserRoundIcon />
                 </FooterButton>
             )}
-            {user !== null && user !== undefined && (
+            {isAuthorized && (
                 <FooterButton
                     onClick={() => {
                         setUser(null);

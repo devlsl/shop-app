@@ -16,7 +16,7 @@ import { Page } from '../../shared/types/page';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { getSearchInputValue, Search } from '../search';
 import { toggleTheme, useTheme } from '../../modules/theme';
-import { setUser, useUser } from '../../modules/user';
+import { setUser, useIsAuthorized, useUser } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
@@ -39,7 +39,7 @@ export const Header = () => {
     const pathname = usePathname();
     const isBottomBarShowed = useBreakpoint('showBottomBar');
     const theme = useTheme();
-    const user = useUser();
+    const isAuthorized = useIsAuthorized();
 
     return (
         <Styled>
@@ -67,25 +67,43 @@ export const Header = () => {
             </>
             {!isBottomBarShowed && (
                 <>
-                    <IconButton>
+                    <IconButton
+                        onClick={() =>
+                            isAuthorized
+                                ? navigate('/cart' satisfies Page)
+                                : showSignInView()
+                        }
+                    >
                         <ShoppingBagIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                        onClick={() =>
+                            isAuthorized
+                                ? navigate('/favorites' satisfies Page)
+                                : showSignInView()
+                        }
+                    >
                         <HeartIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                        onClick={() =>
+                            isAuthorized
+                                ? navigate('/orders' satisfies Page)
+                                : showSignInView()
+                        }
+                    >
                         <ClipboardListIcon />
                     </IconButton>
                     <IconButton onClick={toggleTheme}>
                         {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
                     </IconButton>
 
-                    {user === null && (
+                    {!isAuthorized && (
                         <IconButton onClick={showSignInView}>
                             <UserRoundIcon />
                         </IconButton>
                     )}
-                    {user !== null && user !== undefined && (
+                    {isAuthorized && (
                         <IconButton
                             onClick={() => {
                                 setUser(null);

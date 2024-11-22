@@ -1,0 +1,9 @@
+export const envKeys = [
+    'CLIENT_JWT_SECRET',
+    'STATIC_SERVER_HOSTNAME',
+    'CLIENT_HOSTNAME',
+    'SERVER_PORT',
+    'CLIENT_REFRESH_TOKEN_EXP_IN_SEC',
+    'CLIENT_ACCESS_TOKEN_EXP_IN_SEC',
+    'CLIENT_JWT_SECRET',
+] as const;

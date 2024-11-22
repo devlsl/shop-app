@@ -1,17 +1,13 @@
 import { ActionError } from 'ts-api-generator';
-import { DbEntities, DbService, Handlers } from '../types';
+import { Handlers, HandlersProps, StorageEntities } from '../types';
 
-type Dependencies = {
-    db: DbService;
-};
-
-export default ({ db }: Dependencies): Handlers['getCategoryPath'] =>
+export default (props: HandlersProps): Handlers['getCategoryPath'] =>
     async ({ categoryId }) => {
         if (categoryId === null) return [];
-        const categories = await db.category.get();
+        const categories = await props.storage.category.get();
         const categoriesMap: Record<
             string,
-            DbEntities['category'] | undefined
+            StorageEntities['category'] | undefined
         > = Object.fromEntries(categories.map((c) => [c.id, c]));
         const category = categoriesMap[categoryId];
         if (category === undefined) return new ActionError('CategoryNotFound');

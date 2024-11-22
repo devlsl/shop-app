@@ -6,8 +6,8 @@ const passwordSchema = z.string().min(8).max(70);
 
 export const apiSchema = {
     checkAuth: {
-        return: z.object({ id: z.string(), role: z.string() }),
         roles: true,
+        return: z.object({ id: z.string(), role: z.string() }),
     },
     refreshAuth: {
         return: z.object({ id: z.string(), role: z.string() }),
@@ -18,21 +18,21 @@ export const apiSchema = {
         roles: true,
         lowLevel: true,
     },
-    signInByEmailAndPassword: {
+    signIn: {
         payload: z.object({ email: emailSchema, password: passwordSchema }),
         return: z.object({ id: z.string(), role: z.string() }),
         lowLevel: true,
         roles: false,
         errors: ['BadAuthData'],
     },
-    signUpByEmailAndPassword: {
+    signUp: {
         payload: z.object({ email: emailSchema, password: passwordSchema }),
         return: z.object({ id: z.string(), role: z.string() }),
         lowLevel: true,
         roles: false,
         errors: ['BadAuthData'],
     },
-    getCategoriesPageData: {
+    getCategoriesPageItems: {
         payload: z.object({ categoryId: z.string().nullable() }),
         return: z.object({
             id: z.string().nullable(),
@@ -50,7 +50,7 @@ export const apiSchema = {
         }),
         errors: ['CategoryNotFound'],
     },
-    getFiltersForCategory: {
+    getFilters: {
         payload: z.object({ categoryId: z.string().uuid().nullable() }),
         return: z.record(z.string(), z.string().array().optional()),
         // [
@@ -83,7 +83,7 @@ export const apiSchema = {
             .array(),
         errors: ['CategoryNotFound'],
     },
-    getProductPreviewForUser: {
+    getProductPreview: {
         roles: true,
         payload: z.object({ productId: z.string().uuid() }),
         return: z
@@ -97,7 +97,7 @@ export const apiSchema = {
             })
             .optional(),
     },
-    getProductPreview: {
+    getProductPreviewForGuest: {
         payload: z.object({ productId: z.string().uuid() }),
         return: z
             .object({
@@ -109,7 +109,7 @@ export const apiSchema = {
             })
             .optional(),
     },
-    getProductsForProductPage: {
+    getProductsPageItemsForGuest: {
         payload: z.object({
             categoryId: z.string().uuid().nullable().optional(),
             includeNestedCategories: z.boolean().optional(),
@@ -137,7 +137,7 @@ export const apiSchema = {
                 .array(),
         }),
     },
-    getProductsForProductPageForUser: {
+    getProductsPageItems: {
         roles: true,
         payload: z.object({
             categoryId: z.string().uuid().nullable().optional(),
@@ -185,5 +185,36 @@ export const apiSchema = {
         payload: z.object({
             productId: z.string().uuid(),
         }),
+    },
+    getProductPageItem: {
+        roles: true,
+        payload: z.object({
+            productId: z.string().uuid(),
+        }),
+        return: z
+            .object({
+                id: z.string(),
+                name: z.string(),
+                price: z.string(),
+                leftInStock: z.number(),
+                media: z.object({ url: z.string() }).array(),
+                isLiked: z.boolean(),
+            })
+            .optional(),
+    },
+    getProductPageItemForGuest: {
+        payload: z.object({
+            productId: z.string().uuid(),
+        }),
+        return: z
+            .object({
+                id: z.string(),
+                name: z.string(),
+                price: z.string(),
+                leftInStock: z.number(),
+                media: z.object({ url: z.string() }).array(),
+                isLiked: z.boolean(),
+            })
+            .optional(),
     },
 } as const satisfies ActionOptionsMap;

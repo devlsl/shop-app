@@ -1,28 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { DbEntities, DbService, Handlers } from '../types';
+import { Handlers, HandlersProps, StorageEntities } from '../types';
 import { ActionError, AuthContext } from 'ts-api-generator';
 import { setCookie } from '../utils/setCookie';
 import { generateId } from '../utils/generateId';
 
-type Options = {
-    secret: string;
-    accessTokenExpInSec: number;
-    refreshTokenExpInSec: number;
-};
-
-type Dependencies = {
-    db: DbService;
-};
-
-export default (
-        options: Options,
-        { db }: Dependencies,
-    ): Handlers['signUpByEmailAndPassword'] =>
+export default (props: HandlersProps): Handlers['signUp'] =>
     async (payload, _, response) => {
-        const dbUsers = await db.user.get();
+        const dbUsers = await props.storage.user.get();
         const refreshTokenExpDate = new Date(
-            Date.now() + options.refreshTokenExpInSec * 1000,
+            Date.now() + Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC) * 1000,
         );
         const alreadyExistUser = dbUsers.find((u) => u.email === payload.email);
         if (alreadyExistUser !== undefined)
@@ -36,27 +23,29 @@ export default (
             passwordHash: passwordHash,
             passwordHashSalt: salt,
             role: 'user',
-        } satisfies DbEntities['user'];
-        await db.user.set(dbUsers.concat(newUser));
+        } satisfies StorageEntities['user'];
+        await props.storage.user.set(dbUsers.concat(newUser));
         const newSession = {
             id: generateId(),
             userId: newUser.id,
             expirationDate: refreshTokenExpDate.toISOString(),
-        } satisfies DbEntities['session'];
-        await db.session.set((await db.session.get()).concat(newSession));
+        } satisfies StorageEntities['session'];
+        await props.storage.session.set(
+            (await props.storage.session.get()).concat(newSession),
+        );
         const authContext: AuthContext = { id: newUser.id, role: newUser.role };
-        const accessToken = jwt.sign(authContext, options.secret, {
-            expiresIn: options.accessTokenExpInSec,
+        const accessToken = jwt.sign(authContext, props.CLIENT_JWT_SECRET, {
+            expiresIn: props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC,
         });
         setCookie(response, 'accessToken', accessToken, {
-            maxAge: options.accessTokenExpInSec,
+            maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
             httpOnly: true,
             path: '/',
             sameSite: 'None',
             secure: true,
         });
         setCookie(response, 'refreshToken', newSession.id, {
-            maxAge: options.refreshTokenExpInSec,
+            maxAge: Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC),
             httpOnly: true,
             path: '/',
             sameSite: 'None',

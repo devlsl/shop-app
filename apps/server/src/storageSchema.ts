@@ -1,8 +1,7 @@
 import { z } from 'zod';
 import { zodStrictRecord } from './utils/zodStrictRecord.js';
-import { DbServiceTypeGenerate } from './utils/createDb.js';
 
-export const dbSchema = {
+export const storageSchema = {
     user: z.object({
         id: z.string(),
         email: z.string().email(),

@@ -1,13 +1,9 @@
-import { DbService, Handlers } from '../types';
+import { Handlers, HandlersProps } from '../types';
 
-type Dependencies = {
-    db: DbService;
-};
-
-export default ({ db }: Dependencies): Handlers['deleteProductFromFavorites'] =>
+export default (props: HandlersProps): Handlers['deleteProductFromFavorites'] =>
     async (context, payload) =>
-        db.favoriteItem.set(
-            (await db.favoriteItem.get()).filter(
+        props.storage.favoriteItem.set(
+            (await props.storage.favoriteItem.get()).filter(
                 (i) =>
                     i.productId !== payload.productId ||
                     i.userId !== context.id,

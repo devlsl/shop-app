@@ -1,11 +1,23 @@
 import { HandlersTypeGenerator } from 'ts-api-generator';
 import { apiSchema } from '@shop/shared';
+import { envKeys } from './consts';
+import { storageSchema } from './storageSchema';
 import {
-    DbEntitiesTypeGenerate,
-    DbServiceTypeGenerate,
-} from './utils/createDb';
-import { dbSchema } from './dbSchema';
+    StorageEntitiesTypeGenerate,
+    StorageServiceTypeGenerate,
+} from './utils/createStorageService';
+
+export type StorageEntities = StorageEntitiesTypeGenerate<typeof storageSchema>;
+export type StorageService = StorageServiceTypeGenerate<typeof storageSchema>;
+
+type Services = {
+    storage: StorageService;
+};
+
+type Env = {
+    [Key in (typeof envKeys)[number]]: string;
+};
+
+export type HandlersProps = Services & Env;
 
 export type Handlers = HandlersTypeGenerator<typeof apiSchema>;
-export type DbService = DbServiceTypeGenerate<typeof dbSchema>;
-export type DbEntities = DbEntitiesTypeGenerate<typeof dbSchema>;

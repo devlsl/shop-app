@@ -1,12 +1,8 @@
-import { DbService, Handlers } from '../types';
+import { Handlers, HandlersProps } from '../types';
 import { getCookie } from '../utils/getCookie';
 import { setCookie } from '../utils/setCookie';
 
-type Dependencies = {
-    db: DbService;
-};
-
-export default ({ db }: Dependencies): Handlers['signOut'] =>
+export default (props: HandlersProps): Handlers['signOut'] =>
     async (context, request, response) => {
         setCookie(response, 'accessToken', '', {
             httpOnly: true,
@@ -23,8 +19,8 @@ export default ({ db }: Dependencies): Handlers['signOut'] =>
 
         const refreshToken = getCookie(request, 'refreshToken');
         if (refreshToken === undefined) return;
-        await db.session.set(
-            (await db.session.get()).filter(
+        await props.storage.session.set(
+            (await props.storage.session.get()).filter(
                 (s) => s.id !== refreshToken || s.userId !== context.id,
             ),
         );

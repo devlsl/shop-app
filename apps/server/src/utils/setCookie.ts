@@ -1,12 +1,12 @@
 import { ServerResponse } from 'http';
 
 type CookieOptions = {
-    maxAge?: number; // В секундах
-    expires?: Date; // Дата истечения
-    httpOnly?: boolean; // Запрет доступа через JavaScript
-    secure?: boolean; // Кука будет передаваться только по HTTPS
-    sameSite?: 'Lax' | 'Strict' | 'None'; // Политика отправки куки
-    path?: string; // Путь, для которого кука доступна
+    maxAge?: number;
+    expires?: Date;
+    httpOnly?: boolean;
+    secure?: boolean;
+    sameSite?: 'Lax' | 'Strict' | 'None';
+    path?: string;
 };
 
 export const setCookie = (

@@ -1,5 +1,5 @@
-import { Handlers } from '../types';
+import { Handlers, HandlersProps } from '../types';
 
-const checkAuth: Handlers['checkAuth'] = async (context) => context;
-
-export default checkAuth;
+export default (_: HandlersProps): Handlers['checkAuth'] =>
+    async (context) =>
+        context;

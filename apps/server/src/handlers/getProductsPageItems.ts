@@ -1,19 +1,8 @@
-import { DbService, Handlers } from '../types';
+import { Handlers, HandlersProps } from '../types';
 
-type Options = {
-    staticServerHostname: string;
-};
-
-type Dependencies = {
-    db: DbService;
-};
-
-export default (
-        { staticServerHostname }: Options,
-        { db }: Dependencies,
-    ): Handlers['getProductsForProductPageForUser'] =>
+export default (props: HandlersProps): Handlers['getProductsPageItems'] =>
     async (context, payload) => {
-        const products = (await db.product.get()).filter((p) => {
+        const products = (await props.storage.product.get()).filter((p) => {
             if (p.categoryId !== payload.categoryId) return false;
             const searchQuery = payload.search;
             const productNameInLowerCase = p.name.toLowerCase();
@@ -47,7 +36,7 @@ export default (
         const { limit = products.length, startIndex = 0 } = payload;
 
         const favorites = Object.fromEntries(
-            (await db.favoriteItem.get())
+            (await props.storage.favoriteItem.get())
                 .filter((i) => i.userId === context.id)
                 .map((i) => [i.productId, i.productId]),
         );
@@ -62,7 +51,7 @@ export default (
                 miniatures: p.media
                     .filter((m) => m.type === 'image')
                     .map((m) => ({
-                        url: `${staticServerHostname}/${m.sizes.preview}`,
+                        url: `${props.STATIC_SERVER_HOSTNAME}/${m.sizes.preview}`,
                     })),
             }))
             .slice(startIndex, startIndex + limit);

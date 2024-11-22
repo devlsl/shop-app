@@ -22,6 +22,8 @@ export const getUrlState = useUrlState.getState;
 export const getSearchParam = (key: string) =>
     useUrlState.getState().searchParams[key];
 
+export const getPathname = () => useUrlState.getState().pathname;
+
 export const usePathname = () => useUrlState((state) => state.pathname);
 export const useHash = () => useUrlState((state) => state.hash);
 export const useSearchParams = () => useUrlState((state) => state.searchParams);

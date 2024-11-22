@@ -1,54 +1,45 @@
 import jwt from 'jsonwebtoken';
-import { DbEntities, DbService, Handlers } from '../types';
+import { Handlers, HandlersProps, StorageEntities } from '../types';
 import { ActionError, AuthContext } from 'ts-api-generator';
 import { setCookie } from '../utils/setCookie';
 import { getCookie } from '../utils/getCookie';
 import { generateId } from '../utils/generateId';
 
-type Options = {
-    secret: string;
-    accessTokenExpInSec: number;
-    refreshTokenExpInSec: number;
-};
-
-type Dependencies = {
-    db: DbService;
-};
-
-export default (
-        options: Options,
-        { db }: Dependencies,
-    ): Handlers['refreshAuth'] =>
+export default (props: HandlersProps): Handlers['refreshAuth'] =>
     async (request, response) => {
         const refreshTokenExpDate = new Date(
-            Date.now() + options.refreshTokenExpInSec * 1000,
+            Date.now() + Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC) * 1000,
         );
         const refreshToken = getCookie(request, 'refreshToken');
         if (!refreshToken) return new ActionError('Unauthorized');
-        const session = (await db.session.get()).find(
+        const session = (await props.storage.session.get()).find(
             (s) => s.id === refreshToken,
         );
         if (session === undefined) return new ActionError('Unauthorized');
-        const user = (await db.user.get()).find((u) => u.id === session.userId);
+        const user = (await props.storage.user.get()).find(
+            (u) => u.id === session.userId,
+        );
         if (user === undefined) return new ActionError('Unauthorized');
         const newSession = {
             id: generateId(),
             userId: user.id,
             expirationDate: refreshTokenExpDate.toISOString(),
-        } satisfies DbEntities['session'];
-        await db.session.set((await db.session.get()).concat(newSession));
+        } satisfies StorageEntities['session'];
+        await props.storage.session.set(
+            (await props.storage.session.get()).concat(newSession),
+        );
         const authContext: AuthContext = { id: user.id, role: user.role };
-        const accessToken = jwt.sign(authContext, options.secret, {
-            expiresIn: options.accessTokenExpInSec,
+        const accessToken = jwt.sign(authContext, props.CLIENT_JWT_SECRET, {
+            expiresIn: props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC,
         });
         setCookie(response, 'accessToken', accessToken, {
-            maxAge: options.accessTokenExpInSec,
+            maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
             path: '/',
             sameSite: 'None',
             secure: true,
         });
         setCookie(response, 'refreshToken', newSession.id, {
-            maxAge: options.refreshTokenExpInSec,
+            maxAge: Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC),
             path: '/',
             sameSite: 'None',
             secure: true,

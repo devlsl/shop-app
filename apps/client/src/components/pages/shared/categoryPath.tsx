@@ -3,7 +3,12 @@ import { container } from '../../../shared/utils/styles/container';
 import { typography } from '../../../shared/utils/styles/typography';
 import { hover } from '../../../shared/utils/styles/hover';
 import { transition } from '../../../shared/utils/styles/transition';
-import { navigate, useSearchParam } from '../../../modules/url';
+import {
+    getPathname,
+    getSearchParam,
+    navigate,
+    useSearchParam,
+} from '../../../modules/url';
 import { useApi } from '../../../hooks/useApi';
 import React, { forwardRef, HtmlHTMLAttributes, useEffect } from 'react';
 import { Page } from '../../../shared/types/page';

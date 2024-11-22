@@ -7,13 +7,15 @@ import { container } from '../../shared/utils/styles/container';
 
 import { CategoryPath } from '../pages/shared/categoryPath';
 import { ProductsPage } from '../pages/products/index';
+import { CartPage } from '../pages/cart';
+import { OrdersPage } from '../pages/orders';
+import { FavoritesPage } from '../pages/favorites';
+import { ProductPage } from '../pages/product';
 
-const needShowCategoryPath = (pathname: string) => {
-    if (pathname === '/products' || pathname === '/categories') {
-        return <CategoryPath />;
-    }
-    return null;
-};
+const needShowCategoryPath = (pathname: string) =>
+    ['/products', '/categories', '/product'].includes(pathname) ? (
+        <CategoryPath />
+    ) : null;
 
 const ContentWrapper = styled.div`
     ${container()}
@@ -36,6 +38,10 @@ const pathnameToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
     {
         '/products': <ProductsPage />,
         '/categories': <CategoriesPage />,
+        '/cart': <CartPage />,
+        '/favorites': <FavoritesPage />,
+        '/orders': <OrdersPage />,
+        '/product': <ProductPage />,
     },
     <div>default</div>,
 );

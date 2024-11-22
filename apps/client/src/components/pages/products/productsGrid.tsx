@@ -1,24 +1,25 @@
 import styled, { css } from 'styled-components';
-import { CardsGrid } from '../../shared/cardsGrid';
+import { CardsGrid } from '../shared/cardsGrid';
 import { memo } from 'react';
 import { z } from 'zod';
 import { apiSchema } from '@shop/shared';
-import { useIsAuthorized } from '../../../../modules/user';
-import { IconButton } from '../../../buttons/iconButton';
+import { useIsAuthorized } from '../../../modules/user';
+import { IconButton } from '../../buttons/iconButton';
 import { HeartIcon, PackagePlusIcon } from 'lucide-react';
-import { PageLoader } from '../../../pageLoader';
+import { PageLoader } from '../../pageLoader';
 import { useTheme } from 'styled-components';
 import {
     pushNotification,
     showProductPreview,
     showSignInView,
-} from '../../../../hooks/useAppState';
-import { useApi } from '../../../../hooks/useApi';
-import { typography } from '../../../../shared/utils/styles/typography';
-import { TextButton } from '../../../buttons/textButton';
-import { hover } from '../../../../shared/utils/styles/hover';
-import { Link } from '../../../link';
-import { transition } from '../../../../shared/utils/styles/transition';
+} from '../../../hooks/useAppState';
+import { useApi } from '../../../hooks/useApi';
+import { typography } from '../../../shared/utils/styles/typography';
+import { TextButton } from '../../buttons/textButton';
+import { hover } from '../../../shared/utils/styles/hover';
+import { Link } from '../../link';
+import { transition } from '../../../shared/utils/styles/transition';
+import { getSearchParam } from '../../../modules/url';
 
 export const CardWrapper = styled.div`
     display: flex;
@@ -255,7 +256,10 @@ const ProductCardView = ({
         <CardWrapper>
             <ProductImage
                 $url={previewUrl}
-                to={['/product', { productId: id }]}
+                to={[
+                    '/product',
+                    { productId: id, categoryId: getSearchParam('categoryId') },
+                ]}
             />
             <ProductTypographyWrapper>
                 <ProductName>{name}</ProductName>
@@ -288,7 +292,7 @@ export const ProductsView = memo(
         setFavoriteItemToState,
     }: {
         items: z.infer<
-            (typeof apiSchema)['getProductsForProductPageForUser']['return']
+            (typeof apiSchema)['getProductsPageItems']['return']
         >['items'];
         setFavoriteItemToState: (id: string, value: boolean) => void;
     }) => {
