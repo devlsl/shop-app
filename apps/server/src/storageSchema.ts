@@ -49,4 +49,21 @@ export const storageSchema = {
         productId: z.string().uuid(),
         addedAt: z.string().datetime(),
     }),
+    order: z.object({
+        id: z.string().uuid(),
+        userId: z.string().uuid(),
+        items: z
+            .object({
+                productId: z.string().uuid(),
+                count: z.number().positive(),
+                price: z.number().positive(),
+            })
+            .array(),
+        createdAt: z.string().datetime(),
+        paidAt: z.string().datetime().optional(),
+        sentAt: z.string().datetime().optional(),
+        deliveredAt: z.string().datetime().optional(),
+        receivedAt: z.string().datetime().optional(),
+        rejectedAt: z.string().datetime().optional(),
+    }),
 } as const satisfies Record<string, z.ZodTypeAny>;

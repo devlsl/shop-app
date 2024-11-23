@@ -30,7 +30,7 @@ export default (props: HandlersProps): Handlers['refreshAuth'] =>
         );
         const authContext: AuthContext = { id: user.id, role: user.role };
         const accessToken = jwt.sign(authContext, props.CLIENT_JWT_SECRET, {
-            expiresIn: props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC,
+            expiresIn: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
         });
         setCookie(response, 'accessToken', accessToken, {
             maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),

@@ -13,9 +13,7 @@ import { FavoritesPage } from '../pages/favorites';
 import { ProductPage } from '../pages/product';
 
 const needShowCategoryPath = (pathname: string) =>
-    ['/products', '/categories', '/product'].includes(pathname) ? (
-        <CategoryPath />
-    ) : null;
+    ['/products', '/categories', '/product'].includes(pathname);
 
 const ContentWrapper = styled.div`
     ${container()}
@@ -51,9 +49,11 @@ export const Content = () => {
 
     return (
         <>
-            <CategoryPathWrapper>
-                {needShowCategoryPath(pathname)}
-            </CategoryPathWrapper>
+            {needShowCategoryPath(pathname) && (
+                <CategoryPathWrapper>
+                    <CategoryPath />
+                </CategoryPathWrapper>
+            )}
             <ContentWrapper>{pathnameToComponent(pathname)}</ContentWrapper>
         </>
     );

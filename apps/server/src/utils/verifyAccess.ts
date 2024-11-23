@@ -13,7 +13,7 @@ export const createVerifyAccess =
         if (!accessToken) return left('Unauthorized');
         try {
             const payload = jwt.verify(accessToken, props.CLIENT_JWT_SECRET, {
-                maxAge: props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC,
+                maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
             });
             return parse(
                 z.object({
@@ -22,7 +22,8 @@ export const createVerifyAccess =
                 }),
                 payload,
             ).mapLeft(() => 'Unauthorized');
-        } catch {
+        } catch (error) {
+            console.log(error);
             return left('Unauthorized');
         }
     };

@@ -12,6 +12,7 @@ import { ButtonText } from '../buttonText';
 import {
     getSearchParam,
     setSearchParam,
+    usePathname,
     useSearchParam,
 } from '../../modules/url';
 import { useApi } from '../../hooks/useApi';
@@ -21,6 +22,8 @@ import { DialogRow } from './shared/row';
 import { apiSchema } from '@shop/shared';
 import { z } from 'zod';
 import { hover } from '../../shared/utils/styles/hover';
+import { Page } from '../../shared/types/page';
+import { parseProductFilters, parseProductSorting } from '../pages/favorites';
 
 const DialogWrapper = styled.div`
     display: grid;
@@ -96,6 +99,7 @@ const sortingSections: {
 
 export const ProductFiltersDialog = () => {
     const areShownProductFilters = useAreShownProductFilters();
+    const pathname = usePathname();
     const [sorting, setSorting] = useState<
         Record<string, 'desc' | 'asc' | undefined>
     >({});
@@ -105,27 +109,8 @@ export const ProductFiltersDialog = () => {
 
     useEffect(() => {
         if (areShownProductFilters) {
-            const searchSortingJson = getSearchParam('sorting') ?? '';
-            try {
-                setSorting(
-                    z
-                        .record(z.string(), z.enum(['desc', 'asc']))
-                        .parse(JSON.parse(searchSortingJson)),
-                );
-            } catch {
-                setSorting({});
-            }
-
-            const searchFiltersJson = getSearchParam('filters') ?? '';
-            try {
-                setFilters(
-                    z
-                        .record(z.string(), z.string().array())
-                        .parse(JSON.parse(searchFiltersJson)),
-                );
-            } catch {
-                setFilters({});
-            }
+            setSorting(parseProductSorting());
+            setFilters(parseProductFilters());
         } else {
             setFilters({});
             setFilters({});
@@ -133,11 +118,18 @@ export const ProductFiltersDialog = () => {
     }, [areShownProductFilters]);
 
     const categoryId = useSearchParam('categoryId') ?? null;
-    const { call, data, status } = useApi('getFilters');
+    const { call, data, status } = useApi(
+        pathname.startsWith('/favorites')
+            ? 'getFiltersForFavorites'
+            : 'getFilters',
+    );
 
     useEffect(() => {
-        call({ categoryId });
-    }, []);
+        pathname.startsWith('/favorites')
+            ? call()
+            : //@ts-expect-error
+              call({ categoryId });
+    }, [pathname]);
 
     return (
         <Dialog

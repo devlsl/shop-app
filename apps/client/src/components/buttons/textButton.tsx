@@ -15,6 +15,20 @@ export const TextButton = styled.button`
     )}
     ${typography({ fontWeight: 600 })}
 
+    position: relative;
+
+    svg {
+        ${transition('color')}
+    }
+    gap: 8px;
+
+    svg {
+        stroke-width: 2px;
+        width: 1.2rem;
+        height: 1.2rem;
+        flex-shrink: 0;
+    }
+
     border-radius: ${staticStyles.border.radius};
 
     background-color: ${({ theme }) => theme.button.secondary.background};
@@ -36,8 +50,9 @@ export const TextButton = styled.button`
     text-overflow: ellipsis;
 
     height: 100%;
-
-    /* align-items: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     padding: 0 14px;
 

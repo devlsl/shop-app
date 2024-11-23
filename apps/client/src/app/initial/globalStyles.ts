@@ -8,12 +8,14 @@ export const GlobalStyles = createGlobalStyle`
     a,
     button,
     input,
+    label,
     textarea,
     select {
         outline-color: transparent;
     }
-
+    
     div:focus-visible,
+    label:focus-visible,
     a:focus-visible,
     button:focus-visible,
     input:focus-visible,

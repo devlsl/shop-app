@@ -8,52 +8,7 @@ import { matchMediaBreakpoint } from '../../../shared/utils/helpers/isBreakpoint
 import { LazyLoadingTrigger, ProductsView } from './productsGrid';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { apiPayloadSchemas } from '../../../shared/consts/schemas/api';
-
-// const a = apiPayloadSchemas.getProductsPageItems.shape.filters
-// const b = apiPayloadSchemas.getProductsPageItems.shape.sort
-
-// type A = ApiPayloadSchemas['getProductsPageItems']['filters']
-// type B = ApiPayloadSchemas['getProductsPageItems']['sort']
-
-// const parseProductFilters = () => {
-//     try {
-//         return z
-//             .record(z.string(), z.string().array())
-//             .parse(JSON.parse(getSearchParam('filters') ?? ''));
-//     } catch (error) {
-//         return {};
-//     }
-// };
-
-// export const parseProductSorting = () => {
-//     try {
-//         return z
-//             .record(z.string(), z.enum(['desc', 'asc']).optional())
-//             .parse(JSON.parse(getSearchParam('sorting') ?? ''));
-//     } catch (error) {
-//         return {};
-//     }
-// };
-
-const parseProductFilters = () => {
-    try {
-        return apiPayloadSchemas.getProductsPageItems.shape.filters.parse(
-            JSON.parse(getSearchParam('filters') ?? ''),
-        );
-    } catch (error) {
-        return {};
-    }
-};
-
-export const parseProductSorting = () => {
-    try {
-        return apiPayloadSchemas.getProductsPageItems.shape.sort.parse(
-            JSON.parse(getSearchParam('sorting') ?? ''),
-        );
-    } catch (error) {
-        return {};
-    }
-};
+import { parseProductFilters, parseProductSorting } from '../favorites';
 
 export const ProductsPageView = ({
     isAuthorized = false,

@@ -44,13 +44,12 @@ export const Header = () => {
     return (
         <Styled>
             {!isBottomBarShowed && (
-                <TextButton
-                    onClick={() => navigate('/categories' satisfies Page)}
-                >
+                <TextButton onClick={() => navigate('/categories')}>
                     Каталог
                 </TextButton>
             )}
-            {pathname.startsWith('/products' satisfies Page) && (
+            {(pathname.startsWith('/products') ||
+                pathname.startsWith('/favorites')) && (
                 <IconButton onClick={toggleAreShownProductFilters}>
                     <FilterIcon />
                 </IconButton>
@@ -69,9 +68,7 @@ export const Header = () => {
                 <>
                     <IconButton
                         onClick={() =>
-                            isAuthorized
-                                ? navigate('/cart' satisfies Page)
-                                : showSignInView()
+                            isAuthorized ? navigate('/cart') : showSignInView()
                         }
                     >
                         <ShoppingBagIcon />
@@ -79,7 +76,7 @@ export const Header = () => {
                     <IconButton
                         onClick={() =>
                             isAuthorized
-                                ? navigate('/favorites' satisfies Page)
+                                ? navigate('/favorites')
                                 : showSignInView()
                         }
                     >
@@ -88,7 +85,7 @@ export const Header = () => {
                     <IconButton
                         onClick={() =>
                             isAuthorized
-                                ? navigate('/orders' satisfies Page)
+                                ? navigate('/orders')
                                 : showSignInView()
                         }
                     >

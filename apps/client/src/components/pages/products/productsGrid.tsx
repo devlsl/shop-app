@@ -215,6 +215,8 @@ const AddToFavoritesButton = ({
                     : 'Товар добавлен в избранное',
             );
             setFavoriteItemToState(!isLiked);
+        } else {
+            pushNotification('info', 'Что-то пошло не так');
         }
     };
 
@@ -237,6 +239,7 @@ const AddToFavoritesButton = ({
 
 const ProductCardView = ({
     id,
+    categoryId,
     name,
     price,
     isLiked,
@@ -250,16 +253,14 @@ const ProductCardView = ({
     previewUrl: string;
     isAuthorized: boolean;
     isLiked: boolean;
+    categoryId: string | null;
     setFavoriteItemToState: (value: boolean) => void;
 }) => {
     return (
         <CardWrapper>
             <ProductImage
                 $url={previewUrl}
-                to={[
-                    '/product',
-                    { productId: id, categoryId: getSearchParam('categoryId') },
-                ]}
+                to={['/product', { productId: id, categoryId }]}
             />
             <ProductTypographyWrapper>
                 <ProductName>{name}</ProductName>
@@ -308,6 +309,7 @@ export const ProductsView = memo(
                         key={item.id}
                         price={item.price.concat(' руб.')}
                         name={item.name}
+                        categoryId={item.categoryId}
                         isLiked={item.isLiked ?? false}
                         previewUrl={item.miniatures[0].url}
                         isAuthorized={isAuthorized}

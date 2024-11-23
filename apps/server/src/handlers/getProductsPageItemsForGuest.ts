@@ -37,20 +37,19 @@ export default (
 
         const { limit = products.length, startIndex = 0 } = payload;
 
-        let items = products
-            .map((p) => ({
-                id: p.id,
-                name: p.name,
-                price: p.price,
-                leftInStock: p.leftInStock,
-                isLiked: false,
-                miniatures: p.media
-                    .filter((m) => m.type === 'image')
-                    .map((m) => ({
-                        url: `${props.STATIC_SERVER_HOSTNAME}/${m.sizes.preview}`,
-                    })),
-            }))
-            .slice(startIndex, startIndex + limit);
+        let items = products.map((p) => ({
+            id: p.id,
+            categoryId: p.categoryId,
+            name: p.name,
+            price: p.price,
+            leftInStock: p.leftInStock,
+            isLiked: false,
+            miniatures: p.media
+                .filter((m) => m.type === 'image')
+                .map((m) => ({
+                    url: `${props.STATIC_SERVER_HOSTNAME}/${m.sizes.preview}`,
+                })),
+        }));
 
         const needSortByPrice =
             payload.sort?.price !== undefined && payload.sort?.price;
@@ -65,6 +64,6 @@ export default (
 
         return {
             totalProductsCount: products.length,
-            items,
+            items: items.slice(startIndex, startIndex + limit),
         };
     };

@@ -1,13 +1,14 @@
 import { Handlers, HandlersProps } from '../types';
-import { getProductPageItem } from './shared/getProductPageItem';
+import { getProduct } from './shared/collectProduct';
 
 export default ({
         storage,
         STATIC_SERVER_HOSTNAME,
-    }: HandlersProps): Handlers['getProductPageItemForGuest'] =>
-    async ({ productId }) =>
-        getProductPageItem({
+    }: HandlersProps): Handlers['getProduct'] =>
+    async (context, { productId }) =>
+        getProduct({
             storage,
             productId,
             staticServerHostname: STATIC_SERVER_HOSTNAME,
+            context,
         });

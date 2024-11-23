@@ -1,5 +1,6 @@
 import { AuthContext } from 'ts-api-generator';
 import { StorageService } from '../../types';
+import { features } from 'process';
 
 type Props = {
     staticServerHostname: string;
@@ -8,7 +9,7 @@ type Props = {
     context?: AuthContext;
 };
 
-export const getProductPageItem = async ({
+export const getProduct = async ({
     storage,
     productId,
     staticServerHostname,
@@ -31,6 +32,7 @@ export const getProductPageItem = async ({
 
     return {
         id: product.id,
+        categoryId: product.categoryId,
         media: product.media
             .filter((m) => m.type === 'image')
             .map((m) => ({
@@ -40,5 +42,6 @@ export const getProductPageItem = async ({
         name: product.name,
         price: product.price,
         isLiked,
+        features: product.features,
     };
 };

@@ -49,7 +49,7 @@ export const ProductPreviewView = ({
 }) => {
     const shownProduct = useShownProductPreview();
     const { call, status, cash } = useApi(
-        isAuthorized ? 'getProductPreview' : 'getProductPreviewForGuest',
+        isAuthorized ? 'getProduct' : 'getProductForGuest',
     );
 
     useEffect(() => {
@@ -75,8 +75,7 @@ export const ProductPreviewView = ({
                                     '/product',
                                     {
                                         productId: shownProduct,
-                                        categoryId:
-                                            getSearchParam('categoryId'),
+                                        categoryId: cash.categoryId,
                                     },
                                 ]}
                             />

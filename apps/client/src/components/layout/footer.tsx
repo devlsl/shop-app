@@ -36,35 +36,27 @@ export const Footer = () => {
 
     return (
         <Styled>
-            <FooterButton
-                onClick={() => navigate('/categories' satisfies Page)}
-            >
+            <FooterButton onClick={() => navigate('/categories')}>
                 <LayoutDashboardIcon />
             </FooterButton>
 
             <FooterButton
                 onClick={() =>
-                    isAuthorized
-                        ? navigate('/favorites' satisfies Page)
-                        : showSignInView()
+                    isAuthorized ? navigate('/favorites') : showSignInView()
                 }
             >
                 <HeartIcon />
             </FooterButton>
             <FooterButton
                 onClick={() =>
-                    isAuthorized
-                        ? navigate('/cart' satisfies Page)
-                        : showSignInView()
+                    isAuthorized ? navigate('/cart') : showSignInView()
                 }
             >
                 <ShoppingBagIcon />
             </FooterButton>
             <FooterButton
                 onClick={() =>
-                    isAuthorized
-                        ? navigate('/orders' satisfies Page)
-                        : showSignInView()
+                    isAuthorized ? navigate('/orders') : showSignInView()
                 }
             >
                 <ClipboardListIcon />
