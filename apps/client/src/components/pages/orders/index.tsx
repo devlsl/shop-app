@@ -40,7 +40,7 @@ const Wrapper = styled.div`
     gap: 8px;
 `;
 
-const orderStatusLabelMap: Record<
+export const orderStatusLabelMap: Record<
     ApiReturnSchemas['getOrder']['status'],
     string
 > = {
@@ -78,9 +78,9 @@ const OrdersPageView = ({}) => {
             {orders.map((order) => (
                 <Order>
                     <ProductTypographyWrapper>
-                        <ProductName to={['/order', { orderId: order.id }]}>
+                        <OrderNumberTypo to={['/order', { orderId: order.id }]}>
                             Заказ #{order.orderNumber}
-                        </ProductName>
+                        </OrderNumberTypo>
                         <ProductPrice>
                             Товаров: {order.productsCount}
                         </ProductPrice>
@@ -101,7 +101,7 @@ const OrdersPageView = ({}) => {
                     </ProductTypographyWrapper>
 
                     <OrderImagesWrapper>
-                        {order.miniatures.slice(0, 3).map((miniature) => (
+                        {order.miniatures.map((miniature) => (
                             <Image
                                 $url={miniature.url}
                                 to={[
@@ -173,60 +173,9 @@ const OrderImagesWrapper = styled.div`
     gap: 8px;
 `;
 
-const DotsWrapper = styled.div`
-    ${transition('border-color')}
-
-    border-bottom: 2px dotted ${({ theme }) => theme.new[5]};
-
-    height: 16px;
-    flex: 1;
-`;
-
-const SummaryText = styled.span`
-    cursor: auto;
-    ${typography({
-        fontSize: '1.4rem',
-        lineHeight: '1.5rem',
-        fontWeight: '600',
-    })}
-
-    color: #8f8f8f;
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-`;
-
-const SummaryWrapper = styled.div`
-    padding: 16px 0;
-    /* border: 1px solid red; */
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const SummaryTextWrapper = styled.div`
-    flex: 1;
-    display: flex;
-    gap: 6px;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const CountTypo = styled.span`
-    ${typography({ fontSize: '1rem', lineHeight: '1.5px', fontWeight: 600 })}
-    color: #9d9d9d;
-`;
-
-const ActionsWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 8px;
-`;
-
 const MakeOrderButtonStyled = styled(TextButton)`
-    height: 30px;
+    height: 40px;
+    width: fit-content;
 `;
 
 const MakeOrderButtonText = styled(ButtonText)`
@@ -244,52 +193,34 @@ const ProductTypographyWrapper = styled.div`
     gap: 8px;
 `;
 
-const ProductName = styled(Link)`
-    /* cursor: auto; */
+const OrderNumberTypo = styled(Link)`
     ${transition('color')}
     ${typography({ fontSize: '1rem', lineHeight: '1.5rem' })}
 
+    color: ${({ theme }) => theme.button.secondary.hover.text};
     ${hover(css`
-        color: ${({ theme }) => theme.button.secondary.hover.text};
+        color: ${({ theme }) => theme.button.secondary.active.text};
     `)}
 
-    color: #8f8f8f;
-
-    max-width: 100%;
-    text-align: start;
-    /* flex-grow: 1; */
-    /* height: 100%; */
-
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
+
 const ProductPrice = styled.span`
-    cursor: auto;
-    ${typography({
-        fontSize: '0.9rem',
-        lineHeight: '1.35rem',
-        fontWeight: 600,
-    })}
+    ${transition('color')}
+    ${typography({ fontSize: '1rem', lineHeight: '1.5rem' })}
 
-    color: #9d9d9d;
+    color: ${({ theme }) => theme.button.secondary.hover.text};
 
-    max-width: 100%;
-    text-align: start;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
 
 const Image = styled(Link)<{ $url: string }>`
     border-radius: 8px;
     flex-shrink: 0;
-    /* height: 100%; */
 
     ${transition('background-color', 'transform')}
 

@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { AuthNeedPage } from '../shared/authNeedPage';
 import { NotFoundPage } from '../shared/NotFoundPage';
@@ -10,19 +10,12 @@ import { hover } from '../../../shared/utils/styles/hover';
 import { Checkbox } from '../../checkbox';
 import { Link } from '../../link';
 import { typography } from '../../../shared/utils/styles/typography';
-import {
-    CrossIcon,
-    MinusIcon,
-    PlusIcon,
-    ShoppingBag,
-    XIcon,
-} from 'lucide-react';
 import { ButtonText } from '../../buttonText';
-import { pushNotification, showSignInView } from '../../../hooks/useAppState';
-import { useIsAuthorized } from '../../../modules/user';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
 import { useSearchParam } from '../../../modules/url';
+import { pushNotification } from '../../../hooks/useAppState';
+import { orderStatusLabelMap } from '../orders';
 
 export const OrderPage = () => {
     return (
@@ -37,7 +30,30 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    /* gap: 8px; */
+    /* padding-top: 12px; */
+`;
+
+const OrderWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     gap: 8px;
+    padding-top: 12px;
+`;
+
+const OrderStatusText = styled.span`
+    ${typography({ fontSize: '0.9rem', lineHeight: '0.9rem' })}
+
+    color: ${({ theme }) => theme.button.secondary.text};
+
+    border: 1px solid ${({ theme }) => theme.button.secondary.text};
+    padding: 5px;
+    border-radius: 8px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
 
 const OrderPageView = ({}) => {
@@ -68,94 +84,127 @@ const OrderPageView = ({}) => {
 
     return (
         <Wrapper>
-            Заказ #{order.orderNumber}
-            <CartItems>
-                {order.items.map((cartItem) => (
-                    <CartItem
-                        $isSelected={selectedItems[cartItem.productId] ?? false}
-                    >
-                        <Checkbox
-                            isChecked={
-                                selectedItems[cartItem.productId] ?? false
-                            }
-                            toggleIsChecked={() =>
-                                setSelectedItems((prev) => ({
-                                    ...prev,
-                                    [cartItem.productId]: !(
-                                        prev[cartItem.productId] ?? false
-                                    ),
-                                }))
-                            }
-                        />
-                        <Image
-                            to={[
-                                '/product',
-                                {
-                                    productId: cartItem.productId,
-                                    categoryId: cartItem.categoryId,
-                                },
-                            ]}
-                            $url={cartItem.miniature}
-                        />
-                        <ProductTypographyWrapper>
-                            <ProductName>{cartItem.name}</ProductName>
-                            <ProductPrice>{cartItem.price} руб.</ProductPrice>
-                        </ProductTypographyWrapper>
-                        <ActionsWrapper>
-                            {/* <DeleteFromCartButton
-                                    onDeleted={() =>
-                                        setCartItems((prev) =>
-                                            prev
-                                                .map((i) =>
-                                                    i.productId ===
-                                                    cartItem.productId
-                                                        ? {
-                                                              ...i,
-                                                              count:
-                                                                  i.count - 1,
-                                                          }
-                                                        : i,
-                                                )
-                                                .filter((i) => i.count !== 0),
-                                        )
-                                    }
-                                    productId={cartItem.productId}
-                                />
-                                <CountTypo>{cartItem.count}</CountTypo>
-                                <AddToCartButton
-                                    onAdded={() =>
-                                        setCartItems((prev) =>
-                                            prev.map((i) =>
-                                                i.productId ===
-                                                cartItem.productId
-                                                    ? {
-                                                          ...i,
-                                                          count: i.count + 1,
-                                                      }
-                                                    : i,
-                                            ),
-                                        )
-                                    }
-                                    productId={cartItem.productId}
-                                /> */}
-                        </ActionsWrapper>
+            <OrderWrapper>
+                <div
+                    style={{
+                        display: 'flex',
+                        gap: '12px',
+                        alignItems: 'center',
+                        padding: '8px 0',
+                    }}
+                >
+                    <OrderNumberTypo>
+                        Заказ #{order.orderNumber}
+                    </OrderNumberTypo>
+                    <OrderStatusText>
+                        {orderStatusLabelMap[order.status]}
+                    </OrderStatusText>
+                </div>
 
-                        {/* <DeleteAllFromCartButton
-                                onDeleted={() =>
-                                    setCartItems((prev) =>
-                                        prev.filter(
-                                            (i) =>
-                                                i.productId !==
-                                                cartItem.productId,
-                                        ),
-                                    )
-                                }
-                                productId={cartItem.productId}
-                            /> */}
-                    </CartItem>
-                ))}
-            </CartItems>
+                <CartItems>
+                    {order.items.map((cartItem) => (
+                        <CartItem>
+                            <Image
+                                to={[
+                                    '/product',
+                                    {
+                                        productId: cartItem.productId,
+                                        categoryId: cartItem.categoryId,
+                                    },
+                                ]}
+                                $url={cartItem.miniature}
+                            />
+                            <ProductTypographyWrapper>
+                                <ProductName>{cartItem.name}</ProductName>
+                                <ProductPrice>
+                                    {cartItem.price} руб.
+                                </ProductPrice>
+                            </ProductTypographyWrapper>
+                            <ProductName>
+                                x{cartItem.count} ={' '}
+                                {cartItem.count * cartItem.price} руб.
+                            </ProductName>
+                        </CartItem>
+                    ))}
+                </CartItems>
+            </OrderWrapper>
+            <SummaryWrapper>
+                <SummaryTextWrapper>
+                    <SummaryText>Итого</SummaryText>
+                    <DotsWrapper />
+                    <SummaryText>
+                        {order.items.reduce(
+                            (acc, cur) => acc + cur.price * cur.count,
+                            0,
+                        )}{' '}
+                        руб.
+                    </SummaryText>
+                </SummaryTextWrapper>
+                {order.status === 'awaitedPayment' && (
+                    <MakeOrderButton
+                        items={[]}
+                        onMade={() => {
+                            pushNotification(
+                                'success',
+                                'Заказ оформлен и ожидает оплаты',
+                            );
+                        }}
+                    />
+                )}
+            </SummaryWrapper>
         </Wrapper>
+    );
+};
+
+const MakeOrderButtonStyled = styled(TextButton)`
+    height: 48px;
+`;
+
+const MakeOrderButtonText = styled(ButtonText)`
+    ${typography({
+        fontSize: '1.4rem',
+        lineHeight: '1.5rem',
+        fontWeight: '600',
+    })}
+`;
+
+const MakeOrderButton = ({
+    onMade,
+    items,
+}: {
+    onMade: () => void;
+    items: { productId: string; count: number }[];
+}) => {
+    const { call, status } = useApi('makeOrder');
+
+    const handleClick = async () => {
+        if (status === 'loading') return;
+        const itemsCount = items.reduce((acc, i) => acc + i.count, 0);
+        if (itemsCount === 0)
+            return pushNotification(
+                'info',
+                'Выберите товары для оформления заказа',
+            );
+        const response = await call(items);
+        if (response.isLeft())
+            return pushNotification('info', 'Что-то пошло не так');
+        if (response.isRight()) return onMade();
+    };
+
+    const theme = useTheme();
+
+    return (
+        <MakeOrderButtonStyled onClick={handleClick}>
+            <MakeOrderButtonText>Оплатить</MakeOrderButtonText>
+            {status === 'loading' && (
+                <PageLoader
+                    absolute
+                    startColor={theme.dialog.foreground.background}
+                    size='4px'
+                    gap='3px'
+                />
+            )}
+        </MakeOrderButtonStyled>
     );
 };
 
@@ -200,9 +249,14 @@ const SummaryTextWrapper = styled.div`
     align-items: center;
 `;
 
-const CountTypo = styled.span`
-    ${typography({ fontSize: '1rem', lineHeight: '1.5px', fontWeight: 600 })}
-    color: #9d9d9d;
+const OrderNumberTypo = styled.span`
+    ${typography({ fontSize: '1.5rem', lineHeight: '1.5rem' })}
+
+    color: ${({ theme }) => theme.button.secondary.hover.text};
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
 
 const ActionsWrapper = styled.div`
@@ -223,172 +277,6 @@ const ProductActionButton = styled(TextButton)`
         height: 18px;
     }
 `;
-
-const AddToCartButton = ({
-    productId,
-    onAdded,
-}: {
-    productId: string;
-    onAdded: () => void;
-}) => {
-    const { call, status } = useApi('addProductToCart');
-
-    const handleClick = async () => {
-        if (status === 'loading') return;
-        const response = await call({ productId, count: 1 });
-        if (response.value === 'OutOfStock')
-            return pushNotification('error', 'Товар закончился 😢');
-        if (response.isRight()) {
-            onAdded();
-            return pushNotification('success', 'Успешно добавлен в корзину');
-        }
-    };
-
-    const theme = useTheme();
-
-    return (
-        <ProductActionButton onClick={handleClick}>
-            <PlusIcon />
-            {status === 'loading' && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='4px'
-                    gap='3px'
-                />
-            )}
-        </ProductActionButton>
-    );
-};
-
-const MakeOrderButtonStyled = styled(TextButton)`
-    height: 48px;
-`;
-
-const MakeOrderButtonText = styled(ButtonText)`
-    ${typography({
-        fontSize: '1.4rem',
-        lineHeight: '1.5rem',
-        fontWeight: '600',
-    })}
-`;
-
-const MakeOrderButton = ({
-    onMade,
-    items,
-}: {
-    onMade: () => void;
-    items: { productId: string; count: number }[];
-}) => {
-    const { call, status } = useApi('makeOrder');
-
-    const handleClick = async () => {
-        if (status === 'loading') return;
-        const itemsCount = items.reduce((acc, i) => acc + i.count, 0);
-        if (itemsCount === 0)
-            return pushNotification(
-                'info',
-                'Выберите товары для оформления заказа',
-            );
-        const response = await call(items);
-        if (response.isLeft())
-            return pushNotification('info', 'Что-то пошло не так');
-        if (response.isRight()) return onMade();
-    };
-
-    const theme = useTheme();
-
-    return (
-        <MakeOrderButtonStyled onClick={handleClick}>
-            <MakeOrderButtonText>Оформить заказ</MakeOrderButtonText>
-            {status === 'loading' && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='4px'
-                    gap='3px'
-                />
-            )}
-        </MakeOrderButtonStyled>
-    );
-};
-
-const DeleteAllFromCartButton = ({
-    productId,
-    onDeleted,
-}: {
-    productId: string;
-    onDeleted: () => void;
-}) => {
-    const { call, status } = useApi('deleteProductFromCart');
-
-    const handleClick = async () => {
-        if (status === 'loading') return;
-        const response = await call({ productId, count: 'all' });
-        if (response.isLeft())
-            return pushNotification('info', 'Что-то пошло не так');
-        if (response.isRight()) {
-            onDeleted();
-            return pushNotification(
-                'success',
-                'Товары были удалены из корзины',
-            );
-        }
-    };
-
-    const theme = useTheme();
-
-    return (
-        <ProductActionButton onClick={handleClick}>
-            <XIcon />
-            {status === 'loading' && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='4px'
-                    gap='3px'
-                />
-            )}
-        </ProductActionButton>
-    );
-};
-
-const DeleteFromCartButton = ({
-    productId,
-    onDeleted,
-}: {
-    productId: string;
-    onDeleted: () => void;
-}) => {
-    const { call, status } = useApi('deleteProductFromCart');
-
-    const handleClick = async () => {
-        if (status === 'loading') return;
-        const response = await call({ productId, count: 1 });
-        if (response.isLeft())
-            return pushNotification('info', 'Что-то пошло не так');
-        if (response.isRight()) {
-            onDeleted();
-            return pushNotification('success', 'Товар был удалён из корзины');
-        }
-    };
-
-    const theme = useTheme();
-
-    return (
-        <ProductActionButton onClick={handleClick}>
-            <MinusIcon />
-            {status === 'loading' && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='4px'
-                    gap='3px'
-                />
-            )}
-        </ProductActionButton>
-    );
-};
 
 const ProductTypographyWrapper = styled.div`
     display: flex;
@@ -437,7 +325,6 @@ const ProductPrice = styled.span`
 const Image = styled(Link)<{ $url: string }>`
     border-radius: 8px;
     flex-shrink: 0;
-    /* height: 100%; */
 
     ${transition('background-color', 'transform')}
 
@@ -470,7 +357,7 @@ const CartItems = styled.div`
     padding-right: 8px;
 `;
 
-const CartItem = styled.div<{ $isSelected?: boolean }>`
+const CartItem = styled.div`
     overflow: auto;
     ${transition('border-color')}
     flex-shrink: 0;
@@ -482,10 +369,4 @@ const CartItem = styled.div<{ $isSelected?: boolean }>`
     padding: 20px 20px;
     align-items: center;
     border: 2px solid ${({ theme }) => theme.button.outline.border};
-
-    ${({ theme, $isSelected }) =>
-        $isSelected &&
-        css`
-            border-color: ${theme.focusOutline};
-        `}
 `;
