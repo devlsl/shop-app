@@ -22,11 +22,12 @@ import { pushNotification, showSignInView } from '../../../hooks/useAppState';
 import { useIsAuthorized } from '../../../modules/user';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
+import { useSearchParam } from '../../../modules/url';
 
-export const CartPage = () => {
+export const OrderPage = () => {
     return (
         <AuthNeedPage>
-            <CartPageView />
+            <OrderPageView />
         </AuthNeedPage>
     );
 };
@@ -39,74 +40,69 @@ const Wrapper = styled.div`
     gap: 8px;
 `;
 
-const CartPageView = ({}) => {
-    const { call, status } = useApi('getCart');
+const OrderPageView = ({}) => {
+    const { call, status } = useApi('getOrder');
+
+    const orderId = useSearchParam('orderId') ?? '';
 
     const [selectedItems, setSelectedItems] = useState<
         Record<string, boolean | undefined>
     >({});
 
-    const [cartItems, setCartItems] = useState<ApiReturnSchemas['getCart']>([]);
+    const [order, setOrder] = useState<ApiReturnSchemas['getOrder']>();
 
     const fetchData = async () => {
         if (status === 'loading') return;
-        const response = await call();
-        if (response.isRight()) setCartItems(response.value);
+        const response = await call({ orderId });
+        if (response.isRight()) setOrder(response.value);
     };
 
     useEffect(() => {
         fetchData();
-    }, []);
-
-    console.log(selectedItems);
+    }, [orderId]);
 
     if (status === 'loading' || status === 'idle') return <PageLoader />;
 
-    if (cartItems === null || cartItems.length === 0)
-        return <NotFoundPage>Корзина пуста 😢</NotFoundPage>;
+    if (order === undefined)
+        return <NotFoundPage>Заказ не найден 😢</NotFoundPage>;
 
     return (
         <Wrapper>
+            Заказ #{order.orderNumber}
             <CartItems>
-                {cartItems
-                    .filter((i) => i.count !== 0)
-                    .map((cartItem) => (
-                        <CartItem
-                            $isSelected={
+                {order.items.map((cartItem) => (
+                    <CartItem
+                        $isSelected={selectedItems[cartItem.productId] ?? false}
+                    >
+                        <Checkbox
+                            isChecked={
                                 selectedItems[cartItem.productId] ?? false
                             }
-                        >
-                            <Checkbox
-                                isChecked={
-                                    selectedItems[cartItem.productId] ?? false
-                                }
-                                toggleIsChecked={() =>
-                                    setSelectedItems((prev) => ({
-                                        ...prev,
-                                        [cartItem.productId]: !(
-                                            prev[cartItem.productId] ?? false
-                                        ),
-                                    }))
-                                }
-                            />
-                            <Image
-                                to={[
-                                    '/product',
-                                    {
-                                        productId: cartItem.productId,
-                                        categoryId: cartItem.categoryId,
-                                    },
-                                ]}
-                                $url={cartItem.miniatures[0].url}
-                            />
-                            <ProductTypographyWrapper>
-                                <ProductName>{cartItem.name}</ProductName>
-                                <ProductPrice>
-                                    {cartItem.price} руб.
-                                </ProductPrice>
-                            </ProductTypographyWrapper>
-                            <ActionsWrapper>
-                                <DeleteFromCartButton
+                            toggleIsChecked={() =>
+                                setSelectedItems((prev) => ({
+                                    ...prev,
+                                    [cartItem.productId]: !(
+                                        prev[cartItem.productId] ?? false
+                                    ),
+                                }))
+                            }
+                        />
+                        <Image
+                            to={[
+                                '/product',
+                                {
+                                    productId: cartItem.productId,
+                                    categoryId: cartItem.categoryId,
+                                },
+                            ]}
+                            $url={cartItem.miniature}
+                        />
+                        <ProductTypographyWrapper>
+                            <ProductName>{cartItem.name}</ProductName>
+                            <ProductPrice>{cartItem.price} руб.</ProductPrice>
+                        </ProductTypographyWrapper>
+                        <ActionsWrapper>
+                            {/* <DeleteFromCartButton
                                     onDeleted={() =>
                                         setCartItems((prev) =>
                                             prev
@@ -141,10 +137,10 @@ const CartPageView = ({}) => {
                                         )
                                     }
                                     productId={cartItem.productId}
-                                />
-                            </ActionsWrapper>
+                                /> */}
+                        </ActionsWrapper>
 
-                            <DeleteAllFromCartButton
+                        {/* <DeleteAllFromCartButton
                                 onDeleted={() =>
                                     setCartItems((prev) =>
                                         prev.filter(
@@ -155,46 +151,10 @@ const CartPageView = ({}) => {
                                     )
                                 }
                                 productId={cartItem.productId}
-                            />
-                        </CartItem>
-                    ))}
+                            /> */}
+                    </CartItem>
+                ))}
             </CartItems>
-
-            <SummaryWrapper>
-                <SummaryTextWrapper>
-                    <SummaryText>Итого</SummaryText>
-                    <DotsWrapper />
-                    <SummaryText>
-                        {cartItems.reduce(
-                            (acc, cur) =>
-                                selectedItems[cur.productId]
-                                    ? acc + cur.count * cur.price
-                                    : acc,
-                            0,
-                        )}{' '}
-                        руб.
-                    </SummaryText>
-                </SummaryTextWrapper>
-                <MakeOrderButton
-                    items={cartItems
-                        .filter((i) => selectedItems[i.productId])
-                        .map((i) => ({
-                            count: i.count,
-                            productId: i.productId,
-                        }))}
-                    onMade={() => {
-                        setCartItems((prev) =>
-                            prev.filter(
-                                (i) => selectedItems[i.productId] !== true,
-                            ),
-                        );
-                        pushNotification(
-                            'success',
-                            'Заказ оформлен и ожидает оплаты',
-                        );
-                    }}
-                />
-            </SummaryWrapper>
         </Wrapper>
     );
 };

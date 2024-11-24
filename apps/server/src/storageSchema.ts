@@ -51,6 +51,7 @@ export const storageSchema = {
     }),
     order: z.object({
         id: z.string().uuid(),
+        orderNumber: z.string().length(8),
         userId: z.string().uuid(),
         items: z
             .object({
@@ -65,5 +66,6 @@ export const storageSchema = {
         deliveredAt: z.string().datetime().optional(),
         receivedAt: z.string().datetime().optional(),
         rejectedAt: z.string().datetime().optional(),
+        deletedAt: z.string().datetime().optional(),
     }),
 } as const satisfies Record<string, z.ZodTypeAny>;

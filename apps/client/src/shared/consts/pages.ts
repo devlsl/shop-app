@@ -5,4 +5,5 @@ export const pages = [
     '/orders',
     '/favorites',
     '/product',
+    '/order',
 ] as const;

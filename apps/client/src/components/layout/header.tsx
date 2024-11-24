@@ -9,12 +9,18 @@ import {
     ShoppingBagIcon,
     SunIcon,
     UserRoundIcon,
+    XIcon,
 } from 'lucide-react';
 import { navigate, setSearchParam, usePathname } from '../../modules/url';
 import { TextButton } from '../buttons/textButton';
 import { Page } from '../../shared/types/page';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
-import { getSearchInputValue, Search } from '../search';
+import {
+    getSearchInputValue,
+    Search,
+    setSearchInputValue,
+    useSearchInputValue,
+} from '../search';
 import { toggleTheme, useTheme } from '../../modules/theme';
 import { setUser, useIsAuthorized, useUser } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
@@ -25,6 +31,8 @@ import {
     showSignInView,
     toggleAreShownProductFilters,
 } from '../../hooks/useAppState';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useEffect } from 'react';
 
 const Styled = styled.div`
     ${container()}
@@ -41,6 +49,13 @@ export const Header = () => {
     const theme = useTheme();
     const isAuthorized = useIsAuthorized();
 
+    const searchInputValue = useSearchInputValue();
+    const debouncedSearchInputValue = useDebounce(searchInputValue, 400);
+    useEffect(() => {
+        if (debouncedSearchInputValue !== '')
+            setSearchParam('search', debouncedSearchInputValue);
+    }, [debouncedSearchInputValue]);
+
     return (
         <Styled>
             {!isBottomBarShowed && (
@@ -56,12 +71,8 @@ export const Header = () => {
             )}
             <>
                 <Search />
-                <IconButton
-                    onClick={() =>
-                        setSearchParam('search', getSearchInputValue())
-                    }
-                >
-                    <SearchIcon />
+                <IconButton onClick={() => setSearchInputValue('')}>
+                    <XIcon />
                 </IconButton>
             </>
             {!isBottomBarShowed && (

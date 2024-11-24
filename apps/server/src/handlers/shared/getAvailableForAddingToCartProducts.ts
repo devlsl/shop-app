@@ -2,7 +2,7 @@ import { AuthContext } from 'ts-api-generator';
 import { HandlersProps } from '../../types';
 import { minutesSince } from '../../utils/minutesSince';
 
-export const getAvailableProductsCount = async (
+export const getAvailableForAddingToCartProducts = async (
     props: HandlersProps,
     context: AuthContext,
 ): Promise<Record<string, number | undefined>> => {

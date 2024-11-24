@@ -27,6 +27,8 @@ import getFiltersForFavorites from '../handlers/getFiltersForFavorites';
 import getCart from '../handlers/getCart';
 import deleteProductFromCart from '../handlers/deleteProductFromCart';
 import makeOrder from '../handlers/makeOrder';
+import getOrder from '../handlers/getOrder';
+import getOrders from '../handlers/getOrders';
 
 export const startHttpServer = () => {
     const services = {
@@ -66,6 +68,8 @@ export const startHttpServer = () => {
                 getCart: getCart(props),
                 deleteProductFromCart: deleteProductFromCart(props),
                 makeOrder: makeOrder(props),
+                getOrder: getOrder(props),
+                getOrders: getOrders(props),
             })
             .createDefaultHttpRequestHandler(
                 createVerifyAccess(props),

@@ -105,7 +105,6 @@ export const apiSchema = {
                     categoryId: z.string().uuid().nullable(),
                     name: z.string(),
                     price: z.string(),
-                    leftInStock: z.number(),
                     miniatures: z.object({ url: z.string() }).array(),
                     isLiked: z.boolean(),
                 })
@@ -135,7 +134,6 @@ export const apiSchema = {
                     categoryId: z.string().uuid().nullable(),
                     name: z.string(),
                     price: z.string(),
-                    leftInStock: z.number(),
                     miniatures: z.object({ url: z.string() }).array(),
                     isLiked: z.boolean(),
                 })
@@ -168,7 +166,6 @@ export const apiSchema = {
                     name: z.string(),
                     price: z.string(),
                     isLiked: z.boolean(),
-                    leftInStock: z.number(),
                     miniatures: z.object({ url: z.string() }).array(),
                 })
                 .array(),
@@ -212,7 +209,6 @@ export const apiSchema = {
                 categoryId: z.string().uuid().nullable(),
                 name: z.string(),
                 price: z.string(),
-                leftInStock: z.number(),
                 media: z.object({ url: z.string() }).array(),
                 isLiked: z.boolean(),
                 features: z.record(z.string(), z.string()),
@@ -229,7 +225,6 @@ export const apiSchema = {
                 categoryId: z.string().uuid().nullable(),
                 name: z.string(),
                 price: z.string(),
-                leftInStock: z.number(),
                 media: z.object({ url: z.string() }).array(),
                 isLiked: z.boolean(),
                 features: z.record(z.string(), z.string()),
@@ -243,7 +238,6 @@ export const apiSchema = {
                 productId: z.string().uuid(),
                 categoryId: z.string().uuid().nullable(),
                 count: z.number().nonnegative(),
-                leftInStock: z.number().nonnegative(),
                 name: z.string(),
                 price: z.number().nonnegative(),
                 miniatures: z.object({ url: z.string() }).array(),
@@ -252,21 +246,93 @@ export const apiSchema = {
     },
     makeOrder: {
         roles: true,
+        errors: ['ZeroItems'],
         payload: z
             .object({
                 productId: z.string().uuid(),
                 count: z.number().nonnegative(),
             })
             .array(),
-        return: z.object({ orderMade: z.literal(true) }).or(
-            z.object({
-                orderMade: z.literal(false),
-                outOfStockItems: z.object({
-                    productId: z.string().uuid(),
-                    userWant: z.number().nonnegative(),
-                    inStock: z.number().nonnegative(),
+        return: z
+            .object({
+                orderMade: z.literal(true),
+                amount: z.number().nonnegative(),
+            })
+            .or(
+                z.object({
+                    orderMade: z.literal(false),
+                    outOfStockItems: z
+                        .object({
+                            productId: z.string().uuid(),
+                            userWant: z.number().nonnegative(),
+                            inStock: z.number().nonnegative(),
+                        })
+                        .optional(),
                 }),
-            }),
-        ),
+            ),
+    },
+    getOrders: {
+        roles: true,
+        return: z
+            .object({
+                id: z.string().uuid(),
+                orderNumber: z.string().length(8),
+                status: z.enum([
+                    'awaitedPayment',
+                    'paid',
+                    'sent',
+                    'rejected',
+                    'delivered',
+                    'received',
+                ]),
+                miniatures: z
+                    .object({
+                        productId: z.string().uuid(),
+                        categoryId: z.string().uuid().nullable(),
+                        url: z.string().url(),
+                    })
+                    .array(),
+                createdAt: z.string().datetime(),
+                productsCount: z.number().nonnegative(),
+                amount: z.number().nonnegative(),
+            })
+            .array(),
+    },
+    getOrder: {
+        roles: true,
+        payload: z.object({
+            orderId: z.string().uuid(),
+        }),
+        errors: ['NotFound'],
+        return: z.object({
+            id: z.string().uuid(),
+            orderNumber: z.string().length(8),
+            status: z.enum([
+                'awaitedPayment',
+                'paid',
+                'sent',
+                'rejected',
+                'delivered',
+                'received',
+            ]),
+            createdAt: z.string().datetime(),
+            paidAt: z.string().datetime().optional(),
+            sentAt: z.string().datetime().optional(),
+            deliveredAt: z.string().datetime().optional(),
+            receivedAt: z.string().datetime().optional(),
+            rejectedAt: z.string().datetime().optional(),
+            productsCount: z.number().nonnegative(),
+            amount: z.number().nonnegative(),
+            items: z
+                .object({
+                    productId: z.string().uuid(),
+                    categoryId: z.string().uuid().nullable(),
+                    name: z.string(),
+                    miniature: z.string().url(),
+                    count: z.number().positive(),
+                    price: z.number().positive(),
+                })
+                .array(),
+        }),
     },
 } as const satisfies ActionOptionsMap;

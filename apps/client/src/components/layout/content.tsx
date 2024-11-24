@@ -11,6 +11,7 @@ import { CartPage } from '../pages/cart';
 import { OrdersPage } from '../pages/orders';
 import { FavoritesPage } from '../pages/favorites';
 import { ProductPage } from '../pages/product';
+import { OrderPage } from '../pages/order';
 
 const needShowCategoryPath = (pathname: string) =>
     ['/products', '/categories', '/product'].includes(pathname);
@@ -40,6 +41,7 @@ const pathnameToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
         '/favorites': <FavoritesPage />,
         '/orders': <OrdersPage />,
         '/product': <ProductPage />,
+        '/order': <OrderPage />,
     },
     <div>default</div>,
 );
