@@ -1,0 +1,62 @@
+[
+    {
+        "id": "373ea671-5665-4745-b841-5067ced5dd4b",
+        "imageId": "2efed669-95b7-4c7d-9908-327923171095",
+        "name": "Электроника",
+        "parentCategoryId": null
+    },
+    {
+        "id": "1333624c-0498-4ebe-8952-b502aa9e25c4",
+        "imageId": "bb112bef-d960-4b46-aef7-3d7e21e54ba9",
+        "name": "Смартфоны",
+        "parentCategoryId": "373ea671-5665-4745-b841-5067ced5dd4b"
+    },
+    {
+        "id": "f587b8fd-5648-41af-9016-b41a9857cf18",
+        "imageId": "7d0b8227-08c9-4039-944e-9e14e3da395c",
+        "name": "Ноутбуки",
+        "parentCategoryId": "373ea671-5665-4745-b841-5067ced5dd4b"
+    },
+    {
+        "id": "5c01c880-f9b4-42f3-b277-eb59e894f9d9",
+        "imageId": "13d3aa99-3e6e-45b7-b780-917231a2f1dc",
+        "name": "Планшеты",
+        "parentCategoryId": "373ea671-5665-4745-b841-5067ced5dd4b"
+    },
+    {
+        "id": "6d690fd3-fcec-4ea1-a7bc-eb5c5f6be070",
+        "imageId": "5585ca3c-a93a-4f6a-8c11-68d06339e80b",
+        "name": "Телевизоры",
+        "parentCategoryId": "373ea671-5665-4745-b841-5067ced5dd4b"
+    },
+    {
+        "id": "80cc1b04-c6db-4c37-8e3b-5865ba23f914",
+        "imageId": "a2cd5132-753a-4408-b8bb-e3a611103ba7",
+        "name": "Умные часы\nи браслеты",
+        "parentCategoryId": "373ea671-5665-4745-b841-5067ced5dd4b"
+    },
+    {
+        "id": "4b92cf81-4b77-4b1d-9932-535229e1a932",
+        "imageId": "acb3dc06-6dd0-4fdb-b2f1-f50488da2e9b",
+        "name": "Наушники",
+        "parentCategoryId": "373ea671-5665-4745-b841-5067ced5dd4b"
+    },
+    {
+        "id": "693f4fc4-7800-411d-9434-289ae76b950a",
+        "imageId": "7a723e08-8a8a-4c96-93ed-8457eb73dc37",
+        "name": "Обувь",
+        "parentCategoryId": null
+    },
+    {
+        "id": "dba5cfa0-856c-4c21-985b-9b2927e87228",
+        "imageId": "2093a62f-bc39-4aa3-a178-92bc9aa5ded2",
+        "name": "Кеды",
+        "parentCategoryId": "693f4fc4-7800-411d-9434-289ae76b950a"
+    },
+    {
+        "id": "c3113b82-2a6e-4018-a10c-9188f28e39b0",
+        "imageId": "a76fe0fc-c028-4a1c-8f73-9a4854e45f7e",
+        "name": "Кроссовки",
+        "parentCategoryId": "693f4fc4-7800-411d-9434-289ae76b950a"
+    }
+]

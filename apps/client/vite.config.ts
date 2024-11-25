@@ -6,9 +6,10 @@ import { readFile } from 'fs/promises';
 // https://vitejs.dev/config/
 export default defineConfig(async () => {
     const dotenvMap = Object.fromEntries(
-        (await readFile(resolve(__dirname, '..', '..', '.env')))
+        (await readFile(resolve(__dirname, '..', '..', '.env'), 'utf-8'))
             .toString()
-            .split('\r\n')
+            .replaceAll('\r\n', '\n')
+            .split('\n')
             .filter((l) => l !== '')
             .map((l) => {
                 const lineItems = l.split('=');

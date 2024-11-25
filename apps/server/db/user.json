@@ -1,0 +1,9 @@
+[
+    {
+        "id": "cac30f3a-766e-42e2-82be-19b1d1cd89a3",
+        "email": "test1@mail.ru",
+        "passwordHash": "$2b$10$1RZXsXw9GYsj6yvMFQ7V3.jRnwNFATflolzgYW8zQSJWGn7BNKu6a",
+        "passwordHashSalt": "$2b$10$1RZXsXw9GYsj6yvMFQ7V3.",
+        "role": "user"
+    }
+]
