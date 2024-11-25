@@ -23,6 +23,7 @@ import { useIsAuthorized } from '../../../modules/user';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
 import { useSearchParam } from '../../../modules/url';
+import { useBreakpoint } from '../../../hooks/useBreakpoints';
 
 export const OrdersPage = () => {
     return (
@@ -44,7 +45,7 @@ export const orderStatusLabelMap: Record<
     ApiReturnSchemas['getOrder']['status'],
     string
 > = {
-    awaitedPayment: 'Ожидает оплаты',
+    awaitedPayment: 'Ожидает оплату',
     delivered: 'Доставлен',
     paid: 'Оплачен',
     received: 'Получен',
@@ -58,6 +59,8 @@ const OrdersPageView = ({}) => {
     // const searchQuery = useSearchParam('search');
 
     const [orders, setOrders] = useState<ApiReturnSchemas['getOrders']>([]);
+
+    const isHiddenOrderItemImages = useBreakpoint({ max: 350 });
 
     const fetchData = async () => {
         const response = await call();
@@ -78,149 +81,90 @@ const OrdersPageView = ({}) => {
             {orders.map((order) => (
                 <Order>
                     <ProductTypographyWrapper>
-                        <OrderNumberTypo to={['/order', { orderId: order.id }]}>
-                            Заказ #{order.orderNumber}
-                        </OrderNumberTypo>
-                        <ProductPrice>
+                        <OrderTitleWrapper>
+                            <OrderNumberTypo
+                                to={['/order', { orderId: order.id }]}
+                            >
+                                Заказ #{order.orderNumber}
+                            </OrderNumberTypo>
+                            <OrderStatusText>
+                                {orderStatusLabelMap[order.status]}
+                            </OrderStatusText>
+                        </OrderTitleWrapper>
+                        <ProductPriceDark>
                             Товаров: {order.productsCount}
-                        </ProductPrice>
-                        <ProductPrice>
-                            {orderStatusLabelMap[order.status]}
-                        </ProductPrice>
-                        <ProductPrice>
+                        </ProductPriceDark>
+                        <ProductPriceDark>
                             {new Date(order.createdAt).toLocaleDateString()}
-                        </ProductPrice>
+                        </ProductPriceDark>
                         <ProductPrice>{order.amount} руб.</ProductPrice>
-                        {order.status === 'awaitedPayment' && (
-                            <MakeOrderButtonStyled>
-                                <MakeOrderButtonText>
-                                    Оплатить
-                                </MakeOrderButtonText>
-                            </MakeOrderButtonStyled>
-                        )}
                     </ProductTypographyWrapper>
-
-                    <OrderImagesWrapper>
-                        {order.miniatures.map((miniature) => (
+                    {!isHiddenOrderItemImages && (
+                        <OrderImagesWrapper>
                             <Image
-                                $url={miniature.url}
+                                $url={order.miniatures[0].url ?? ''}
                                 to={[
                                     '/product',
                                     {
-                                        productId: miniature.productId,
-                                        categoryId: miniature.categoryId,
+                                        productId:
+                                            order.miniatures[0].productId,
+                                        categoryId:
+                                            order.miniatures[0].categoryId,
                                     },
                                 ]}
                             />
-                        ))}
-                    </OrderImagesWrapper>
-                    {/* <ActionsWrapper>
-                            <DeleteFromCartButton
-                                onDeleted={() =>
-                                    setCartItems((prev) =>
-                                        prev
-                                            .map((i) =>
-                                                i.productId ===
-                                                cartItem.productId
-                                                    ? {
-                                                          ...i,
-                                                          count: i.count - 1,
-                                                      }
-                                                    : i,
-                                            )
-                                            .filter((i) => i.count !== 0),
-                                    )
-                                }
-                                productId={cartItem.productId}
-                            />
-                            <CountTypo>{cartItem.count}</CountTypo>
-                            <AddToCartButton
-                                onAdded={() =>
-                                    setCartItems((prev) =>
-                                        prev.map((i) =>
-                                            i.productId === cartItem.productId
-                                                ? {
-                                                      ...i,
-                                                      count: i.count + 1,
-                                                  }
-                                                : i,
-                                        ),
-                                    )
-                                }
-                                productId={cartItem.productId}
-                            />
-                        </ActionsWrapper> */}
-
-                    {/* <DeleteAllFromCartButton
-                            onDeleted={() =>
-                                setOrders((prev) =>
-                                    prev.filter(
-                                        (o) => o.orderId !== order.orderId,
-                                    ),
-                                )
-                            }
-                            productId={order.productId}
-                        /> */}
+                            {order.miniatures.length > 1 && (
+                                <OtherOrderItems
+                                    $url={order.miniatures[1].url ?? ''}
+                                    to={['/order', { orderId: order.id }]}
+                                />
+                            )}
+                        </OrderImagesWrapper>
+                    )}
                 </Order>
             ))}
         </Orders>
     );
 };
 
-const OrderImagesWrapper = styled.div`
-    /* border: 1px solid red; */
-    display: flex;
-    gap: 8px;
-`;
+const OtherOrderItems = styled(Link)<{ $url: string }>`
+    position: absolute;
+    inset: 0;
+    transform: translate(10px, -10px);
+    z-index: 1;
 
-const MakeOrderButtonStyled = styled(TextButton)`
-    height: 40px;
-    width: fit-content;
-`;
+    background-color: red;
 
-const MakeOrderButtonText = styled(ButtonText)`
-    ${typography({
-        fontSize: '1.4rem',
-        lineHeight: '1.5rem',
-        fontWeight: '600',
-    })}
-`;
+    border-radius: 8px;
+    flex-shrink: 0;
 
-const ProductTypographyWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 8px;
-`;
+    ${transition('background-color', 'transform')}
 
-const OrderNumberTypo = styled(Link)`
-    ${transition('color')}
-    ${typography({ fontSize: '1rem', lineHeight: '1.5rem' })}
+    cursor: pointer;
+    aspect-ratio: 4/5;
+    background-image: url(${({ $url }) => $url});
+    background-color: ${({ theme }) => theme.button.secondary.background};
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 80px;
 
-    color: ${({ theme }) => theme.button.secondary.hover.text};
     ${hover(css`
-        color: ${({ theme }) => theme.button.secondary.active.text};
+        background-color: ${({ theme }) =>
+            theme.button.secondary.hover.background};
     `)}
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-`;
-
-const ProductPrice = styled.span`
-    ${transition('color')}
-    ${typography({ fontSize: '1rem', lineHeight: '1.5rem' })}
-
-    color: ${({ theme }) => theme.button.secondary.hover.text};
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    &:active {
+        background-color: ${({ theme }) =>
+            theme.button.secondary.active.background};
+    }
 `;
 
 const Image = styled(Link)<{ $url: string }>`
     border-radius: 8px;
     flex-shrink: 0;
+    z-index: 2;
+    border: 1px solid ${({ theme }) => theme.body.background};
 
     ${transition('background-color', 'transform')}
 
@@ -245,12 +189,100 @@ const Image = styled(Link)<{ $url: string }>`
     }
 `;
 
+const OrderImagesWrapper = styled.div`
+    display: flex;
+    position: relative;
+    padding-right: 10px;
+`;
+
+const MakeOrderButtonStyled = styled(TextButton)`
+    height: 40px;
+    width: fit-content;
+`;
+
+const MakeOrderButtonText = styled(ButtonText)`
+    ${typography({
+        fontSize: '1.4rem',
+        lineHeight: '1.5rem',
+        fontWeight: '600',
+    })}
+`;
+
+const ProductTypographyWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+`;
+
+const OrderNumberTypo = styled(Link)`
+    ${transition('color')}
+    ${typography({ fontSize: '1.2rem', lineHeight: '1.5rem' })}
+
+    color: ${({ theme }) => theme.button.secondary.hover.text};
+    ${hover(css`
+        color: ${({ theme }) => theme.button.secondary.active.text};
+    `)}
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const ProductPrice = styled.span`
+    ${transition('color')}
+    ${typography({ fontSize: '1rem', lineHeight: '1.5rem' })}
+
+    color: ${({ theme }) => theme.button.secondary.hover.text};
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const ProductPriceDark = styled.span`
+    ${transition('color')}
+    ${typography({ fontSize: '0.8rem', lineHeight: '1.2rem' })}
+
+    color: ${({ theme }) => theme.button.secondary.text};
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
 const Orders = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
     overflow: auto;
     padding-right: 8px;
+`;
+
+const OrderTitleWrapper = styled.div`
+    display: flex;
+    gap: 12px;
+    row-gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+`;
+
+const OrderStatusText = styled.span`
+    ${typography({ fontSize: '0.9rem', lineHeight: '0.9rem' })}
+
+    color: ${({ theme }) => theme.button.secondary.text};
+
+    display: block;
+
+    width: fit-content;
+
+    border: 1px solid ${({ theme }) => theme.button.secondary.text};
+    padding: 5px;
+    border-radius: 8px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
 
 const Order = styled.div<{ $isSelected?: boolean }>`

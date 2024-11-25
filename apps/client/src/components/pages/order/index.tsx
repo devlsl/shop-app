@@ -30,6 +30,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    gap: 8px;
     /* gap: 8px; */
     /* padding-top: 12px; */
 `;
@@ -84,50 +85,38 @@ const OrderPageView = ({}) => {
 
     return (
         <Wrapper>
-            <OrderWrapper>
-                <div
-                    style={{
-                        display: 'flex',
-                        gap: '12px',
-                        alignItems: 'center',
-                        padding: '8px 0',
-                    }}
-                >
-                    <OrderNumberTypo>
-                        Заказ #{order.orderNumber}
-                    </OrderNumberTypo>
-                    <OrderStatusText>
-                        {orderStatusLabelMap[order.status]}
-                    </OrderStatusText>
-                </div>
+            <OrderTitleWrapper>
+                <OrderNumberTypo>Заказ #{order.orderNumber}</OrderNumberTypo>
+                <OrderStatusText>
+                    {orderStatusLabelMap[order.status]}
+                </OrderStatusText>
+            </OrderTitleWrapper>
 
-                <CartItems>
-                    {order.items.map((cartItem) => (
-                        <CartItem>
-                            <Image
-                                to={[
-                                    '/product',
-                                    {
-                                        productId: cartItem.productId,
-                                        categoryId: cartItem.categoryId,
-                                    },
-                                ]}
-                                $url={cartItem.miniature}
-                            />
-                            <ProductTypographyWrapper>
-                                <ProductName>{cartItem.name}</ProductName>
-                                <ProductPrice>
-                                    {cartItem.price} руб.
-                                </ProductPrice>
-                            </ProductTypographyWrapper>
-                            <ProductName>
-                                x{cartItem.count} ={' '}
-                                {cartItem.count * cartItem.price} руб.
-                            </ProductName>
-                        </CartItem>
-                    ))}
-                </CartItems>
-            </OrderWrapper>
+            <CartItems>
+                {order.items.map((cartItem) => (
+                    <CartItem>
+                        <Image
+                            to={[
+                                '/product',
+                                {
+                                    productId: cartItem.productId,
+                                    categoryId: cartItem.categoryId,
+                                },
+                            ]}
+                            $url={cartItem.miniature}
+                        />
+                        <ProductTypographyWrapper>
+                            <ProductName>{cartItem.name}</ProductName>
+                            <ProductPrice>{cartItem.price} руб.</ProductPrice>
+                        </ProductTypographyWrapper>
+                        <ProductName>
+                            x{cartItem.count} ={' '}
+                            {cartItem.count * cartItem.price} руб.
+                        </ProductName>
+                    </CartItem>
+                ))}
+            </CartItems>
+
             <SummaryWrapper>
                 <SummaryTextWrapper>
                     <SummaryText>Итого</SummaryText>
@@ -140,21 +129,27 @@ const OrderPageView = ({}) => {
                         руб.
                     </SummaryText>
                 </SummaryTextWrapper>
+
                 {order.status === 'awaitedPayment' && (
-                    <MakeOrderButton
-                        items={[]}
-                        onMade={() => {
-                            pushNotification(
-                                'success',
-                                'Заказ оформлен и ожидает оплаты',
-                            );
-                        }}
-                    />
+                    <MakeOrderButtonStyled
+                        onClick={() =>
+                            pushNotification('info', 'Недостаточно средств')
+                        }
+                    >
+                        <MakeOrderButtonText>Оплатить</MakeOrderButtonText>
+                    </MakeOrderButtonStyled>
                 )}
             </SummaryWrapper>
         </Wrapper>
     );
 };
+
+const OrderTitleWrapper = styled.div`
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+`;
 
 const MakeOrderButtonStyled = styled(TextButton)`
     height: 48px;
@@ -167,46 +162,6 @@ const MakeOrderButtonText = styled(ButtonText)`
         fontWeight: '600',
     })}
 `;
-
-const MakeOrderButton = ({
-    onMade,
-    items,
-}: {
-    onMade: () => void;
-    items: { productId: string; count: number }[];
-}) => {
-    const { call, status } = useApi('makeOrder');
-
-    const handleClick = async () => {
-        if (status === 'loading') return;
-        const itemsCount = items.reduce((acc, i) => acc + i.count, 0);
-        if (itemsCount === 0)
-            return pushNotification(
-                'info',
-                'Выберите товары для оформления заказа',
-            );
-        const response = await call(items);
-        if (response.isLeft())
-            return pushNotification('info', 'Что-то пошло не так');
-        if (response.isRight()) return onMade();
-    };
-
-    const theme = useTheme();
-
-    return (
-        <MakeOrderButtonStyled onClick={handleClick}>
-            <MakeOrderButtonText>Оплатить</MakeOrderButtonText>
-            {status === 'loading' && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='4px'
-                    gap='3px'
-                />
-            )}
-        </MakeOrderButtonStyled>
-    );
-};
 
 const DotsWrapper = styled.div`
     ${transition('border-color')}
@@ -355,6 +310,7 @@ const CartItems = styled.div`
     gap: 8px;
     overflow: auto;
     padding-right: 8px;
+    height: 100%;
 `;
 
 const CartItem = styled.div`
