@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { usePathname } from '../../modules/url';
+import { navigate, usePathname } from '../../modules/url';
 import { Page } from '../../shared/types/page';
 import { createMapWithDefaultValue } from '../../shared/utils/helpers/createMapWithDefaultValue';
 import { CategoriesPage } from '../pages/categories';
@@ -12,6 +12,11 @@ import { OrdersPage } from '../pages/orders';
 import { FavoritesPage } from '../pages/favorites';
 import { ProductPage } from '../pages/product';
 import { OrderPage } from '../pages/order';
+import { useEffect } from 'react';
+import { NotFoundPage } from '../pages/shared/NotFoundPage';
+import { ButtonText } from '../buttonText';
+import { TextButton } from '../buttons/textButton';
+import { typography } from '../../shared/utils/styles/typography';
 
 const needShowCategoryPath = (pathname: string) =>
     ['/products', '/categories', '/product'].includes(pathname);
@@ -33,6 +38,24 @@ const CategoryPathWrapper = styled.div`
     padding: 0 8px;
 `;
 
+const NotFoundPageWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+`;
+
+const GoToCatalogButton = styled(TextButton)`
+    height: 40px;
+`;
+
+const GoToCatalogButtonText = styled(ButtonText)`
+    ${typography({
+        fontSize: '1.1rem',
+        lineHeight: '1.1rem',
+        fontWeight: '600',
+    })}
+`;
+
 const pathnameToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
     {
         '/products': <ProductsPage />,
@@ -43,11 +66,23 @@ const pathnameToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
         '/product': <ProductPage />,
         '/order': <OrderPage />,
     },
-    <div>default</div>,
+    <NotFoundPage>
+        <NotFoundPageWrapper>
+            <div>Такой страницы нет</div>
+            <GoToCatalogButton onClick={() => navigate('/categories')}>
+                <GoToCatalogButtonText>Перейти в каталог</GoToCatalogButtonText>
+            </GoToCatalogButton>
+        </NotFoundPageWrapper>
+    </NotFoundPage>,
 );
 
 export const Content = () => {
     const pathname = usePathname();
+    console.log(pathname);
+
+    useEffect(() => {
+        if (pathname === '/') navigate('/categories');
+    }, [pathname]);
 
     return (
         <>
