@@ -3,11 +3,10 @@ import { useApi } from '../../../hooks/useApi';
 import { AuthNeedPage } from '../shared/authNeedPage';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
-import styled, { css, useTheme } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { staticStyles } from '../../../shared/consts/styles/static';
 import { transition } from '../../../shared/utils/styles/transition';
 import { hover } from '../../../shared/utils/styles/hover';
-import { Checkbox } from '../../checkbox';
 import { Link } from '../../link';
 import { typography } from '../../../shared/utils/styles/typography';
 import { ButtonText } from '../../buttonText';
@@ -35,14 +34,6 @@ const Wrapper = styled.div`
     /* padding-top: 12px; */
 `;
 
-const OrderWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: 8px;
-    padding-top: 12px;
-`;
-
 const OrderStatusText = styled.span`
     ${typography({ fontSize: '0.9rem', lineHeight: '0.9rem' })}
 
@@ -61,10 +52,6 @@ const OrderPageView = ({}) => {
     const { call, status } = useApi('getOrder');
 
     const orderId = useSearchParam('orderId') ?? '';
-
-    const [selectedItems, setSelectedItems] = useState<
-        Record<string, boolean | undefined>
-    >({});
 
     const [order, setOrder] = useState<ApiReturnSchemas['getOrder']>();
 
@@ -212,25 +199,6 @@ const OrderNumberTypo = styled.span`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-`;
-
-const ActionsWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 8px;
-`;
-
-const ProductActionButton = styled(TextButton)`
-    padding: 0;
-    height: 26px;
-    width: 26px;
-    flex-shrink: 0;
-
-    svg {
-        stroke-width: 2px;
-        width: 18px;
-        height: 18px;
-    }
 `;
 
 const ProductTypographyWrapper = styled.div`

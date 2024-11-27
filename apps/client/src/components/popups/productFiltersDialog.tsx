@@ -6,15 +6,9 @@ import {
 import { typography } from '../../shared/utils/styles/typography';
 import { Dialog } from './shared';
 import { DialogOutlineButton } from './shared/outlineButton';
-import { DialogContentWrapper } from './shared/wrapper';
 import { DialogSecondaryButton } from './shared/secondaryButton';
 import { ButtonText } from '../buttonText';
-import {
-    getSearchParam,
-    setSearchParam,
-    usePathname,
-    useSearchParam,
-} from '../../modules/url';
+import { setSearchParam, usePathname, useSearchParam } from '../../modules/url';
 import { useApi } from '../../hooks/useApi';
 import { useEffect, useState } from 'react';
 import { PageLoader } from '../pageLoader';
@@ -22,7 +16,6 @@ import { DialogRow } from './shared/row';
 import { apiSchema } from '@shop/shared';
 import { z } from 'zod';
 import { hover } from '../../shared/utils/styles/hover';
-import { Page } from '../../shared/types/page';
 import { parseProductFilters, parseProductSorting } from '../pages/favorites';
 
 const DialogWrapper = styled.div`

@@ -1,17 +1,14 @@
 import styled, { css } from 'styled-components';
-import { container } from '../../../shared/utils/styles/container';
 import { transition } from '../../../shared/utils/styles/transition';
 import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
 import { typography } from '../../../shared/utils/styles/typography';
 import { useEffect } from 'react';
-import { navigate, setSearchParam, useSearchParam } from '../../../modules/url';
+import { useSearchParam } from '../../../modules/url';
 import { useApi } from '../../../hooks/useApi';
 import { ChevronLeftIcon, TextSearchIcon } from 'lucide-react';
 import { PageLoader } from '../../pageLoader';
-import { Page } from '../../../shared/types/page';
 import { Card } from '../shared/card';
 import { CardsGrid } from '../shared/cardsGrid';
-import { useSearchInputValue } from '../../search';
 
 const TitleLine = styled.div`
     ${typography({

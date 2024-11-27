@@ -148,7 +148,7 @@ const AddToCartButton = ({ productId }: { productId: string }) => {
 };
 
 const AddToFavoritesButtonIcon = styled(HeartIcon)<{ $isLiked: boolean }>`
-    ${({ theme, $isLiked }) =>
+    ${({ $isLiked }) =>
         $isLiked &&
         css`
             color: red;

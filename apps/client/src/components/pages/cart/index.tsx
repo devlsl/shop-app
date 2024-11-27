@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { AuthNeedPage } from '../shared/authNeedPage';
 import { NotFoundPage } from '../shared/NotFoundPage';
@@ -10,16 +10,9 @@ import { hover } from '../../../shared/utils/styles/hover';
 import { Checkbox } from '../../checkbox';
 import { Link } from '../../link';
 import { typography } from '../../../shared/utils/styles/typography';
-import {
-    CrossIcon,
-    MinusIcon,
-    PlusIcon,
-    ShoppingBag,
-    XIcon,
-} from 'lucide-react';
+import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { ButtonText } from '../../buttonText';
-import { pushNotification, showSignInView } from '../../../hooks/useAppState';
-import { useIsAuthorized } from '../../../modules/user';
+import { pushNotification } from '../../../hooks/useAppState';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
 

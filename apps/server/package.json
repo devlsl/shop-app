@@ -5,7 +5,9 @@
     "type": "commonjs",
     "scripts": {
         "build:w": "tsc -w",
-        "dev": "node --env-file ../../.env --watch ./dist/main.js"
+        "build": "tsc",
+        "dev": "node --env-file ../../.env --watch ./dist/main.js",
+        "start": "node --env-file ../../.env ./dist/main.js"
     },
     "keywords": [],
     "author": "",

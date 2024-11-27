@@ -19,7 +19,6 @@ import { TextButton } from '../../buttons/textButton';
 import { hover } from '../../../shared/utils/styles/hover';
 import { Link } from '../../link';
 import { transition } from '../../../shared/utils/styles/transition';
-import { getSearchParam } from '../../../modules/url';
 
 export const CardWrapper = styled.div`
     display: flex;
@@ -132,16 +131,6 @@ const ProductActionsWrapper = styled.div`
 // const ProductActionIconButton = styled(IconButton)`
 //     hei
 // `
-
-const LikeButton = styled(IconButton)<{ $isLiked: boolean }>`
-    ${({ $isLiked }) =>
-        $isLiked &&
-        css`
-            svg {
-                color: red;
-            }
-        `}
-`;
 
 const AddToCartButton = ({
     isAuthorized,

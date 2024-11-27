@@ -14,7 +14,6 @@ import { DialogContentWrapper } from '../shared/wrapper';
 import { DialogOutlineButton } from '../shared/outlineButton';
 import { Dialog } from '../shared';
 import { ButtonText } from '../../buttonText';
-import { getSearchParam } from '../../../modules/url';
 import { AuthDependentView } from '../../pages/shared/authDependentView';
 
 const ProductImage = styled(Link)<{ $url: string }>`

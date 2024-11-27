@@ -1,28 +1,15 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { AuthNeedPage } from '../shared/authNeedPage';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
-import styled, { css, useTheme } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { staticStyles } from '../../../shared/consts/styles/static';
 import { transition } from '../../../shared/utils/styles/transition';
 import { hover } from '../../../shared/utils/styles/hover';
-import { Checkbox } from '../../checkbox';
 import { Link } from '../../link';
 import { typography } from '../../../shared/utils/styles/typography';
-import {
-    CrossIcon,
-    MinusIcon,
-    PlusIcon,
-    ShoppingBag,
-    XIcon,
-} from 'lucide-react';
-import { ButtonText } from '../../buttonText';
-import { pushNotification, showSignInView } from '../../../hooks/useAppState';
-import { useIsAuthorized } from '../../../modules/user';
-import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
-import { useSearchParam } from '../../../modules/url';
 import { useBreakpoint } from '../../../hooks/useBreakpoints';
 
 export const OrdersPage = () => {
@@ -32,14 +19,6 @@ export const OrdersPage = () => {
         </AuthNeedPage>
     );
 };
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    gap: 8px;
-`;
 
 export const orderStatusLabelMap: Record<
     ApiReturnSchemas['getOrder']['status'],
@@ -193,19 +172,6 @@ const OrderImagesWrapper = styled.div`
     display: flex;
     position: relative;
     padding-right: 10px;
-`;
-
-const MakeOrderButtonStyled = styled(TextButton)`
-    height: 40px;
-    width: fit-content;
-`;
-
-const MakeOrderButtonText = styled(ButtonText)`
-    ${typography({
-        fontSize: '1.4rem',
-        lineHeight: '1.5rem',
-        fontWeight: '600',
-    })}
 `;
 
 const ProductTypographyWrapper = styled.div`

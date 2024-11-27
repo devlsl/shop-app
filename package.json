@@ -2,13 +2,16 @@
     "name": "shop",
     "private": true,
     "scripts": {
-        "build:shared": "cd packages/shared && npm run build",
         "building:server": "cd apps/server && npm run build:w",
-        "start:server": "cd apps/server && npm run dev",
+        "dev:server": "cd apps/server && npm run dev",
         "building:static": "cd apps/static && npm run build:w",
         "start:static": "cd apps/static && npm run dev",
         "start:client": "cd apps/client && npm run dev",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "shared:build": "cd packages/shared && npm run build",
+        "client:build": "cd apps/client && npm run build",
+        "server:build": "cd apps/server && npm run build",
+        "server:start": "cd apps/server && npm run start"
     },
     "workspaces": [
         "packages/*",

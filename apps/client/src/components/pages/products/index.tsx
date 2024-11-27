@@ -3,11 +3,10 @@ import { AuthDependentView } from '../shared/authDependentView';
 import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import { getSearchParam, useSearchParam } from '../../../modules/url';
+import { useSearchParam } from '../../../modules/url';
 import { matchMediaBreakpoint } from '../../../shared/utils/helpers/isBreakpointMathers';
 import { LazyLoadingTrigger, ProductsView } from './productsGrid';
 import { NotFoundPage } from '../shared/NotFoundPage';
-import { apiPayloadSchemas } from '../../../shared/consts/schemas/api';
 import { parseProductFilters, parseProductSorting } from '../favorites';
 
 export const ProductsPageView = ({

@@ -63,43 +63,6 @@ const Text = styled.span`
     /* border: 1px solid red; */
 `;
 
-const Title = styled.span`
-    display: inline;
-
-    ${typography({
-        fontWeight: 600,
-        fontSize: '0.85rem',
-        lineHeight: '0.85rem',
-    })}
-    max-width: 100%;
-    text-align: center;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    white-space: nowrap;
-    overflow-wrap: break-word;
-    overflow: hidden;
-
-    ${breakpoint(
-        'twoColumnsInContentGrid',
-        css`
-            font-size: 1rem;
-            line-height: 1rem;
-        `,
-    )}
-
-    ${breakpoint(
-        'oneColumnInContentGrid',
-        css`
-            font-size: 1.3rem;
-            line-height: 1.3rem;
-        `,
-    )}
-
-color: ${({ theme }) => theme.button.secondary.text};
-
-    ${transition('color')}
-`;
-
 const CloseButton = styled(LinkIconButton)<{ $variant: Notification['type'] }>`
     ${breakpoint(
         'showBottomBar',

@@ -5,7 +5,6 @@ import {
     HeartIcon,
     LogOutIcon,
     MoonIcon,
-    SearchIcon,
     ShoppingBagIcon,
     SunIcon,
     UserRoundIcon,
@@ -13,16 +12,10 @@ import {
 } from 'lucide-react';
 import { navigate, setSearchParam, usePathname } from '../../modules/url';
 import { TextButton } from '../buttons/textButton';
-import { Page } from '../../shared/types/page';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
-import {
-    getSearchInputValue,
-    Search,
-    setSearchInputValue,
-    useSearchInputValue,
-} from '../search';
+import { Search, setSearchInputValue, useSearchInputValue } from '../search';
 import { toggleTheme, useTheme } from '../../modules/theme';
-import { setUser, useIsAuthorized, useUser } from '../../modules/user';
+import { setUser, useIsAuthorized } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';

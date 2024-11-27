@@ -13,7 +13,6 @@ import { FooterButton } from '../buttons/footerButton';
 import { apiAction } from '../../hooks/useApi';
 import { navigate } from '../../modules/url';
 import { setUser, useUser } from '../../modules/user';
-import { Page } from '../../shared/types/page';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
 import { useBreakpoint } from '../../hooks/useBreakpoints';

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    client:
+        build:
+            context: ./
+            dockerfile: ./apps/client/Dockerfile
+        ports:
+            - '5173:80'
+    server:
+        build:
+            context: ./
+            dockerfile: ./apps/server/Dockerfile
+        ports:
+            - '3000:3000'
+    static:
+        build:
+            context: ./
+            dockerfile: ./apps/static/Dockerfile
+        ports:
+            - '3001:3001'
