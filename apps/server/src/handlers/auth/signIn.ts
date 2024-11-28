@@ -34,14 +34,14 @@ export default (props: HandlersProps): Handlers['signIn'] =>
             maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
             httpOnly: true,
             path: '/',
-            sameSite: 'None',
+            sameSite: 'Lax',
             // secure: true,
         });
         setCookie(response, 'refreshToken', newSession.id, {
             maxAge: Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC),
             httpOnly: true,
             path: '/',
-            sameSite: 'None',
+            sameSite: 'Lax',
             // secure: true,
         });
         return authContext;

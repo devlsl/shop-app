@@ -6,13 +6,13 @@ export default (props: HandlersProps): Handlers['signOut'] =>
     async (context, request, response) => {
         setCookie(response, 'accessToken', '', {
             httpOnly: true,
-            sameSite: 'None',
+            sameSite: 'Lax',
             // secure: true,
             path: '/',
         });
         setCookie(response, 'refreshToken', '', {
             httpOnly: true,
-            sameSite: 'None',
+            sameSite: 'Lax',
             // secure: true,
             path: '/',
         });
