@@ -35,15 +35,9 @@ export const setUrlParam = (
     pushToHistory: boolean = true,
 ) => {
     const prevState = useUrlState.getState().params;
-    const oldValue = prevState[key];
-    if (value === oldValue && !deleteOtherParams) return;
-
-    const nextState =
-        value === null || value === undefined
-            ? Object.fromEntries(
-                  Object.entries(prevState).filter(([k]) => k !== key),
-              )
-            : { ...prevState, [key]: value };
+    const nextState = getNextUrlState({[key]: value}, deleteOtherParams);
+    if (isDeepEqual(prevState, nextState)) return;
+    useUrlState.setState(() => ({ params: nextState }));
     const jsonNextState = JSON.stringify(nextState);
     const url = new URL(window.location.href);
     url.searchParams.set(__APP_ENV__.CLIENT_URL_PARAMS_KEY, jsonNextState);
@@ -52,7 +46,6 @@ export const setUrlParam = (
         '',
         url,
     );
-    useUrlState.setState(() => ({ params: nextState }));
 };
 
 export const getHrefFromUrlState = (state: UrlState['params']) => {
