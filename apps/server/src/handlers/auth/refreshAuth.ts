@@ -36,13 +36,13 @@ export default (props: HandlersProps): Handlers['refreshAuth'] =>
             maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
             path: '/',
             sameSite: 'None',
-            secure: true,
+            // secure: true,
         });
         setCookie(response, 'refreshToken', newSession.id, {
             maxAge: Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC),
             path: '/',
             sameSite: 'None',
-            secure: true,
+            // secure: true,
         });
         return authContext;
     };
