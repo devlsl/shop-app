@@ -1,5 +1,5 @@
 import { ActionError } from 'ts-api-generator';
-import { Handlers, HandlersProps } from '../types';
+import { Handlers, HandlersProps } from '../../types';
 
 export default (props: HandlersProps): Handlers['getCategoriesPageItems'] =>
     async ({ categoryId }) => {

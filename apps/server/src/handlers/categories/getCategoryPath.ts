@@ -1,5 +1,5 @@
 import { ActionError } from 'ts-api-generator';
-import { Handlers, HandlersProps, StorageEntities } from '../types';
+import { Handlers, HandlersProps, StorageEntities } from '../../types';
 
 export default (props: HandlersProps): Handlers['getCategoryPath'] =>
     async ({ categoryId }) => {
