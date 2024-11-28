@@ -46,6 +46,7 @@ const Text = styled.span`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
     ${typography({ fontSize: '1.1rem', fontWeight: '600' })}
     ${breakpoint(
         'showBottomBar',
@@ -54,13 +55,9 @@ const Text = styled.span`
             font-weight: 700;
         `,
     )}
-    align-self: end;
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: start; */
 
-    height: 1.95rem;
-    /* border: 1px solid red; */
+    align-items: center;
+    justify-content: center;
 `;
 
 const CloseButton = styled(LinkIconButton)<{ $variant: Notification['type'] }>`
