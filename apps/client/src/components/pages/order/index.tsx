@@ -12,17 +12,19 @@ import { typography } from '../../../shared/utils/styles/typography';
 import { ButtonText } from '../../buttonText';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
-import { useSearchParam } from '../../../modules/url';
+import { useUrlParam } from '../../../modules/url';
 import { pushNotification } from '../../../hooks/useAppState';
 import { orderStatusLabelMap } from '../orders';
 
-export const OrderPage = () => {
+const OrderPage = () => {
     return (
         <AuthNeedPage>
             <OrderPageView />
         </AuthNeedPage>
     );
 };
+
+export default OrderPage;
 
 const Wrapper = styled.div`
     display: flex;
@@ -51,7 +53,7 @@ const OrderStatusText = styled.span`
 const OrderPageView = ({}) => {
     const { call, status } = useApi('getOrder');
 
-    const orderId = useSearchParam('orderId') ?? '';
+    const orderId = useUrlParam('orderId') ?? '';
 
     const [order, setOrder] = useState<ApiReturnSchemas['getOrder']>();
 
@@ -83,13 +85,11 @@ const OrderPageView = ({}) => {
                 {order.items.map((cartItem) => (
                     <CartItem>
                         <Image
-                            to={[
-                                '/product',
-                                {
-                                    productId: cartItem.productId,
-                                    categoryId: cartItem.categoryId,
-                                },
-                            ]}
+                            to={{
+                                page: 'product',
+                                productId: cartItem.productId,
+                                categoryId: cartItem.categoryId,
+                            }}
                             $url={cartItem.miniature}
                         />
                         <ProductTypographyWrapper>

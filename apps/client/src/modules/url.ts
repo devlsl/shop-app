@@ -1,152 +1,121 @@
 import { useEffect } from 'react';
+import { z } from 'zod';
 import { create } from 'zustand';
+import { isDeepEqual } from '../shared/utils/helpers/isDeepEqual';
 
-type UrlState = {
-    pathname: string;
-    searchParams: Record<string, string | undefined>;
-    hash: string;
+type UrlState = { params: Record<string, string | undefined> };
+
+const getCurrentUrlState = () => {
+    const params = new URLSearchParams(window.location.search).get(
+        __APP_ENV__.CLIENT_URL_PARAMS_KEY,
+    );
+    if (params === null) return {};
+    try {
+        return z
+            .record(z.string(), z.string().optional())
+            .parse(JSON.parse(params));
+    } catch {
+        return {};
+    }
 };
 
 const useUrlState = create<UrlState>(() => ({
-    pathname: window.location.pathname,
-    searchParams: Object.fromEntries(
-        new URL(window.location.href).searchParams.entries(),
-    ),
-    hash: window.location.hash.slice(1),
+    params: getCurrentUrlState(),
 }));
 
-const setUrlState = useUrlState.setState;
+export const useUrlParam = (key: string) =>
+    useUrlState((state) => state.params[key]);
 
-export const getUrlState = useUrlState.getState;
+export const getUrlParam = (key: string) => useUrlState.getState().params[key];
 
-export const getSearchParam = (key: string) =>
-    useUrlState.getState().searchParams[key];
-
-export const getPathname = () => useUrlState.getState().pathname;
-
-export const usePathname = () => useUrlState((state) => state.pathname);
-export const useHash = () => useUrlState((state) => state.hash);
-export const useSearchParams = () => useUrlState((state) => state.searchParams);
-// export const useUrl = () =>
-//     useUrlState(() => window.location.pathname + window.location.search);
-export const useSearchParam = (key: string) =>
-    useUrlState((state) => state.searchParams[key]);
-
-export const setSearchParams = (
-    params: { key: string; value: string | null }[],
-    replace: boolean = false,
-) =>
-    setUrlState((prev) => {
-        const url = new URL(window.location.href);
-
-        let hasChanges = false;
-
-        params.forEach(({ key, value }) => {
-            if (prev.searchParams[key] !== value) hasChanges = true;
-            if (value === null) {
-                url.searchParams.delete(key);
-            } else {
-                url.searchParams.set(key, value);
-            }
-        });
-
-        if (!hasChanges) return prev;
-
-        const historyUpdateFn = replace ? 'replaceState' : 'pushState';
-        history[historyUpdateFn](url.href, '', url.href);
-
-        return {
-            ...prev,
-            searchParams: Object.fromEntries(url.searchParams.entries()),
-        };
-    });
-
-export const setSearchParam = (
+export const setUrlParam = (
     key: string,
-    value: string | null,
-    replace: boolean = false,
-) =>
-    setUrlState((prev) => {
-        if (prev.searchParams[key] === value) return prev;
-        const url = new URL(window.location.href);
+    value: string | undefined | null,
+    deleteOtherParams: boolean = false,
+    pushToHistory: boolean = true,
+) => {
+    const prevState = useUrlState.getState().params;
+    const oldValue = prevState[key];
+    if (value === oldValue && !deleteOtherParams) return;
 
-        if (value === null) {
-            url.searchParams.delete(key);
-        } else {
-            url.searchParams.set(key, value);
-        }
+    const nextState =
+        value === null || value === undefined
+            ? Object.fromEntries(
+                  Object.entries(prevState).filter(([k]) => k !== key),
+              )
+            : { ...prevState, [key]: value };
+    const jsonNextState = JSON.stringify(nextState);
+    const url = new URL(window.location.href);
+    url.searchParams.set(__APP_ENV__.CLIENT_URL_PARAMS_KEY, jsonNextState);
+    history[pushToHistory ? 'pushState' : 'replaceState'](
+        jsonNextState,
+        '',
+        url,
+    );
+    useUrlState.setState(() => ({ params: nextState }));
+};
 
-        const historyUpdateFn = replace ? 'replaceState' : 'pushState';
-        history[historyUpdateFn](url.href, '', url.href);
+export const getHrefFromUrlState = (state: UrlState['params']) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set(
+        __APP_ENV__.CLIENT_URL_PARAMS_KEY,
+        JSON.stringify(state),
+    );
+    return url.href;
+};
 
-        return {
-            ...prev,
-            searchParams: Object.fromEntries(url.searchParams.entries()),
-        };
-    });
+export const getNextUrlState = (
+    entries: Record<string, string | undefined | null>,
+    deleteOtherParams: boolean = false,
+): UrlState['params'] => {
+    const prevState = useUrlState.getState().params;
 
-export const setHash = (
-    arg: ((prev: string) => string) | string,
-    replace: boolean = false,
-) =>
-    setUrlState((prev) => {
-        const nextHash = (
-            typeof arg === 'function' ? arg(window.location.hash) : arg
-        ).replace(/#/g, '');
+    if (deleteOtherParams) {
+        return Object.fromEntries(
+            Object.entries(entries).filter(
+                ([_, value]) => value !== undefined && value !== null,
+            ),
+        ) as UrlState['params'];
+    }
 
-        if (nextHash === prev.hash) return prev;
+    const entriesKeys: Record<string, string | undefined> = Object.fromEntries(
+        Object.keys(entries).map((key) => [key, key]),
+    );
 
-        const historyUpdateFn = replace ? 'replaceState' : 'pushState';
-        const url = new URL(window.location.href);
-        url.hash = nextHash;
-        history[historyUpdateFn](url.href, '', url.href);
+    return Object.fromEntries(
+        Object.entries(prevState)
+            .map(([k, v]) => [k, entriesKeys[k] !== undefined ? entries[k] : v])
+            .concat(Object.entries(entries))
+            .filter(([_, v]) => v !== undefined || v !== null),
+    ) as UrlState['params'];
+};
 
-        return {
-            ...prev,
-            hash: nextHash,
-        };
-    });
-
-export const navigate = (to: string, replace: boolean = false) => {
-    setUrlState((prev) => {
-        const prevHref = window.location.href;
-        const prevUrl = new URL(prevHref);
-        const nextHref =
-            to.charAt(0) !== '/'
-                ? prevUrl.origin
-                      .concat(prevUrl.pathname)
-                      .split('/')
-                      .slice(0, -1)
-                      .concat(to)
-                      .join('/')
-                : prevUrl.origin.concat(to);
-
-        if (nextHref === prevHref) return prev;
-        const nextUrl = new URL(nextHref);
-
-        const historyUpdateFn = replace ? 'replaceState' : 'pushState';
-        history[historyUpdateFn](nextHref, '', nextHref);
-
-        return {
-            ...prev,
-            pathname: nextUrl.pathname,
-            searchParams: Object.fromEntries(nextUrl.searchParams.entries()),
-            hash: nextUrl.hash.replace(/#/g, ''),
-        };
-    });
-    return null;
+export const setUrlParams = (
+    entries: Record<string, string | undefined | null>,
+    deleteOtherParams: boolean = false,
+    pushToHistory: boolean = true,
+) => {
+    const prevState = useUrlState.getState().params;
+    const nextState = getNextUrlState(entries, deleteOtherParams);
+    if (isDeepEqual(prevState, nextState)) return;
+    useUrlState.setState(() => ({ params: nextState }));
+    const jsonNextState = JSON.stringify(nextState);
+    const url = new URL(window.location.href);
+    url.searchParams.set(__APP_ENV__.CLIENT_URL_PARAMS_KEY, jsonNextState);
+    history[pushToHistory ? 'pushState' : 'replaceState'](
+        jsonNextState,
+        '',
+        url,
+    );
 };
 
 export const usePopUrlStateListener = () => {
     useEffect(() => {
         const handle = () => {
-            const href = window.location.href;
-            const url = new URL(href);
-            setUrlState({
-                pathname: url.pathname,
-                searchParams: Object.fromEntries(url.searchParams.entries()),
-                hash: url.hash.slice(1),
-            });
+            const prevState = useUrlState.getState().params;
+            const nextState = getCurrentUrlState();
+            if (!isDeepEqual(prevState, nextState))
+                useUrlState.setState(() => ({ params: nextState }));
         };
         window.addEventListener('popstate', handle);
         return () => window.removeEventListener('popstate', handle);

@@ -3,7 +3,7 @@ import { AuthDependentView } from '../shared/authDependentView';
 import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import { useSearchParam } from '../../../modules/url';
+import { useUrlParam } from '../../../modules/url';
 import { matchMediaBreakpoint } from '../../../shared/utils/helpers/isBreakpointMathers';
 import { LazyLoadingTrigger, ProductsView } from './productsGrid';
 import { NotFoundPage } from '../shared/NotFoundPage';
@@ -17,11 +17,11 @@ export const ProductsPageView = ({
     const [lazyLoadElementRef, lazyLoadEntry] = useIntersectionObserver({
         threshold: 0,
     });
-    const categoryId = useSearchParam('categoryId') ?? null;
+    const categoryId = useUrlParam('categoryId') ?? null;
 
-    const filters = useSearchParam('filters');
-    const sorting = useSearchParam('sorting');
-    const searchQuery = useSearchParam('search');
+    const filters = useUrlParam('filters');
+    const sorting = useUrlParam('sorting');
+    const searchQuery = useUrlParam('search');
 
     const { cash, call, status } = useApi(
         isAuthorized ? 'getProductsPageItems' : 'getProductsPageItemsForGuest',
@@ -103,10 +103,12 @@ export const ProductsPageView = ({
     );
 };
 
-export const ProductsPage = () => (
+const ProductsPage = () => (
     <AuthDependentView
         authorized={<ProductsPageView isAuthorized />}
         unauthorized={<ProductsPageView />}
         checking={<PageLoader />}
     />
 );
+
+export default ProductsPage;

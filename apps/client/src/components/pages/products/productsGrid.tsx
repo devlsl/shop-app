@@ -249,7 +249,7 @@ const ProductCardView = ({
         <CardWrapper>
             <ProductImage
                 $url={previewUrl}
-                to={['/product', { productId: id, categoryId }]}
+                to={{ page: 'product', productId: id, categoryId }}
             />
             <ProductTypographyWrapper>
                 <ProductName>{name}</ProductName>

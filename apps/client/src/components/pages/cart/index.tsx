@@ -16,13 +16,15 @@ import { pushNotification } from '../../../hooks/useAppState';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
 
-export const CartPage = () => {
+const CartPage = () => {
     return (
         <AuthNeedPage>
             <CartPageView />
         </AuthNeedPage>
     );
 };
+
+export default CartPage;
 
 const Wrapper = styled.div`
     display: flex;
@@ -83,13 +85,11 @@ const CartPageView = ({}) => {
                                 }
                             />
                             <Image
-                                to={[
-                                    '/product',
-                                    {
-                                        productId: cartItem.productId,
-                                        categoryId: cartItem.categoryId,
-                                    },
-                                ]}
+                                to={{
+                                    page: 'product',
+                                    productId: cartItem.productId,
+                                    categoryId: cartItem.categoryId,
+                                }}
                                 $url={cartItem.miniatures[0].url}
                             />
                             <ProductTypographyWrapper>

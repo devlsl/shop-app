@@ -1,25 +1,26 @@
 import styled from 'styled-components';
-import { navigate, usePathname } from '../../modules/url';
 import { Page } from '../../shared/types/page';
 import { createMapWithDefaultValue } from '../../shared/utils/helpers/createMapWithDefaultValue';
-import { CategoriesPage } from '../pages/categories';
 import { container } from '../../shared/utils/styles/container';
 
 import { CategoryPath } from '../pages/shared/categoryPath';
-import { ProductsPage } from '../pages/products/index';
-import { CartPage } from '../pages/cart';
-import { OrdersPage } from '../pages/orders';
-import { FavoritesPage } from '../pages/favorites';
-import { ProductPage } from '../pages/product';
-import { OrderPage } from '../pages/order';
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { NotFoundPage } from '../pages/shared/NotFoundPage';
 import { ButtonText } from '../buttonText';
 import { TextButton } from '../buttons/textButton';
 import { typography } from '../../shared/utils/styles/typography';
+import { setUrlParam, useUrlParam } from '../../modules/url';
 
-const needShowCategoryPath = (pathname: string) =>
-    ['/products', '/categories', '/product'].includes(pathname);
+const CategoriesPage = lazy(() => import('../pages/categories'));
+const ProductsPage = lazy(() => import('../pages/products/index'));
+const CartPage = lazy(() => import('../pages/cart'));
+const OrdersPage = lazy(() => import('../pages/orders'));
+const FavoritesPage = lazy(() => import('../pages/favorites'));
+const ProductPage = lazy(() => import('../pages/product'));
+const OrderPage = lazy(() => import('../pages/order'));
+
+const needShowCategoryPath = (page: string) =>
+    ['products', 'categories', 'product'].includes(page);
 
 const ContentWrapper = styled.div`
     ${container()}
@@ -56,20 +57,22 @@ const GoToCatalogButtonText = styled(ButtonText)`
     })}
 `;
 
-const pathnameToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
+const mapPageToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
     {
-        '/products': <ProductsPage />,
-        '/categories': <CategoriesPage />,
-        '/cart': <CartPage />,
-        '/favorites': <FavoritesPage />,
-        '/orders': <OrdersPage />,
-        '/product': <ProductPage />,
-        '/order': <OrderPage />,
+        products: <ProductsPage />,
+        categories: <CategoriesPage />,
+        cart: <CartPage />,
+        favorites: <FavoritesPage />,
+        orders: <OrdersPage />,
+        product: <ProductPage />,
+        order: <OrderPage />,
     },
     <NotFoundPage>
         <NotFoundPageWrapper>
             <div>Такой страницы нет</div>
-            <GoToCatalogButton onClick={() => navigate('/categories')}>
+            <GoToCatalogButton
+                onClick={() => setUrlParam('page', 'categories', true)}
+            >
                 <GoToCatalogButtonText>Перейти в каталог</GoToCatalogButtonText>
             </GoToCatalogButton>
         </NotFoundPageWrapper>
@@ -77,21 +80,21 @@ const pathnameToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
 );
 
 export const Content = () => {
-    const pathname = usePathname();
-    console.log(pathname);
+    const page = useUrlParam('page') ?? '';
+    console.log({ page, weqweqweqwe: '' });
 
     useEffect(() => {
-        if (pathname === '/') navigate('/categories');
-    }, [pathname]);
+        if (page === '') setUrlParam('page', 'categories', true);
+    }, [page]);
 
     return (
         <>
-            {needShowCategoryPath(pathname) && (
+            {needShowCategoryPath(page) && (
                 <CategoryPathWrapper>
                     <CategoryPath />
                 </CategoryPathWrapper>
             )}
-            <ContentWrapper>{pathnameToComponent(pathname)}</ContentWrapper>
+            <ContentWrapper>{mapPageToComponent(page)}</ContentWrapper>
         </>
     );
 };

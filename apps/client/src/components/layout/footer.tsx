@@ -11,7 +11,7 @@ import {
 import { toggleTheme, useTheme } from '../../modules/theme';
 import { FooterButton } from '../buttons/footerButton';
 import { apiAction } from '../../hooks/useApi';
-import { navigate } from '../../modules/url';
+import { setUrlParam } from '../../modules/url';
 import { setUser, useUser } from '../../modules/user';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
@@ -35,27 +35,35 @@ export const Footer = () => {
 
     return (
         <Styled>
-            <FooterButton onClick={() => navigate('/categories')}>
+            <FooterButton
+                onClick={() => setUrlParam('page', 'categories', true)}
+            >
                 <LayoutDashboardIcon />
             </FooterButton>
 
             <FooterButton
                 onClick={() =>
-                    isAuthorized ? navigate('/favorites') : showSignInView()
+                    isAuthorized
+                        ? setUrlParam('page', 'favorite', true)
+                        : showSignInView()
                 }
             >
                 <HeartIcon />
             </FooterButton>
             <FooterButton
                 onClick={() =>
-                    isAuthorized ? navigate('/cart') : showSignInView()
+                    isAuthorized
+                        ? setUrlParam('page', 'cart', true)
+                        : showSignInView()
                 }
             >
                 <ShoppingBagIcon />
             </FooterButton>
             <FooterButton
                 onClick={() =>
-                    isAuthorized ? navigate('/orders') : showSignInView()
+                    isAuthorized
+                        ? setUrlParam('page', 'orders', true)
+                        : showSignInView()
                 }
             >
                 <ClipboardListIcon />

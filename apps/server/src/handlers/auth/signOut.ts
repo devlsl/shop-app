@@ -1,6 +1,6 @@
-import { Handlers, HandlersProps } from '../types';
-import { getCookie } from '../utils/getCookie';
-import { setCookie } from '../utils/setCookie';
+import { Handlers, HandlersProps } from '../../types';
+import { getCookie } from '../../utils/getCookie';
+import { setCookie } from '../../utils/setCookie';
 
 export default (props: HandlersProps): Handlers['signOut'] =>
     async (context, request, response) => {

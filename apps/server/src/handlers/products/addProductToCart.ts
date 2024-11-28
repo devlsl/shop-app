@@ -1,6 +1,6 @@
 import { ActionError } from 'ts-api-generator';
-import { Handlers, HandlersProps, StorageEntities } from '../types';
-import { minutesSince } from '../utils/minutesSince';
+import { Handlers, HandlersProps, StorageEntities } from '../../types';
+import { minutesSince } from '../../utils/minutesSince';
 
 export default (props: HandlersProps): Handlers['addProductToCart'] =>
     async (context, payload) => {

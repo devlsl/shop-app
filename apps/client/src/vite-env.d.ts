@@ -15,11 +15,6 @@
 //     readonly env: ImportMetaEnv;
 // }
 declare const __APP_ENV__: Record<
-    | 'STATIC_SERVER_HOSTNAME'
-    | 'STATIC_SERVER_PORT'
-    | 'SERVER_HOSTNAME'
-    | 'SERVER_PORT'
-    | 'CLIENT_HOSTNAME'
-    | 'CLIENT_PORT',
+    'SERVER_HOSTNAME' | 'CLIENT_URL_PARAMS_KEY',
     string
 >;

@@ -1,6 +1,6 @@
 import { HandlersTypeGenerator } from 'ts-api-generator';
 import { apiSchema } from '@shop/shared';
-import { envKeys } from './consts';
+import { envKeys } from './envKeys';
 import { storageSchema } from './storageSchema';
 import {
     StorageEntitiesTypeGenerate,

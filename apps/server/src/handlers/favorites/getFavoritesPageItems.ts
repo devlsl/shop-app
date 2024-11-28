@@ -1,4 +1,4 @@
-import { Handlers, HandlersProps } from '../types';
+import { Handlers, HandlersProps } from '../../types';
 
 export default (props: HandlersProps): Handlers['getFavoritesPageItems'] =>
     async (context, payload) => {

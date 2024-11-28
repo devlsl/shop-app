@@ -1,6 +1,6 @@
 import { ActionError } from 'ts-api-generator';
-import { Handlers, HandlersProps } from '../types';
-import { calcOrderStatus } from './shared/calcOrderStatus';
+import { Handlers, HandlersProps } from '../../types';
+import { calcOrderStatus } from '../shared/calcOrderStatus';
 
 export default (props: HandlersProps): Handlers['getOrder'] =>
     async (context, payload) => {

@@ -2,7 +2,7 @@ import { AuthNeedPage } from '../shared/authNeedPage';
 import { PageLoader } from '../../pageLoader';
 import { useApi } from '../../../hooks/useApi';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import { getSearchParam, useSearchParam } from '../../../modules/url';
+import { getUrlParam, useUrlParam } from '../../../modules/url';
 import { matchMediaBreakpoint } from '../../../shared/utils/helpers/isBreakpointMathers';
 
 import { NotFoundPage } from '../shared/NotFoundPage';
@@ -14,7 +14,7 @@ export const parseProductFilters = () => {
     try {
         return apiPayloadSchemas.getProductsPageItems
             .required()
-            .shape.filters.parse(JSON.parse(getSearchParam('filters') ?? ''));
+            .shape.filters.parse(JSON.parse(getUrlParam('filters') ?? ''));
     } catch (error) {
         return {};
     }
@@ -24,7 +24,7 @@ export const parseProductSorting = () => {
     try {
         return apiPayloadSchemas.getProductsPageItems
             .required()
-            .shape.sort.parse(JSON.parse(getSearchParam('sorting') ?? ''));
+            .shape.sort.parse(JSON.parse(getUrlParam('sorting') ?? ''));
     } catch (error) {
         return {};
     }
@@ -35,9 +35,9 @@ export const ProductsPageView = () => {
         threshold: 0,
     });
 
-    const filters = useSearchParam('filters');
-    const sorting = useSearchParam('sorting');
-    const searchQuery = useSearchParam('search');
+    const filters = useUrlParam('filters');
+    const sorting = useUrlParam('sorting');
+    const searchQuery = useUrlParam('search');
 
     const { cash, call, status } = useApi('getFavoritesPageItems');
     const [products, setProducts] = useState<NonNullable<typeof cash>['items']>(
@@ -113,8 +113,10 @@ export const ProductsPageView = () => {
     );
 };
 
-export const FavoritesPage = () => (
+const FavoritesPage = () => (
     <AuthNeedPage>
         <ProductsPageView />
     </AuthNeedPage>
 );
+
+export default FavoritesPage;

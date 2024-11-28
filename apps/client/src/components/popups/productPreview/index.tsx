@@ -70,13 +70,11 @@ export const ProductPreviewView = ({
                             <ProductImage
                                 $url={cash.media[0]?.url ?? ''}
                                 onWillRedirect={hideProductPreview}
-                                to={[
-                                    '/product',
-                                    {
-                                        productId: shownProduct,
-                                        categoryId: cash.categoryId,
-                                    },
-                                ]}
+                                to={{
+                                    page: 'product',
+                                    productId: shownProduct,
+                                    categoryId: cash.categoryId,
+                                }}
                             />
                             <DialogOutlineButton onClick={hideProductPreview}>
                                 <ButtonText $size='l'>Отменить</ButtonText>

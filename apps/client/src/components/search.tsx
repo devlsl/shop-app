@@ -4,12 +4,10 @@ import { transition } from '../shared/utils/styles/transition';
 import { typography } from '../shared/utils/styles/typography';
 import { useTyping } from '../shared/hooks/useTyping';
 import { useEffect, useState } from 'react';
-import { getSearchParam, setSearchParam } from '../modules/url';
 import { create } from 'zustand';
+import { getUrlParam, setUrlParam } from '../modules/url';
 
-const useSearchInputState = create<string>(
-    () => getSearchParam('search') ?? '',
-);
+const useSearchInputState = create<string>(() => getUrlParam('search') ?? '');
 export const useSearchInputValue = () => useSearchInputState((state) => state);
 export const setSearchInputValue = (value: string) =>
     useSearchInputState.setState(value);
@@ -75,7 +73,7 @@ export const Search = () => {
     const searchInputValue = useSearchInputValue();
 
     useEffect(() => {
-        if (searchInputValue === '') setSearchParam('search', null);
+        if (searchInputValue === '') setUrlParam('search', null);
     }, [searchInputValue]);
 
     return (

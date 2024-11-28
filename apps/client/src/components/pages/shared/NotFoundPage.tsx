@@ -6,6 +6,7 @@ export const NotFoundPage = styled.div`
     height: 100%;
     display: flex;
     justify-content: center;
+    
     align-items: center;
     color: ${({ theme }) => theme.button.secondary.text};
     ${typography({ fontSize: '1.4rem', lineHeight: '2.1rem' })}

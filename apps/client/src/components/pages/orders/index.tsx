@@ -12,13 +12,15 @@ import { typography } from '../../../shared/utils/styles/typography';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
 import { useBreakpoint } from '../../../hooks/useBreakpoints';
 
-export const OrdersPage = () => {
+const OrdersPage = () => {
     return (
         <AuthNeedPage>
             <OrdersPageView />
         </AuthNeedPage>
     );
 };
+
+export default OrdersPage;
 
 export const orderStatusLabelMap: Record<
     ApiReturnSchemas['getOrder']['status'],
@@ -62,7 +64,7 @@ const OrdersPageView = ({}) => {
                     <ProductTypographyWrapper>
                         <OrderTitleWrapper>
                             <OrderNumberTypo
-                                to={['/order', { orderId: order.id }]}
+                                to={{ page: 'order', orderId: order.id }}
                             >
                                 Заказ #{order.orderNumber}
                             </OrderNumberTypo>
@@ -82,20 +84,16 @@ const OrdersPageView = ({}) => {
                         <OrderImagesWrapper>
                             <Image
                                 $url={order.miniatures[0].url ?? ''}
-                                to={[
-                                    '/product',
-                                    {
-                                        productId:
-                                            order.miniatures[0].productId,
-                                        categoryId:
-                                            order.miniatures[0].categoryId,
-                                    },
-                                ]}
+                                to={{
+                                    page: 'product',
+                                    productId: order.miniatures[0].productId,
+                                    categoryId: order.miniatures[0].categoryId,
+                                }}
                             />
                             {order.miniatures.length > 1 && (
                                 <OtherOrderItems
                                     $url={order.miniatures[1].url ?? ''}
-                                    to={['/order', { orderId: order.id }]}
+                                    to={{ page: 'order', orderId: order.id }}
                                 />
                             )}
                         </OrderImagesWrapper>

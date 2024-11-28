@@ -1,9 +1,9 @@
 import { ActionError } from 'ts-api-generator';
-import { Handlers, HandlersProps, StorageEntities } from '../types';
-import { generateId } from '../utils/generateId';
-import { generateOrderNumber } from '../utils/generateOrderNumber';
-import deleteProductFromCart from './deleteProductFromCart';
-import { getAvailableForOrderProducts } from './shared/getAvailableForOrderProducts';
+import { Handlers, HandlersProps, StorageEntities } from '../../types';
+import { generateId } from '../../utils/generateId';
+import { generateOrderNumber } from '../../utils/generateOrderNumber';
+import deleteProductFromCart from '../products/deleteProductFromCart';
+import { getAvailableForOrderProducts } from '../shared/getAvailableForOrderProducts';
 
 export default (props: HandlersProps): Handlers['makeOrder'] =>
     async (context, payload) => {

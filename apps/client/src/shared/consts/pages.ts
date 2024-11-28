@@ -1,9 +1,9 @@
 export const pages = [
-    '/categories',
-    '/products',
-    '/cart',
-    '/orders',
-    '/favorites',
-    '/product',
-    '/order',
+    'categories',
+    'products',
+    'cart',
+    'orders',
+    'favorites',
+    'product',
+    'order',
 ] as const;

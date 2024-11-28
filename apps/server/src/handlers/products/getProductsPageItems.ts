@@ -1,4 +1,4 @@
-import { Handlers, HandlersProps } from '../types';
+import { Handlers, HandlersProps } from '../../types';
 
 export default (props: HandlersProps): Handlers['getProductsPageItems'] =>
     async (context, payload) => {

@@ -3,7 +3,7 @@ import { transition } from '../../../shared/utils/styles/transition';
 import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
 import { typography } from '../../../shared/utils/styles/typography';
 import { useEffect } from 'react';
-import { useSearchParam } from '../../../modules/url';
+import { useUrlParam } from '../../../modules/url';
 import { useApi } from '../../../hooks/useApi';
 import { ChevronLeftIcon, TextSearchIcon } from 'lucide-react';
 import { PageLoader } from '../../pageLoader';
@@ -63,10 +63,12 @@ const TitleWrapper = styled.div`
     flex-direction: column;
 `;
 
-export const CategoriesPage = () => {
-    const categoryId = useSearchParam('categoryId') ?? null;
+const CategoriesPage = () => {
+    const categoryId = useUrlParam('categoryId') ?? null;
 
-    const searchQuery = useSearchParam('search');
+    const searchQuery = useUrlParam('search');
+
+    console.log(categoryId);
 
     const { call, cash, status } = useApi('getCategoriesPageItems');
 
@@ -91,7 +93,7 @@ export const CategoriesPage = () => {
         <CardsGrid>
             {cash.backCategoryId !== undefined ? (
                 <Card
-                    to={['/categories', { categoryId: cash.backCategoryId }]}
+                    to={{ page: 'categories', categoryId: cash.backCategoryId }}
                     aspectRatio='1'
                     imageUrlOrSlot={<ChevronLeftIcon width='50%' />}
                 />
@@ -100,7 +102,7 @@ export const CategoriesPage = () => {
                 <Card
                     aspectRatio='1'
                     imageUrlOrSlot={<TextSearchIcon width='50%' />}
-                    to={['/products', { categoryId: cash.id }]}
+                    to={{ page: 'products', categoryId: cash.id }}
                 >
                     <TitleWrapper>
                         <TitleLine>Товары</TitleLine>
@@ -113,10 +115,12 @@ export const CategoriesPage = () => {
                     aspectRatio='1'
                     imageUrlOrSlot={item.imageUrl}
                     key={item.id}
-                    to={[
-                        item.haveNestedCategories ? '/categories' : '/products',
-                        { categoryId: item.id },
-                    ]}
+                    to={{
+                        page: item.haveNestedCategories
+                            ? 'categories'
+                            : 'products',
+                        categoryId: item.id,
+                    }}
                 >
                     <TitleWrapper>
                         {item.name
@@ -131,3 +135,5 @@ export const CategoriesPage = () => {
         </CardsGrid>
     );
 };
+
+export default CategoriesPage;

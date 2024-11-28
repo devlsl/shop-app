@@ -1,16 +1,13 @@
 import { forwardRef } from 'react';
-import { navigate } from '../modules/url';
-import { toUrl } from '../shared/utils/helpers/toUrl';
+import {
+    getHrefFromUrlState,
+    getNextUrlState,
+    setUrlParams,
+} from '../modules/url';
 
 export type LinkProps<Props> = Omit<Props, 'href' | 'onClick'> & {
     onWillRedirect?: () => Promise<void> | void;
-    to:
-        | string
-        | [
-              pathname: string,
-              searchParas?: Record<string, string | undefined | null>,
-              hash?: string,
-          ];
+    to: Record<string, string | undefined | null>;
 };
 
 export const Link = forwardRef<
@@ -18,15 +15,15 @@ export const Link = forwardRef<
     LinkProps<React.AnchorHTMLAttributes<HTMLAnchorElement>>
 >((props, ref) => {
     const { to, children, onWillRedirect = () => {}, ...otherProps } = props;
-    const url = typeof to === 'string' ? to : toUrl(...to);
+
     return (
         <a
             ref={ref}
-            href={url}
+            href={getHrefFromUrlState(getNextUrlState(to, true))}
             onClick={async (e) => {
                 e.preventDefault();
                 await onWillRedirect();
-                navigate(url);
+                setUrlParams(to, true);
             }}
             {...otherProps}
         >

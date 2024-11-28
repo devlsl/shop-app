@@ -8,7 +8,6 @@ import { Dialog } from './shared';
 import { DialogOutlineButton } from './shared/outlineButton';
 import { DialogSecondaryButton } from './shared/secondaryButton';
 import { ButtonText } from '../buttonText';
-import { setSearchParam, usePathname, useSearchParam } from '../../modules/url';
 import { useApi } from '../../hooks/useApi';
 import { useEffect, useState } from 'react';
 import { PageLoader } from '../pageLoader';
@@ -17,6 +16,7 @@ import { apiSchema } from '@shop/shared';
 import { z } from 'zod';
 import { hover } from '../../shared/utils/styles/hover';
 import { parseProductFilters, parseProductSorting } from '../pages/favorites';
+import { setUrlParam, useUrlParam } from '../../modules/url';
 
 const DialogWrapper = styled.div`
     display: grid;
@@ -92,7 +92,7 @@ const sortingSections: {
 
 export const ProductFiltersDialog = () => {
     const areShownProductFilters = useAreShownProductFilters();
-    const pathname = usePathname();
+    const page = useUrlParam('page') ?? '';
     const [sorting, setSorting] = useState<
         Record<string, 'desc' | 'asc' | undefined>
     >({});
@@ -110,19 +110,17 @@ export const ProductFiltersDialog = () => {
         }
     }, [areShownProductFilters]);
 
-    const categoryId = useSearchParam('categoryId') ?? null;
+    const categoryId = useUrlParam('categoryId') ?? null;
     const { call, data, status } = useApi(
-        pathname.startsWith('/favorites')
-            ? 'getFiltersForFavorites'
-            : 'getFilters',
+        page === 'favorites' ? 'getFiltersForFavorites' : 'getFilters',
     );
 
     useEffect(() => {
-        pathname.startsWith('/favorites')
+        page === 'favorites'
             ? call()
             : //@ts-expect-error
               call({ categoryId });
-    }, [pathname]);
+    }, [page]);
 
     return (
         <Dialog
@@ -276,7 +274,7 @@ export const ProductFiltersDialog = () => {
                                     ),
                                 );
 
-                                setSearchParam(
+                                setUrlParam(
                                     'filters',
                                     Object.entries(newFiltersValue).length === 0
                                         ? null
@@ -289,7 +287,7 @@ export const ProductFiltersDialog = () => {
                                     ),
                                 ) as Record<string, 'asc' | 'desc'>;
 
-                                setSearchParam(
+                                setUrlParam(
                                     'sorting',
                                     Object.entries(newSortingValue).length === 0
                                         ? null

@@ -1,4 +1,4 @@
-import { Handlers, HandlersProps } from '../types';
+import { Handlers, HandlersProps } from '../../types';
 
 export default (props: HandlersProps): Handlers['getCart'] =>
     async (context) => {
@@ -10,7 +10,6 @@ export default (props: HandlersProps): Handlers['getCart'] =>
             .reduce<
                 Record<string, number | undefined>
             >((result, i) => ({ ...result, [i.productId]: (result[i.productId] ?? 0) + 1 }), {});
-
 
         return Object.entries(cartItems).map(([id, count]) => {
             const product = products[id];

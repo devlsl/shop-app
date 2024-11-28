@@ -1,5 +1,5 @@
-import { Handlers, HandlersProps } from '../types';
-import { getProduct } from './shared/collectProduct';
+import { Handlers, HandlersProps } from '../../types';
+import { getProduct } from '../shared/collectProduct';
 
 export default ({
         storage,

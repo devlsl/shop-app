@@ -10,7 +10,6 @@ import {
     UserRoundIcon,
     XIcon,
 } from 'lucide-react';
-import { navigate, setSearchParam, usePathname } from '../../modules/url';
 import { TextButton } from '../buttons/textButton';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { Search, setSearchInputValue, useSearchInputValue } from '../search';
@@ -26,6 +25,7 @@ import {
 } from '../../hooks/useAppState';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useEffect } from 'react';
+import { setUrlParam, useUrlParam } from '../../modules/url';
 
 const Styled = styled.div`
     ${container()}
@@ -37,7 +37,7 @@ const Styled = styled.div`
 `;
 
 export const Header = () => {
-    const pathname = usePathname();
+    const page = useUrlParam('page');
     const isBottomBarShowed = useBreakpoint('showBottomBar');
     const theme = useTheme();
     const isAuthorized = useIsAuthorized();
@@ -46,18 +46,19 @@ export const Header = () => {
     const debouncedSearchInputValue = useDebounce(searchInputValue, 400);
     useEffect(() => {
         if (debouncedSearchInputValue !== '')
-            setSearchParam('search', debouncedSearchInputValue);
+            setUrlParam('search', debouncedSearchInputValue);
     }, [debouncedSearchInputValue]);
 
     return (
         <Styled>
             {!isBottomBarShowed && (
-                <TextButton onClick={() => navigate('/categories')}>
+                <TextButton
+                    onClick={() => setUrlParam('page', 'categories', true)}
+                >
                     Каталог
                 </TextButton>
             )}
-            {(pathname.startsWith('/products') ||
-                pathname.startsWith('/favorites')) && (
+            {(page === 'products' || page === 'favorites') && (
                 <IconButton onClick={toggleAreShownProductFilters}>
                     <FilterIcon />
                 </IconButton>
@@ -72,7 +73,9 @@ export const Header = () => {
                 <>
                     <IconButton
                         onClick={() =>
-                            isAuthorized ? navigate('/cart') : showSignInView()
+                            isAuthorized
+                                ? setUrlParam('page', 'cart', true)
+                                : showSignInView()
                         }
                     >
                         <ShoppingBagIcon />
@@ -80,7 +83,7 @@ export const Header = () => {
                     <IconButton
                         onClick={() =>
                             isAuthorized
-                                ? navigate('/favorites')
+                                ? setUrlParam('page', 'favorites', true)
                                 : showSignInView()
                         }
                     >
@@ -89,7 +92,7 @@ export const Header = () => {
                     <IconButton
                         onClick={() =>
                             isAuthorized
-                                ? navigate('/orders')
+                                ? setUrlParam('page', 'orders', true)
                                 : showSignInView()
                         }
                     >

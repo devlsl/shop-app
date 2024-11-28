@@ -1,5 +1,5 @@
-import { Handlers, HandlersProps } from '../types';
-import { calcOrderStatus } from './shared/calcOrderStatus';
+import { Handlers, HandlersProps } from '../../types';
+import { calcOrderStatus } from '../shared/calcOrderStatus';
 
 export default (props: HandlersProps): Handlers['getOrders'] =>
     async (context) => {

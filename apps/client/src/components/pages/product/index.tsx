@@ -3,7 +3,7 @@ import { useApi } from '../../../hooks/useApi';
 import { PageLoader } from '../../pageLoader';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { AuthDependentView } from '../shared/authDependentView';
-import { useSearchParam } from '../../../modules/url';
+import { useUrlParam } from '../../../modules/url';
 import styled, { css, useTheme } from 'styled-components';
 import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
 import { transition } from '../../../shared/utils/styles/transition';
@@ -257,7 +257,7 @@ const ProductPageView = ({
 }: {
     isAuthorized?: boolean;
 }) => {
-    const productId = useSearchParam('productId') ?? '';
+    const productId = useUrlParam('productId') ?? '';
     const { data, call } = useApi(
         isAuthorized ? 'getProduct' : 'getProductForGuest',
     );
@@ -311,13 +311,15 @@ const ProductPageView = ({
     );
 };
 
-export const ProductPage = () => (
+const ProductPage = () => (
     <AuthDependentView
         authorized={<ProductPageView isAuthorized />}
         checking={<PageLoader />}
         unauthorized={<ProductPageView />}
     />
 );
+
+export default ProductPage;
 
 const ProductFeatureItemWrapper = styled.div`
     ${transition('color')}

@@ -6,6 +6,7 @@ import { PageLoader } from '../pageLoader';
 import { Header } from './header';
 import { Footer } from './footer';
 import { Popups } from '../popups';
+import { Suspense } from 'react';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -30,11 +31,13 @@ export const Layout = () => {
 
     return (
         <Wrapper>
-            <Header />
-            <Content />
-            <Footer />
+            <Suspense fallback={<PageLoader />}>
+                <Header />
+                <Content />
+                <Footer />
 
-            <Popups />
+                <Popups />
+            </Suspense>
         </Wrapper>
     );
 };

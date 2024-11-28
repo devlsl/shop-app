@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Handlers, HandlersProps, StorageEntities } from '../types';
+import { Handlers, HandlersProps, StorageEntities } from '../../types';
 import { ActionError, AuthContext } from 'ts-api-generator';
-import { setCookie } from '../utils/setCookie';
-import { generateId } from '../utils/generateId';
+import { setCookie } from '../../utils/setCookie';
+import { generateId } from '../../utils/generateId';
 
 export default (props: HandlersProps): Handlers['signIn'] =>
     async (payload, _, response) => {
