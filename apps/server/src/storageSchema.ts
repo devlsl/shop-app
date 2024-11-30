@@ -37,9 +37,6 @@ export const storageSchema = {
             })
             .array(),
     }),
-    file: z.object({
-        id: z.string().uuid(),
-    }),
     favoriteItem: z.object({
         userId: z.string().uuid(),
         productId: z.string().uuid(),
