@@ -3,14 +3,24 @@ import { z } from 'zod';
 
 const emailSchema = z.string().email();
 const passwordSchema = z.string().min(8).max(70);
+const orderStatusSchema = z.enum([
+    'awaitedPayment',
+    'paid',
+    'sent',
+    'rejected',
+    'delivered',
+    'received',
+]);
+const orderNumberSchema = z.string().length(8);
+const idSchema = z.string().uuid();
 
 export const apiSchema = {
     checkAuth: {
         roles: true,
-        return: z.object({ id: z.string(), role: z.string() }),
+        return: z.object({ id: idSchema, role: z.string() }),
     },
     refreshAuth: {
-        return: z.object({ id: z.string(), role: z.string() }),
+        return: z.object({ id: idSchema, role: z.string() }),
         lowLevel: true,
         errors: ['Unauthorized'],
     },
@@ -20,27 +30,27 @@ export const apiSchema = {
     },
     signIn: {
         payload: z.object({ email: emailSchema, password: passwordSchema }),
-        return: z.object({ id: z.string(), role: z.string() }),
+        return: z.object({ id: idSchema, role: z.string() }),
         lowLevel: true,
         roles: false,
         errors: ['BadAuthData'],
     },
     signUp: {
         payload: z.object({ email: emailSchema, password: passwordSchema }),
-        return: z.object({ id: z.string(), role: z.string() }),
+        return: z.object({ id: idSchema, role: z.string() }),
         lowLevel: true,
         roles: false,
         errors: ['BadAuthData'],
     },
     getCategoriesPageItems: {
-        payload: z.object({ categoryId: z.string().nullable() }),
+        payload: z.object({ categoryId: idSchema.nullable() }),
         return: z.object({
-            id: z.string().nullable(),
+            id: idSchema.nullable(),
             haveProducts: z.boolean(),
-            backCategoryId: z.string().nullable().optional(),
+            backCategoryId: idSchema.nullable().optional(),
             items: z
                 .object({
-                    id: z.string(),
+                    id: idSchema,
                     name: z.string(),
                     imageUrl: z.string().url(),
                     haveProducts: z.boolean(),
@@ -51,33 +61,15 @@ export const apiSchema = {
         errors: ['CategoryNotFound'],
     },
     getFilters: {
-        payload: z.object({ categoryId: z.string().uuid().nullable() }),
+        payload: z.object({ categoryId: idSchema.nullable() }),
         return: z.record(z.string(), z.string().array().optional()),
-        // [
-        //     z.object({
-        //         type: z.literal('number'),
-        //         key: z.string(),
-        //         from: z.number(),
-        //         to: z.number(),
-        //     }),
-        //     z.object({
-        //         type: z.literal('string'),
-        //         key: z.string(),
-        //         values: z.string().array(),
-        //     }),
-        //     z.object({
-        //         type: z.literal('boolean'),
-        //         key: z.string(),
-        //     }),
-        // ])
-        // .array(),
         errors: ['CategoryNotFound'],
     },
     getCategoryPath: {
-        payload: z.object({ categoryId: z.string().uuid().nullable() }),
+        payload: z.object({ categoryId: idSchema.nullable() }),
         return: z
             .object({
-                id: z.string(),
+                id: idSchema,
                 name: z.string(),
             })
             .array(),
@@ -85,7 +77,7 @@ export const apiSchema = {
     },
     getProductsPageItemsForGuest: {
         payload: z.object({
-            categoryId: z.string().uuid().nullable().optional(),
+            categoryId: idSchema.nullable().optional(),
             includeNestedCategories: z.boolean().optional(),
             startIndex: z.number().nonnegative().optional(),
             limit: z.number().positive().optional(),
@@ -101,8 +93,8 @@ export const apiSchema = {
             totalProductsCount: z.number(),
             items: z
                 .object({
-                    id: z.string(),
-                    categoryId: z.string().uuid().nullable(),
+                    id: idSchema,
+                    categoryId: idSchema.nullable(),
                     name: z.string(),
                     price: z.string(),
                     miniatures: z.object({ url: z.string() }).array(),
@@ -114,7 +106,7 @@ export const apiSchema = {
     getProductsPageItems: {
         roles: true,
         payload: z.object({
-            categoryId: z.string().uuid().nullable().optional(),
+            categoryId: idSchema.nullable().optional(),
             includeNestedCategories: z.boolean().optional(),
             startIndex: z.number().nonnegative().optional(),
             limit: z.number().positive().optional(),
@@ -130,8 +122,8 @@ export const apiSchema = {
             totalProductsCount: z.number(),
             items: z
                 .object({
-                    id: z.string(),
-                    categoryId: z.string().uuid().nullable(),
+                    id: idSchema,
+                    categoryId: idSchema.nullable(),
                     name: z.string(),
                     price: z.string(),
                     miniatures: z.object({ url: z.string() }).array(),
@@ -161,8 +153,8 @@ export const apiSchema = {
             totalProductsCount: z.number(),
             items: z
                 .object({
-                    id: z.string(),
-                    categoryId: z.string().uuid().nullable(),
+                    id: idSchema,
+                    categoryId: idSchema.nullable(),
                     name: z.string(),
                     price: z.string(),
                     isLiked: z.boolean(),
@@ -174,7 +166,7 @@ export const apiSchema = {
     addProductToCart: {
         roles: true,
         payload: z.object({
-            productId: z.string().uuid(),
+            productId: idSchema,
             count: z.number().positive(),
         }),
         errors: ['OutOfStock'],
@@ -182,31 +174,31 @@ export const apiSchema = {
     deleteProductFromCart: {
         roles: true,
         payload: z.object({
-            productId: z.string().uuid(),
+            productId: idSchema,
             count: z.number().positive().or(z.literal('all')),
         }),
     },
     addProductToFavorites: {
         roles: true,
         payload: z.object({
-            productId: z.string().uuid(),
+            productId: idSchema,
         }),
     },
     deleteProductFromFavorites: {
         roles: true,
         payload: z.object({
-            productId: z.string().uuid(),
+            productId: idSchema,
         }),
     },
     getProduct: {
         roles: true,
         payload: z.object({
-            productId: z.string().uuid(),
+            productId: idSchema,
         }),
         return: z
             .object({
                 id: z.string(),
-                categoryId: z.string().uuid().nullable(),
+                categoryId: idSchema.nullable(),
                 name: z.string(),
                 price: z.string(),
                 media: z.object({ url: z.string() }).array(),
@@ -217,12 +209,12 @@ export const apiSchema = {
     },
     getProductForGuest: {
         payload: z.object({
-            productId: z.string().uuid(),
+            productId: idSchema,
         }),
         return: z
             .object({
                 id: z.string(),
-                categoryId: z.string().uuid().nullable(),
+                categoryId: idSchema.nullable(),
                 name: z.string(),
                 price: z.string(),
                 media: z.object({ url: z.string() }).array(),
@@ -235,8 +227,8 @@ export const apiSchema = {
         roles: true,
         return: z
             .object({
-                productId: z.string().uuid(),
-                categoryId: z.string().uuid().nullable(),
+                productId: idSchema,
+                categoryId: idSchema.nullable(),
                 count: z.number().nonnegative(),
                 name: z.string(),
                 price: z.number().nonnegative(),
@@ -249,7 +241,7 @@ export const apiSchema = {
         errors: ['ZeroItems'],
         payload: z
             .object({
-                productId: z.string().uuid(),
+                productId: idSchema,
                 count: z.number().nonnegative(),
             })
             .array(),
@@ -263,7 +255,7 @@ export const apiSchema = {
                     orderMade: z.literal(false),
                     outOfStockItems: z
                         .object({
-                            productId: z.string().uuid(),
+                            productId: idSchema,
                             userWant: z.number().nonnegative(),
                             inStock: z.number().nonnegative(),
                         })
@@ -275,20 +267,13 @@ export const apiSchema = {
         roles: true,
         return: z
             .object({
-                id: z.string().uuid(),
-                orderNumber: z.string().length(8),
-                status: z.enum([
-                    'awaitedPayment',
-                    'paid',
-                    'sent',
-                    'rejected',
-                    'delivered',
-                    'received',
-                ]),
+                Id: idSchema,
+                orderNumber: orderNumberSchema,
+                status: orderStatusSchema,
                 miniatures: z
                     .object({
-                        productId: z.string().uuid(),
-                        categoryId: z.string().uuid().nullable(),
+                        productId: idSchema,
+                        categoryId: idSchema.nullable(),
                         url: z.string().url(),
                     })
                     .array(),
@@ -301,20 +286,13 @@ export const apiSchema = {
     getOrder: {
         roles: true,
         payload: z.object({
-            orderId: z.string().uuid(),
+            orderId: idSchema,
         }),
         errors: ['NotFound'],
         return: z.object({
-            id: z.string().uuid(),
-            orderNumber: z.string().length(8),
-            status: z.enum([
-                'awaitedPayment',
-                'paid',
-                'sent',
-                'rejected',
-                'delivered',
-                'received',
-            ]),
+            Id: idSchema,
+            orderNumber: orderNumberSchema,
+            status: orderStatusSchema,
             createdAt: z.string().datetime(),
             paidAt: z.string().datetime().optional(),
             sentAt: z.string().datetime().optional(),
@@ -325,8 +303,8 @@ export const apiSchema = {
             amount: z.number().nonnegative(),
             items: z
                 .object({
-                    productId: z.string().uuid(),
-                    categoryId: z.string().uuid().nullable(),
+                    productId: idSchema,
+                    categoryId: idSchema.nullable(),
                     name: z.string(),
                     miniature: z.string().url(),
                     count: z.number().positive(),
