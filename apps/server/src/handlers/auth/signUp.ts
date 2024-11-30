@@ -7,11 +7,11 @@ import { generateId } from '../../utils/generateId';
 
 export default (props: HandlersProps): Handlers['signUp'] =>
     async (payload, _, response) => {
-        const dbUsers = await props.storage.user.get();
+        const users = await props.storage.user.get();
         const refreshTokenExpDate = new Date(
             Date.now() + Number(props.CLIENT_REFRESH_TOKEN_EXP_IN_SEC) * 1000,
         );
-        const alreadyExistUser = dbUsers.find((u) => u.email === payload.email);
+        const alreadyExistUser = users.find((u) => u.email === payload.email);
         if (alreadyExistUser !== undefined)
             return new ActionError('BadAuthData');
         const salt = await bcrypt.genSalt();
@@ -24,7 +24,7 @@ export default (props: HandlersProps): Handlers['signUp'] =>
             passwordHashSalt: salt,
             role: 'user',
         } satisfies StorageEntities['user'];
-        await props.storage.user.set(dbUsers.concat(newUser));
+        await props.storage.user.set(users.concat(newUser));
         const newSession = {
             id: generateId(),
             userId: newUser.id,

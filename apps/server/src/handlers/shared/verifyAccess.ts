@@ -2,9 +2,9 @@ import { left } from '@sweet-monads/either';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import { VerifyAccess } from 'ts-api-generator';
-import { parse } from './zodParser';
-import { getCookie } from './getCookie';
-import { HandlersProps } from '../types';
+import { parse } from '../../utils/zodParser';
+import { getCookie } from '../../utils/getCookie';
+import { HandlersProps } from '../../types';
 
 export const createVerifyAccess =
     (props: HandlersProps): VerifyAccess =>

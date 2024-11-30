@@ -1,4 +1,4 @@
-import { generateRandomNumberString } from './generateRandomNumberString';
+import { generateRandomNumberString } from '../../utils/generateRandomNumberString';
 
 export const generateOrderNumber = (arr: string[]): string => {
     let newString = generateRandomNumberString(1, 1, 9);

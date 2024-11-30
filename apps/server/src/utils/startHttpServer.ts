@@ -15,7 +15,7 @@ import getFilters from '../handlers/filters/getFilters';
 import addProductToCart from '../handlers/products/addProductToCart';
 import addProductToFavorites from '../handlers/products/addProductToFavorites';
 import deleteProductFromFavorites from '../handlers/products/deleteProductFromFavorites';
-import { createVerifyAccess } from './verifyAccess';
+import { createVerifyAccess } from '../handlers/shared/verifyAccess';
 import { getEnv } from './getEnv';
 import { envKeys } from '../envKeys';
 import getProduct from '../handlers/products/getProduct';

@@ -1,7 +1,7 @@
 import { ActionError } from 'ts-api-generator';
 import { Handlers, HandlersProps, StorageEntities } from '../../types';
 import { generateId } from '../../utils/generateId';
-import { generateOrderNumber } from '../../utils/generateOrderNumber';
+import { generateOrderNumber } from '../shared/generateOrderNumber';
 import deleteProductFromCart from '../products/deleteProductFromCart';
 import { getAvailableForOrderProducts } from '../shared/getAvailableForOrderProducts';
 
