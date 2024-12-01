@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
-import { showSignInView } from '../../../hooks/useAppState';
-import { useAuthStatus } from '../../../modules/user';
-import { TextButton } from '../../buttons/textButton';
+import { TextButton } from '../../../../components/buttons/textButton';
 import styled from 'styled-components';
-import { ButtonText } from '../../buttonText';
-import { typography } from '../../../shared/utils/styles/typography';
+import { ButtonText } from '../../../../components/buttonText';
+import { typography } from '../../../../shared/utils/styles/typography';
+import { showSignInPopup } from '../actions';
+import { useAuthStatus } from '../selectors';
 
 export const AuthNeedPage = ({ children }: { children: React.ReactNode }) => {
     const authStatus = useAuthStatus();
 
     useEffect(() => {
-        authStatus === 'unauthorized' && showSignInView();
+        authStatus === 'unauthorized' && showSignInPopup();
     }, [authStatus]);
 
     if (authStatus !== 'authorized')
@@ -20,7 +20,7 @@ export const AuthNeedPage = ({ children }: { children: React.ReactNode }) => {
                     Чтобы попасть, на эту страницу, необходимо войти в учётную
                     запись
                 </Typo>
-                <Btn onClick={showSignInView}>
+                <Btn onClick={showSignInPopup}>
                     <ButtonText $size='l'>Войти</ButtonText>
                 </Btn>
             </Center>

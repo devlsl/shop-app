@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
-import { AuthNeedPage } from '../shared/authNeedPage';
+import { AuthNeedPage } from '../../../features/auth/public/components';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
 import styled, { css } from 'styled-components';

@@ -1,4 +1,4 @@
-import { useAuthStatus } from '../../../modules/user';
+import { useAuthStatus } from '../selectors';
 
 export const AuthDependentView = (
     props: Record<ReturnType<typeof useAuthStatus>, React.ReactNode>,

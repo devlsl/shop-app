@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
-import { AuthNeedPage } from '../shared/authNeedPage';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
 import styled, { css, useTheme } from 'styled-components';
@@ -15,6 +14,7 @@ import { ButtonText } from '../../buttonText';
 import { pushNotification } from '../../../hooks/useAppState';
 import { TextButton } from '../../buttons/textButton';
 import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
+import { AuthNeedPage } from '../../../features/auth/public/components';
 
 const CartPage = () => {
     return (

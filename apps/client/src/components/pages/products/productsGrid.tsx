@@ -3,7 +3,6 @@ import { CardsGrid } from '../shared/cardsGrid';
 import { memo } from 'react';
 import { z } from 'zod';
 import { apiSchema } from '@shop/shared';
-import { useIsAuthorized } from '../../../modules/user';
 import { IconButton } from '../../buttons/iconButton';
 import { HeartIcon, PackagePlusIcon } from 'lucide-react';
 import { PageLoader } from '../../pageLoader';
@@ -11,7 +10,6 @@ import { useTheme } from 'styled-components';
 import {
     pushNotification,
     showProductPreview,
-    showSignInView,
 } from '../../../hooks/useAppState';
 import { useApi } from '../../../hooks/useApi';
 import { typography } from '../../../shared/utils/styles/typography';
@@ -19,6 +17,8 @@ import { TextButton } from '../../buttons/textButton';
 import { hover } from '../../../shared/utils/styles/hover';
 import { Link } from '../../link';
 import { transition } from '../../../shared/utils/styles/transition';
+import { showSignInPopup } from '../../../features/auth/public/actions';
+import { useIsAuthorized } from '../../../features/auth/public/selectors';
 
 export const CardWrapper = styled.div`
     display: flex;
@@ -142,7 +142,7 @@ const AddToCartButton = ({
     const { call, status } = useApi('addProductToCart');
 
     const handleClick = async () => {
-        if (!isAuthorized) return showSignInView();
+        if (!isAuthorized) return showSignInPopup();
         if (status === 'loading') return;
         const response = await call({ productId, count: 1 });
         if (response.value === 'OutOfStock')
@@ -190,7 +190,7 @@ const AddToFavoritesButton = ({
         deletingStatus === 'loading' || addingStatus === 'loading';
 
     const handleClick = async () => {
-        if (!isAuthorized) return showSignInView();
+        if (!isAuthorized) return showSignInPopup();
         if (isLoading) return;
         const method = isLiked ? deleteFromFavorites : addToFavorites;
 

@@ -14,7 +14,7 @@ import { DialogContentWrapper } from '../shared/wrapper';
 import { DialogOutlineButton } from '../shared/outlineButton';
 import { Dialog } from '../shared';
 import { ButtonText } from '../../buttonText';
-import { AuthDependentView } from '../../pages/shared/authDependentView';
+import { AuthDependentView } from '../../../features/auth/public/components';
 
 const ProductImage = styled(Link)<{ $url: string }>`
     border-radius: 8px;

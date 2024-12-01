@@ -8,20 +8,15 @@ export type Notification = {
 
 type AppState = {
     notifications: Notification[];
-    isShownSignInView: boolean;
     shownProductPreview: null | string;
     areShownProductFilters: boolean;
 };
 
 const useAppState = create<AppState>(() => ({
     notifications: [],
-    isShownSignInView: false,
     shownProductPreview: null,
     areShownProductFilters: false,
 }));
-
-export const useIsShownSignInView = () =>
-    useAppState((state) => state.isShownSignInView);
 
 export const useNotifications = () =>
     useAppState((state) => state.notifications);
@@ -49,16 +44,6 @@ export const removeNotificationById = (id: string) =>
         ...prev,
         notifications: prev.notifications.filter((item) => item.id !== id),
     }));
-
-export const showSignInView = () =>
-    useAppState.setState({
-        isShownSignInView: true,
-    });
-
-export const hideSignInView = () =>
-    useAppState.setState({
-        isShownSignInView: false,
-    });
 
 export const useShownProductPreview = () =>
     useAppState((state) => state.shownProductPreview);

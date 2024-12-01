@@ -3,27 +3,22 @@ import {
     ClipboardListIcon,
     FilterIcon,
     HeartIcon,
-    LogOutIcon,
     ShoppingBagIcon,
-    UserRoundIcon,
     XIcon,
 } from 'lucide-react';
 import { TextButton } from '../buttons/textButton';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { Search, setSearchInputValue, useSearchInputValue } from '../search';
-import { setUser, useIsAuthorized } from '../../modules/user';
-import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
-import {
-    pushNotification,
-    showSignInView,
-    toggleAreShownProductFilters,
-} from '../../hooks/useAppState';
+import { toggleAreShownProductFilters } from '../../hooks/useAppState';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useEffect } from 'react';
 import { setUrlParam, useUrlParam } from '../../modules/url';
 import { HeaderColorModeChangeButton } from '../../features/colorMode/public/components';
+import { showSignInPopup } from '../../features/auth/public/actions';
+import { useIsAuthorized } from '../../features/auth/public/selectors';
+import { HeaderAuthButton } from '../../features/auth/public/components';
 
 const Styled = styled.div`
     ${container()}
@@ -72,7 +67,7 @@ export const Header = () => {
                         onClick={() =>
                             isAuthorized
                                 ? setUrlParam('page', 'cart', true)
-                                : showSignInView()
+                                : showSignInPopup()
                         }
                     >
                         <ShoppingBagIcon />
@@ -81,7 +76,7 @@ export const Header = () => {
                         onClick={() =>
                             isAuthorized
                                 ? setUrlParam('page', 'favorites', true)
-                                : showSignInView()
+                                : showSignInPopup()
                         }
                     >
                         <HeartIcon />
@@ -90,37 +85,13 @@ export const Header = () => {
                         onClick={() =>
                             isAuthorized
                                 ? setUrlParam('page', 'orders', true)
-                                : showSignInView()
+                                : showSignInPopup()
                         }
                     >
                         <ClipboardListIcon />
                     </IconButton>
                     <HeaderColorModeChangeButton />
-
-                    {!isAuthorized && (
-                        <IconButton onClick={showSignInView}>
-                            <UserRoundIcon />
-                        </IconButton>
-                    )}
-                    {isAuthorized && (
-                        <IconButton
-                            onClick={() => {
-                                setUser(null);
-                                apiAction('signOut')
-                                    .call()
-                                    .then(
-                                        (res) =>
-                                            res.isRight() &&
-                                            pushNotification(
-                                                'info',
-                                                'Вы вышли из аккаунта',
-                                            ),
-                                    );
-                            }}
-                        >
-                            <LogOutIcon />
-                        </IconButton>
-                    )}
+                    <HeaderAuthButton />
                 </>
             )}
         </Styled>

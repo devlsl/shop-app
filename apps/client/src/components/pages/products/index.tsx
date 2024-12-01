@@ -1,5 +1,5 @@
 import { PageLoader } from '../../pageLoader';
-import { AuthDependentView } from '../shared/authDependentView';
+import { AuthDependentView } from '../../../features/auth/public/components';
 import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';

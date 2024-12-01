@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import { PageLoader } from '../../pageLoader';
 import { NotFoundPage } from '../shared/NotFoundPage';
-import { AuthDependentView } from '../shared/authDependentView';
 import { useUrlParam } from '../../../modules/url';
 import styled, { css, useTheme } from 'styled-components';
 import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
@@ -10,9 +9,11 @@ import { transition } from '../../../shared/utils/styles/transition';
 import { typography } from '../../../shared/utils/styles/typography';
 import { TextButton } from '../../buttons/textButton';
 import { HeartIcon, ShoppingBag } from 'lucide-react';
-import { pushNotification, showSignInView } from '../../../hooks/useAppState';
-import { useIsAuthorized } from '../../../modules/user';
+import { pushNotification } from '../../../hooks/useAppState';
 import { ButtonText } from '../../buttonText';
+import { useIsAuthorized } from '../../../features/auth/public/selectors';
+import { showSignInPopup } from '../../../features/auth/public/actions';
+import { AuthDependentView } from '../../../features/auth/public/components';
 
 const Wrapper = styled.div`
     display: flex;
@@ -120,7 +121,7 @@ const AddToCartButton = ({ productId }: { productId: string }) => {
     const { call, status } = useApi('addProductToCart');
 
     const handleClick = async () => {
-        if (!isAuthorized) return showSignInView();
+        if (!isAuthorized) return showSignInPopup();
         if (status === 'loading') return;
         const response = await call({ productId, count: 1 });
         if (response.value === 'OutOfStock')
@@ -177,7 +178,7 @@ const AddToFavoritesButton = ({
         deletingStatus === 'loading' || addingStatus === 'loading';
 
     const handleClick = async () => {
-        if (!isAuthorized) return showSignInView();
+        if (!isAuthorized) return showSignInPopup();
         if (isLoading) return;
         const method = isLiked ? deleteFromFavorites : addToFavorites;
 

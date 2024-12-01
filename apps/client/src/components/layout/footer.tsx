@@ -2,21 +2,17 @@ import {
     ClipboardListIcon,
     HeartIcon,
     LayoutDashboardIcon,
-    LogOutIcon,
-    MoonIcon,
     ShoppingBagIcon,
-    SunIcon,
-    UserRoundIcon,
 } from 'lucide-react';
 import { FooterButton } from '../buttons/footerButton';
-import { apiAction } from '../../hooks/useApi';
 import { setUrlParam } from '../../modules/url';
-import { setUser, useUser } from '../../modules/user';
 import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
-import { pushNotification, showSignInView } from '../../hooks/useAppState';
 import { FooterColorModeChangeButton } from '../../features/colorMode/public/components';
+import { FooterAuthButton } from '../../features/auth/public/components';
+import { showSignInPopup } from '../../features/auth/public/actions';
+import { useIsAuthorized } from '../../features/auth/public/selectors';
 
 const Styled = styled.div`
     ${container()}
@@ -27,8 +23,7 @@ const Styled = styled.div`
 
 export const Footer = () => {
     const isBottomBarShowed = useBreakpoint('showBottomBar');
-
-    const isAuthorized = useUser();
+    const isAuthorized = useIsAuthorized();
 
     if (!isBottomBarShowed) return null;
 
@@ -44,7 +39,7 @@ export const Footer = () => {
                 onClick={() =>
                     isAuthorized
                         ? setUrlParam('page', 'favorite', true)
-                        : showSignInView()
+                        : showSignInPopup()
                 }
             >
                 <HeartIcon />
@@ -53,7 +48,7 @@ export const Footer = () => {
                 onClick={() =>
                     isAuthorized
                         ? setUrlParam('page', 'cart', true)
-                        : showSignInView()
+                        : showSignInPopup()
                 }
             >
                 <ShoppingBagIcon />
@@ -62,37 +57,13 @@ export const Footer = () => {
                 onClick={() =>
                     isAuthorized
                         ? setUrlParam('page', 'orders', true)
-                        : showSignInView()
+                        : showSignInPopup()
                 }
             >
                 <ClipboardListIcon />
             </FooterButton>
             <FooterColorModeChangeButton />
-
-            {!isAuthorized && (
-                <FooterButton onClick={showSignInView}>
-                    <UserRoundIcon />
-                </FooterButton>
-            )}
-            {isAuthorized && (
-                <FooterButton
-                    onClick={() => {
-                        setUser(null);
-                        apiAction('signOut')
-                            .call()
-                            .then(
-                                (res) =>
-                                    res.isRight() &&
-                                    pushNotification(
-                                        'info',
-                                        'Вы вышли из аккаунта',
-                                    ),
-                            );
-                    }}
-                >
-                    <LogOutIcon />
-                </FooterButton>
-            )}
+            <FooterAuthButton />
         </Styled>
     );
 };

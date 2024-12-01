@@ -1,7 +1,7 @@
 import { apiSchema } from '@shop/shared';
 import { createUseApi } from './createUseApi';
-import { setUser } from '../modules/user';
 import { pushNotification } from './useAppState';
+import { setUser } from '../features/auth/private/actions';
 
 export const { useApi, apiAction } = createUseApi(
     __APP_ENV__.SERVER_HOSTNAME,

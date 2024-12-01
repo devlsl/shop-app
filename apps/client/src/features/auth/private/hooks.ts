@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { setUser } from '../modules/user';
-import { useApi } from './useApi';
+import { useApi } from '../../../hooks/useApi';
+import { setUser } from './actions';
 
 export const useAuthorizeChecking = () => {
     const { call, status, data } = useApi('checkAuth');

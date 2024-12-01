@@ -1,4 +1,3 @@
-import { AuthNeedPage } from '../shared/authNeedPage';
 import { PageLoader } from '../../pageLoader';
 import { useApi } from '../../../hooks/useApi';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
@@ -9,6 +8,7 @@ import { NotFoundPage } from '../shared/NotFoundPage';
 import { apiPayloadSchemas } from '../../../shared/consts/schemas/api';
 import { useEffect, useState } from 'react';
 import { LazyLoadingTrigger, ProductsView } from '../products/productsGrid';
+import { AuthNeedPage } from '../../../features/auth/public/components';
 
 export const parseProductFilters = () => {
     try {

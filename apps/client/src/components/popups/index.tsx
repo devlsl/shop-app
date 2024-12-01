@@ -1,14 +1,14 @@
 import { ProductPreview } from './productPreview';
-import { SignInView } from './signInView';
 import { NotificationsView } from './notifications/list';
 import { ProductFiltersDialog } from './productFiltersDialog';
+import { SignInPopup } from '../../features/auth/public/components';
 
 export const Popups = () => {
     return (
         <>
             <ProductFiltersDialog />
             <ProductPreview />
-            <SignInView />
+            <SignInPopup />
             <NotificationsView />
         </>
     );

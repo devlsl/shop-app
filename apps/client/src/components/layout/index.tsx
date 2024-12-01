@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { useUser } from '../../modules/user';
 import { Content } from './content';
 import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
 import { PageLoader } from '../pageLoader';
@@ -7,6 +6,7 @@ import { Header } from './header';
 import { Footer } from './footer';
 import { Popups } from '../popups';
 import { Suspense } from 'react';
+import { useAuthStatus } from '../../features/auth/public/selectors';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -25,9 +25,9 @@ const Wrapper = styled.div`
 `;
 
 export const Layout = () => {
-    const user = useUser();
+    const authStatus = useAuthStatus();
 
-    if (user === undefined) return <PageLoader />;
+    if (authStatus === 'checking') return <PageLoader />;
 
     return (
         <Wrapper>
