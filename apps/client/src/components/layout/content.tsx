@@ -81,7 +81,6 @@ const mapPageToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
 
 export const Content = () => {
     const page = useUrlParam('page') ?? '';
-    console.log({ page, weqweqweqwe: '' });
 
     useEffect(() => {
         if (page === '') setUrlParam('page', 'categories', true);

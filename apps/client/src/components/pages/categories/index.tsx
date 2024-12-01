@@ -68,8 +68,6 @@ const CategoriesPage = () => {
 
     const searchQuery = useUrlParam('search');
 
-    console.log(categoryId);
-
     const { call, cash, status } = useApi('getCategoriesPageItems');
 
     useEffect(() => {

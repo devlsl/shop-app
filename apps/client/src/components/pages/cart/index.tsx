@@ -53,8 +53,6 @@ const CartPageView = ({}) => {
         fetchData();
     }, []);
 
-    console.log(selectedItems);
-
     if (status === 'loading' || status === 'idle') return <PageLoader />;
 
     if (cartItems === null || cartItems.length === 0)

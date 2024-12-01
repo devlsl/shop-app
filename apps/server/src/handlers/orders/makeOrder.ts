@@ -21,10 +21,6 @@ export default (props: HandlersProps): Handlers['makeOrder'] =>
 
         let canMakeOrder = payload.reduce((acc, i) => {
             if (!acc) return false;
-            console.log(availableProducts[i.productId]);
-            console.log(availableProducts[i.productId] ?? 0);
-            console.log(i.count);
-
             return (availableProducts[i.productId] ?? 0) - i.count >= 0;
         }, true);
 
