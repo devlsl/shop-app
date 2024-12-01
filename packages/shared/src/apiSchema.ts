@@ -267,7 +267,7 @@ export const apiSchema = {
         roles: true,
         return: z
             .object({
-                Id: idSchema,
+                id: idSchema,
                 orderNumber: orderNumberSchema,
                 status: orderStatusSchema,
                 miniatures: z
@@ -290,7 +290,7 @@ export const apiSchema = {
         }),
         errors: ['NotFound'],
         return: z.object({
-            Id: idSchema,
+            id: idSchema,
             orderNumber: orderNumberSchema,
             status: orderStatusSchema,
             createdAt: z.string().datetime(),
