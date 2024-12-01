@@ -1,23 +1,17 @@
-import { ThemeProvider } from 'styled-components';
-import { useDeviceThemeListener, useTheme } from '../../modules/theme';
 import { usePopUrlStateListener } from '../../modules/url';
 import { useAuthorizeChecking } from '../../hooks/useAuthorizeChecking';
-import { darkColors } from '../../shared/consts/styles/colors/dark';
-import { lightColors } from '../../shared/consts/styles/colors/light';
-import { GlobalStyles } from './globalStyles';
 import { Layout } from '../../components/layout';
+import { ColorModeProvider } from '../../features/colorMode/public/components';
+import { GlobalStyles } from './globalStyles';
 
 export const Initial = () => {
     useAuthorizeChecking();
     usePopUrlStateListener();
-    useDeviceThemeListener();
-
-    const theme = useTheme();
 
     return (
-        <ThemeProvider theme={theme === 'dark' ? darkColors : lightColors}>
+        <ColorModeProvider>
             <GlobalStyles />
             <Layout />
-        </ThemeProvider>
+        </ColorModeProvider>
     );
 };

@@ -8,7 +8,6 @@ import {
     SunIcon,
     UserRoundIcon,
 } from 'lucide-react';
-import { toggleTheme, useTheme } from '../../modules/theme';
 import { FooterButton } from '../buttons/footerButton';
 import { apiAction } from '../../hooks/useApi';
 import { setUrlParam } from '../../modules/url';
@@ -17,6 +16,7 @@ import styled from 'styled-components';
 import { container } from '../../shared/utils/styles/container';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { pushNotification, showSignInView } from '../../hooks/useAppState';
+import { FooterColorModeChangeButton } from '../../features/colorMode/public/components';
 
 const Styled = styled.div`
     ${container()}
@@ -28,7 +28,6 @@ const Styled = styled.div`
 export const Footer = () => {
     const isBottomBarShowed = useBreakpoint('showBottomBar');
 
-    const theme = useTheme();
     const isAuthorized = useUser();
 
     if (!isBottomBarShowed) return null;
@@ -68,9 +67,7 @@ export const Footer = () => {
             >
                 <ClipboardListIcon />
             </FooterButton>
-            <FooterButton onClick={toggleTheme}>
-                {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
-            </FooterButton>
+            <FooterColorModeChangeButton />
 
             {!isAuthorized && (
                 <FooterButton onClick={showSignInView}>

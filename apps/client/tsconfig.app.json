@@ -1,4 +1,5 @@
 {
+    "files": ["src/features/colorMode/typing.d.ts"],
     "compilerOptions": {
         "target": "ES2020",
         "useDefineForClassFields": true,
@@ -21,5 +22,5 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src"]
+    "include": ["src", "src/features/colorMode/typing.d.ts"]
 }

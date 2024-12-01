@@ -4,16 +4,13 @@ import {
     FilterIcon,
     HeartIcon,
     LogOutIcon,
-    MoonIcon,
     ShoppingBagIcon,
-    SunIcon,
     UserRoundIcon,
     XIcon,
 } from 'lucide-react';
 import { TextButton } from '../buttons/textButton';
 import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { Search, setSearchInputValue, useSearchInputValue } from '../search';
-import { toggleTheme, useTheme } from '../../modules/theme';
 import { setUser, useIsAuthorized } from '../../modules/user';
 import { apiAction } from '../../hooks/useApi';
 import styled from 'styled-components';
@@ -26,6 +23,7 @@ import {
 import { useDebounce } from '../../hooks/useDebounce';
 import { useEffect } from 'react';
 import { setUrlParam, useUrlParam } from '../../modules/url';
+import { HeaderColorModeChangeButton } from '../../features/colorMode/public/components';
 
 const Styled = styled.div`
     ${container()}
@@ -39,7 +37,6 @@ const Styled = styled.div`
 export const Header = () => {
     const page = useUrlParam('page');
     const isBottomBarShowed = useBreakpoint('showBottomBar');
-    const theme = useTheme();
     const isAuthorized = useIsAuthorized();
 
     const searchInputValue = useSearchInputValue();
@@ -98,9 +95,7 @@ export const Header = () => {
                     >
                         <ClipboardListIcon />
                     </IconButton>
-                    <IconButton onClick={toggleTheme}>
-                        {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
-                    </IconButton>
+                    <HeaderColorModeChangeButton />
 
                     {!isAuthorized && (
                         <IconButton onClick={showSignInView}>
