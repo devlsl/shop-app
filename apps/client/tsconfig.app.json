@@ -22,5 +22,5 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src", "src/features/colorMode/typing.d.ts"]
+    "include": ["src", "src/features/colorMode/typing.d.ts", "env"]
 }

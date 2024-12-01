@@ -4,7 +4,7 @@ export const getEnv = <Keys extends readonly string[]>(keys: Keys) =>
             if (process.env[key] === undefined) {
                 (function () {
                     throw new Error(
-                        `.env read error: variable with key ${key} was not found`,
+                        `apps/server: .env read error: variable with key ${key} was not found`,
                     );
                 })();
             }

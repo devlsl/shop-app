@@ -12,8 +12,8 @@ export const createVerifyAccess =
         const accessToken = getCookie(request, 'accessToken');
         if (!accessToken) return left('Unauthorized');
         try {
-            const payload = jwt.verify(accessToken, props.CLIENT_JWT_SECRET, {
-                maxAge: Number(props.CLIENT_ACCESS_TOKEN_EXP_IN_SEC),
+            const payload = jwt.verify(accessToken, props.SERVER_JWT_SECRET, {
+                maxAge: Number(props.SERVER_ACCESS_TOKEN_EXP_IN_SEC),
             });
             return parse(
                 z.object({

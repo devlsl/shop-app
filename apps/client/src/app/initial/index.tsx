@@ -6,6 +6,7 @@ import { AuthProvider } from '../../features/auth/public/components';
 
 export const Initial = () => {
     usePopUrlStateListener();
+    console.log({ __APP_ENV__ });
 
     return (
         <AuthProvider>
