@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { ColorMode } from './types';
-
-type ColorModeState = {
-    value: ColorMode;
-};
+import { ColorModeState } from './types';
 
 export const useColorModeState = create(
     persist<ColorModeState>(

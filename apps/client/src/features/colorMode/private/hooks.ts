@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import { useColorModeState } from "./state";
-
-export const useColorMode = () => useColorModeState((state) => state.value);
+import { useEffect } from 'react';
+import { useColorModeState } from './state';
 
 export const useDeviceColorModeListener = () => {
     useEffect(() => {

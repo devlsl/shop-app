@@ -4,3 +4,7 @@ import { darkColors } from './consts/schemes/dark';
 export type ColorMode = (typeof colorModes)[number];
 
 export type ColorScheme = typeof darkColors;
+
+export type ColorModeState = {
+    value: ColorMode;
+};

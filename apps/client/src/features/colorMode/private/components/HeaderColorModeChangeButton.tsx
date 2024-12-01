@@ -1,7 +1,7 @@
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { toggleColorMode } from '../actions';
-import { useColorMode } from '../hooks';
 import { IconButton } from '../../../../components/buttons/iconButton';
+import { useColorMode } from '../selectors';
 
 export const HeaderColorModeChangeButton = () => {
     const colorMode = useColorMode();
