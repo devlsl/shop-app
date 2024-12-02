@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { TextButton } from '../../buttons/textButton';
-import { hover } from '../../../shared/utils/styles/hover';
+import { hover } from '../../../shared/styles/hover';
 
 export const DialogOutlineButton = styled(TextButton)`
     background-color: transparent;

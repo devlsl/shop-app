@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '../../../hooks/useApi';
 import { PageLoader } from '../../pageLoader';
 import { NotFoundPage } from '../shared/NotFoundPage';
-import { useUrlParam } from '../../../modules/url';
 import styled, { css, useTheme } from 'styled-components';
-import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
-import { transition } from '../../../shared/utils/styles/transition';
-import { typography } from '../../../shared/utils/styles/typography';
+import { breakpoint } from '../../../features/breakpoints';
 import { TextButton } from '../../buttons/textButton';
 import { HeartIcon, ShoppingBag } from 'lucide-react';
-import { pushNotification } from '../../../hooks/useAppState';
 import { ButtonText } from '../../buttonText';
-import { useIsAuthorized } from '../../../features/auth/public/selectors';
-import { showSignInPopup } from '../../../features/auth/public/actions';
-import { AuthDependentView } from '../../../features/auth/public/components';
+import {
+    showSignInPopup,
+    AuthDependentView,
+    useIsAuthorized,
+} from '../../../features/auth';
+import { useUrlParam } from '../../../features/url';
+import { useApi } from '../../../features/api';
+import { transition } from '../../../shared/styles/transition';
+import { typography } from '../../../shared/styles/typography';
+import { pushNotification } from '../../../shared/hooks/useAppState';
 
 const Wrapper = styled.div`
     display: flex;

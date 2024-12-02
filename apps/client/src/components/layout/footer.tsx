@@ -5,14 +5,14 @@ import {
     ShoppingBagIcon,
 } from 'lucide-react';
 import { FooterButton } from '../buttons/footerButton';
-import { setUrlParam } from '../../modules/url';
 import styled from 'styled-components';
-import { container } from '../../shared/utils/styles/container';
-import { useBreakpoint } from '../../hooks/useBreakpoints';
-import { FooterColorModeChangeButton } from '../../features/colorMode/public/components';
-import { FooterAuthButton } from '../../features/auth/public/components';
-import { showSignInPopup } from '../../features/auth/public/actions';
-import { useIsAuthorized } from '../../features/auth/public/selectors';
+import { FooterColorModeChangeButton } from '../../features/colorMode';
+import { FooterAuthButton } from '../../features/auth';
+import { showSignInPopup } from '../../features/auth';
+import { useIsAuthorized } from '../../features/auth';
+import { navigate } from '../../features/url';
+import { useBreakpoint } from '../../features/breakpoints';
+import { container } from '../../shared/styles/container';
 
 const Styled = styled.div`
     ${container()}
@@ -29,35 +29,27 @@ export const Footer = () => {
 
     return (
         <Styled>
-            <FooterButton
-                onClick={() => setUrlParam('page', 'categories', true)}
-            >
+            <FooterButton onClick={() => navigate('categories')}>
                 <LayoutDashboardIcon />
             </FooterButton>
 
             <FooterButton
                 onClick={() =>
-                    isAuthorized
-                        ? setUrlParam('page', 'favorite', true)
-                        : showSignInPopup()
+                    isAuthorized ? navigate('favorites') : showSignInPopup()
                 }
             >
                 <HeartIcon />
             </FooterButton>
             <FooterButton
                 onClick={() =>
-                    isAuthorized
-                        ? setUrlParam('page', 'cart', true)
-                        : showSignInPopup()
+                    isAuthorized ? navigate('cart') : showSignInPopup()
                 }
             >
                 <ShoppingBagIcon />
             </FooterButton>
             <FooterButton
                 onClick={() =>
-                    isAuthorized
-                        ? setUrlParam('page', 'orders', true)
-                        : showSignInPopup()
+                    isAuthorized ? navigate('orders') : showSignInPopup()
                 }
             >
                 <ClipboardListIcon />

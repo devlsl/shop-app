@@ -1,15 +1,16 @@
 import styled from 'styled-components';
-import { Page } from '../../shared/types/page';
-import { createMapWithDefaultValue } from '../../shared/utils/helpers/createMapWithDefaultValue';
-import { container } from '../../shared/utils/styles/container';
 
 import { CategoryPath } from '../pages/shared/categoryPath';
 import { lazy, useEffect } from 'react';
 import { NotFoundPage } from '../pages/shared/NotFoundPage';
 import { ButtonText } from '../buttonText';
 import { TextButton } from '../buttons/textButton';
-import { typography } from '../../shared/utils/styles/typography';
-import { setUrlParam, useUrlParam } from '../../modules/url';
+import { navigate } from '../../features/url/actions';
+import { useUrlParam } from '../../features/url/selectors';
+import { Page } from '../../features/url/types';
+import { container } from '../../shared/styles/container';
+import { typography } from '../../shared/styles/typography';
+import { createMapWithDefaultValue } from '../../shared/helpers/createMapWithDefaultValue';
 
 const CategoriesPage = lazy(() => import('../pages/categories'));
 const ProductsPage = lazy(() => import('../pages/products/index'));
@@ -70,9 +71,7 @@ const mapPageToComponent = createMapWithDefaultValue<Page, React.ReactNode>(
     <NotFoundPage>
         <NotFoundPageWrapper>
             <div>Такой страницы нет</div>
-            <GoToCatalogButton
-                onClick={() => setUrlParam('page', 'categories', true)}
-            >
+            <GoToCatalogButton onClick={() => navigate('categories')}>
                 <GoToCatalogButtonText>Перейти в каталог</GoToCatalogButtonText>
             </GoToCatalogButton>
         </NotFoundPageWrapper>
@@ -83,7 +82,7 @@ export const Content = () => {
     const page = useUrlParam('page') ?? '';
 
     useEffect(() => {
-        if (page === '') setUrlParam('page', 'categories', true);
+        if (page === '') navigate('categories');
     }, [page]);
 
     return (

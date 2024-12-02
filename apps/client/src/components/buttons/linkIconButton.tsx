@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import { transition } from '../../shared/utils/styles/transition';
-import { staticStyles } from '../../shared/consts/styles/static';
-import { hover } from '../../shared/utils/styles/hover';
+import { staticStyles } from '../../shared/consts/staticStyles';
+import { transition } from '../../shared/styles/transition';
+import { hover } from '../../shared/styles/hover';
 
 export const LinkIconButton = styled.button`
     ${transition('transform', 'outline-color')}

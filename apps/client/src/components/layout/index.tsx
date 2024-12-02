@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components';
 import { Content } from './content';
-import { breakpoint } from '../../shared/utils/styles/breakpointMedia';
+import { breakpoint } from '../../features/breakpoints';
 import { PageLoader } from '../pageLoader';
 import { Header } from './header';
 import { Footer } from './footer';
 import { Popups } from '../popups';
 import { Suspense } from 'react';
-import { useAuthStatus } from '../../features/auth/public/selectors';
+import { useAuthStatus } from '../../features/auth';
 
 const Wrapper = styled.div`
     width: 100%;

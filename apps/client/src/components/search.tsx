@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { staticStyles } from '../shared/consts/styles/static';
-import { transition } from '../shared/utils/styles/transition';
-import { typography } from '../shared/utils/styles/typography';
-import { useTyping } from '../shared/hooks/useTyping';
+import { staticStyles } from '../shared/consts/staticStyles';
 import { useEffect, useState } from 'react';
 import { create } from 'zustand';
-import { getUrlParam, setUrlParam } from '../modules/url';
+import { getUrlParam, setUrlParam } from '../features/url';
+import { transition } from '../shared/styles/transition';
+import { typography } from '../shared/styles/typography';
+import { useTyping } from '../shared/hooks/useTyping';
 
 const useSearchInputState = create<string>(() => getUrlParam('search') ?? '');
 export const useSearchInputValue = () => useSearchInputState((state) => state);

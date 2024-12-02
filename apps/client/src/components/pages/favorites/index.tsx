@@ -1,14 +1,12 @@
 import { PageLoader } from '../../pageLoader';
-import { useApi } from '../../../hooks/useApi';
-import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import { getUrlParam, useUrlParam } from '../../../modules/url';
-import { matchMediaBreakpoint } from '../../../shared/utils/helpers/isBreakpointMathers';
-
+import { matchMediaBreakpoint } from '../../../features/breakpoints';
 import { NotFoundPage } from '../shared/NotFoundPage';
-import { apiPayloadSchemas } from '../../../shared/consts/schemas/api';
+import { apiPayloadSchemas, useApi } from '../../../features/api';
 import { useEffect, useState } from 'react';
 import { LazyLoadingTrigger, ProductsView } from '../products/productsGrid';
-import { AuthNeedPage } from '../../../features/auth/public/components';
+import { AuthNeedPage } from '../../../features/auth';
+import { getUrlParam, useUrlParam } from '../../../features/url';
+import { useIntersectionObserver } from '../../../shared/hooks/useIntersectionObserver';
 
 export const parseProductFilters = () => {
     try {

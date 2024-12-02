@@ -7,18 +7,17 @@ import { IconButton } from '../../buttons/iconButton';
 import { HeartIcon, PackagePlusIcon } from 'lucide-react';
 import { PageLoader } from '../../pageLoader';
 import { useTheme } from 'styled-components';
+import { TextButton } from '../../buttons/textButton';
+import { Link } from '../../../features/url';
+import { showSignInPopup, useIsAuthorized } from '../../../features/auth';
+import { useApi } from '../../../features/api';
+import { transition } from '../../../shared/styles/transition';
+import { hover } from '../../../shared/styles/hover';
+import { typography } from '../../../shared/styles/typography';
 import {
     pushNotification,
     showProductPreview,
-} from '../../../hooks/useAppState';
-import { useApi } from '../../../hooks/useApi';
-import { typography } from '../../../shared/utils/styles/typography';
-import { TextButton } from '../../buttons/textButton';
-import { hover } from '../../../shared/utils/styles/hover';
-import { Link } from '../../link';
-import { transition } from '../../../shared/utils/styles/transition';
-import { showSignInPopup } from '../../../features/auth/public/actions';
-import { useIsAuthorized } from '../../../features/auth/public/selectors';
+} from '../../../shared/hooks/useAppState';
 
 export const CardWrapper = styled.div`
     display: flex;
@@ -249,7 +248,7 @@ const ProductCardView = ({
         <CardWrapper>
             <ProductImage
                 $url={previewUrl}
-                to={{ page: 'product', productId: id, categoryId }}
+                to={['product', { productId: id, categoryId }]}
             />
             <ProductTypographyWrapper>
                 <ProductName>{name}</ProductName>

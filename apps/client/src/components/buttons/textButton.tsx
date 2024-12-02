@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { transition } from '../../shared/utils/styles/transition';
-import { staticStyles } from '../../shared/consts/styles/static';
-import { hover } from '../../shared/utils/styles/hover';
-import { typography } from '../../shared/utils/styles/typography';
+import { staticStyles } from '../../shared/consts/staticStyles';
+import { typography } from '../../shared/styles/typography';
+import { transition } from '../../shared/styles/transition';
+import { hover } from '../../shared/styles/hover';
 
 export const TextButton = styled.button`
     ${transition(

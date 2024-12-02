@@ -3,7 +3,7 @@ import { createStorageService } from './createStorageService';
 import { storageSchema } from '../storageSchema';
 import { createServer } from 'http';
 import { apiSchema } from '@shop/shared';
-import { bindActions } from 'ts-api-generator';
+import { requestHandlerBuilder } from 'ts-api-generator';
 import checkAuth from '../handlers/auth/checkAuth';
 import refreshAuth from '../handlers/auth/refreshAuth';
 import signOut from '../handlers/auth/signOut';
@@ -78,7 +78,8 @@ export const startHttpServer = () => {
     };
 
     createServer(
-        bindActions(apiSchema)
+        requestHandlerBuilder
+            .bindApiSchema(apiSchema)
             .bindHandlers(handlers)
             .createDefaultHttpRequestHandler(
                 createVerifyAccess(props),

@@ -1,14 +1,14 @@
 import styled, { css } from 'styled-components';
-import { transition } from '../../../shared/utils/styles/transition';
-import { breakpoint } from '../../../shared/utils/styles/breakpointMedia';
-import { typography } from '../../../shared/utils/styles/typography';
+import { breakpoint } from '../../../features/breakpoints';
 import { useEffect } from 'react';
-import { useUrlParam } from '../../../modules/url';
-import { useApi } from '../../../hooks/useApi';
 import { ChevronLeftIcon, TextSearchIcon } from 'lucide-react';
 import { PageLoader } from '../../pageLoader';
 import { Card } from '../shared/card';
 import { CardsGrid } from '../shared/cardsGrid';
+import { useUrlParam } from '../../../features/url';
+import { useApi } from '../../../features/api';
+import { typography } from '../../../shared/styles/typography';
+import { transition } from '../../../shared/styles/transition';
 
 const TitleLine = styled.div`
     ${typography({
@@ -72,7 +72,12 @@ const CategoriesPage = () => {
 
     useEffect(() => {
         if (status === 'loading') return;
-        call({ categoryId });
+        const a = call({ categoryId });
+        a.then(w => {
+            if (w.isRight()) {
+            const qw = w.value
+            }
+        })
     }, [categoryId]);
 
     if (cash === null) return <PageLoader />;
@@ -91,7 +96,7 @@ const CategoriesPage = () => {
         <CardsGrid>
             {cash.backCategoryId !== undefined ? (
                 <Card
-                    to={{ page: 'categories', categoryId: cash.backCategoryId }}
+                    to={['categories', { categoryId: cash.backCategoryId }]}
                     aspectRatio='1'
                     imageUrlOrSlot={<ChevronLeftIcon width='50%' />}
                 />
@@ -100,7 +105,7 @@ const CategoriesPage = () => {
                 <Card
                     aspectRatio='1'
                     imageUrlOrSlot={<TextSearchIcon width='50%' />}
-                    to={{ page: 'products', categoryId: cash.id }}
+                    to={['products', { categoryId: cash.id }]}
                 >
                     <TitleWrapper>
                         <TitleLine>Товары</TitleLine>
@@ -113,12 +118,12 @@ const CategoriesPage = () => {
                     aspectRatio='1'
                     imageUrlOrSlot={item.imageUrl}
                     key={item.id}
-                    to={{
-                        page: item.haveNestedCategories
-                            ? 'categories'
-                            : 'products',
-                        categoryId: item.id,
-                    }}
+                    to={[
+                        item.haveNestedCategories ? 'categories' : 'products',
+                        {
+                            categoryId: item.id,
+                        },
+                    ]}
                 >
                     <TitleWrapper>
                         {item.name

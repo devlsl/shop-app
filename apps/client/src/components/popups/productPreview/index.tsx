@@ -1,20 +1,19 @@
 import styled, { css } from 'styled-components';
-import { useApi } from '../../../hooks/useApi';
-import {
-    hideProductPreview,
-    useShownProductPreview,
-} from '../../../hooks/useAppState';
-import { hover } from '../../../shared/utils/styles/hover';
-import { transition } from '../../../shared/utils/styles/transition';
-
 import { PageLoader } from '../../pageLoader';
-import { Link } from '../../link';
+import { Link } from '../../../features/url';
 import { useEffect } from 'react';
 import { DialogContentWrapper } from '../shared/wrapper';
 import { DialogOutlineButton } from '../shared/outlineButton';
 import { Dialog } from '../shared';
 import { ButtonText } from '../../buttonText';
-import { AuthDependentView } from '../../../features/auth/public/components';
+import { AuthDependentView } from '../../../features/auth';
+import { useApi } from '../../../features/api';
+import { transition } from '../../../shared/styles/transition';
+import { hover } from '../../../shared/styles/hover';
+import {
+    hideProductPreview,
+    useShownProductPreview,
+} from '../../../shared/hooks/useAppState';
 
 const ProductImage = styled(Link)<{ $url: string }>`
     border-radius: 8px;
@@ -70,11 +69,13 @@ export const ProductPreviewView = ({
                             <ProductImage
                                 $url={cash.media[0]?.url ?? ''}
                                 onWillRedirect={hideProductPreview}
-                                to={{
-                                    page: 'product',
-                                    productId: shownProduct,
-                                    categoryId: cash.categoryId,
-                                }}
+                                to={[
+                                    'product',
+                                    {
+                                        productId: shownProduct,
+                                        categoryId: cash.categoryId,
+                                    },
+                                ]}
                             />
                             <DialogOutlineButton onClick={hideProductPreview}>
                                 <ButtonText $size='l'>Отменить</ButtonText>

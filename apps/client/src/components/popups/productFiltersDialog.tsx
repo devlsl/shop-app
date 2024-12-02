@@ -1,22 +1,22 @@
 import styled, { css } from 'styled-components';
-import {
-    toggleAreShownProductFilters,
-    useAreShownProductFilters,
-} from '../../hooks/useAppState';
-import { typography } from '../../shared/utils/styles/typography';
 import { Dialog } from './shared';
 import { DialogOutlineButton } from './shared/outlineButton';
 import { DialogSecondaryButton } from './shared/secondaryButton';
 import { ButtonText } from '../buttonText';
-import { useApi } from '../../hooks/useApi';
 import { useEffect, useState } from 'react';
 import { PageLoader } from '../pageLoader';
 import { DialogRow } from './shared/row';
 import { apiSchema } from '@shop/shared';
 import { z } from 'zod';
-import { hover } from '../../shared/utils/styles/hover';
 import { parseProductFilters, parseProductSorting } from '../pages/favorites';
-import { setUrlParam, useUrlParam } from '../../modules/url';
+import { setUrlParam, useUrlParam } from '../../features/url';
+import { useApi } from '../../features/api';
+import { hover } from '../../shared/styles/hover';
+import {
+    toggleAreShownProductFilters,
+    useAreShownProductFilters,
+} from '../../shared/hooks/useAppState';
+import { typography } from '../../shared/styles/typography';
 
 const DialogWrapper = styled.div`
     display: grid;

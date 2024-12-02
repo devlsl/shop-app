@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '../../../hooks/useApi';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
 import styled, { css, useTheme } from 'styled-components';
-import { staticStyles } from '../../../shared/consts/styles/static';
-import { transition } from '../../../shared/utils/styles/transition';
-import { hover } from '../../../shared/utils/styles/hover';
+import { staticStyles } from '../../../shared/consts/staticStyles';
 import { Checkbox } from '../../checkbox';
-import { Link } from '../../link';
-import { typography } from '../../../shared/utils/styles/typography';
+import { Link } from '../../../features/url';
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { ButtonText } from '../../buttonText';
-import { pushNotification } from '../../../hooks/useAppState';
 import { TextButton } from '../../buttons/textButton';
-import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
-import { AuthNeedPage } from '../../../features/auth/public/components';
+import { AuthNeedPage } from '../../../features/auth';
+import { ApiReturnData, useApi } from '../../../features/api';
+import { pushNotification } from '../../../shared/hooks/useAppState';
+import { transition } from '../../../shared/styles/transition';
+import { typography } from '../../../shared/styles/typography';
+import { hover } from '../../../shared/styles/hover';
 
 const CartPage = () => {
     return (
@@ -41,7 +40,7 @@ const CartPageView = ({}) => {
         Record<string, boolean | undefined>
     >({});
 
-    const [cartItems, setCartItems] = useState<ApiReturnSchemas['getCart']>([]);
+    const [cartItems, setCartItems] = useState<ApiReturnData['getCart']>([]);
 
     const fetchData = async () => {
         if (status === 'loading') return;
@@ -83,11 +82,13 @@ const CartPageView = ({}) => {
                                 }
                             />
                             <Image
-                                to={{
-                                    page: 'product',
-                                    productId: cartItem.productId,
-                                    categoryId: cartItem.categoryId,
-                                }}
+                                to={[
+                                    'product',
+                                    {
+                                        productId: cartItem.productId,
+                                        categoryId: cartItem.categoryId,
+                                    },
+                                ]}
                                 $url={cartItem.miniatures[0].url}
                             />
                             <ProductTypographyWrapper>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FlashingCircle } from './flashingCircle';
-import { staticStyles } from '../shared/consts/styles/static';
+import { staticStyles } from '../shared/consts/staticStyles';
 
 const Wrapper = styled.div<{
     $gap: string;

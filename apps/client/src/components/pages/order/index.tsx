@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '../../../hooks/useApi';
-import { AuthNeedPage } from '../../../features/auth/public/components';
+import { AuthNeedPage } from '../../../features/auth';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
 import styled, { css } from 'styled-components';
-import { staticStyles } from '../../../shared/consts/styles/static';
-import { transition } from '../../../shared/utils/styles/transition';
-import { hover } from '../../../shared/utils/styles/hover';
-import { Link } from '../../link';
-import { typography } from '../../../shared/utils/styles/typography';
+import { staticStyles } from '../../../shared/consts/staticStyles';
 import { ButtonText } from '../../buttonText';
 import { TextButton } from '../../buttons/textButton';
-import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
-import { useUrlParam } from '../../../modules/url';
-import { pushNotification } from '../../../hooks/useAppState';
 import { orderStatusLabelMap } from '../orders';
+import { Link, useUrlParam } from '../../../features/url';
+import { typography } from '../../../shared/styles/typography';
+import { ApiReturnData, useApi } from '../../../features/api';
+import { pushNotification } from '../../../shared/hooks/useAppState';
+import { transition } from '../../../shared/styles/transition';
+import { hover } from '../../../shared/styles/hover';
 
 const OrderPage = () => {
     return (
@@ -55,7 +53,7 @@ const OrderPageView = ({}) => {
 
     const orderId = useUrlParam('orderId') ?? '';
 
-    const [order, setOrder] = useState<ApiReturnSchemas['getOrder']>();
+    const [order, setOrder] = useState<ApiReturnData['getOrder']>();
 
     const fetchData = async () => {
         if (status === 'loading') return;
@@ -85,11 +83,13 @@ const OrderPageView = ({}) => {
                 {order.items.map((cartItem) => (
                     <CartItem>
                         <Image
-                            to={{
-                                page: 'product',
-                                productId: cartItem.productId,
-                                categoryId: cartItem.categoryId,
-                            }}
+                            to={[
+                                'product',
+                                {
+                                    productId: cartItem.productId,
+                                    categoryId: cartItem.categoryId,
+                                },
+                            ]}
                             $url={cartItem.miniature}
                         />
                         <ProductTypographyWrapper>

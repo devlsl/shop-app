@@ -1,4 +1,4 @@
-import { ColorScheme } from './private/types';
+import { ColorScheme } from './types';
 import 'styled-components';
 
 declare module 'styled-components' {

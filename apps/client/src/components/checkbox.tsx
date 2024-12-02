@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { transition } from '../shared/utils/styles/transition';
 import { css } from 'styled-components';
-import { hover } from '../shared/utils/styles/hover';
+import { transition } from '../shared/styles/transition';
+import { hover } from '../shared/styles/hover';
 
 export const Checkbox = ({
     isChecked = false,

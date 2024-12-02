@@ -1,12 +1,11 @@
 import styled, { css } from 'styled-components';
-import { container } from '../../../shared/utils/styles/container';
-import { typography } from '../../../shared/utils/styles/typography';
-import { hover } from '../../../shared/utils/styles/hover';
-import { transition } from '../../../shared/utils/styles/transition';
-import { useUrlParam } from '../../../modules/url';
-import { useApi } from '../../../hooks/useApi';
 import React, { useEffect } from 'react';
-import { Link } from '../../link';
+import { Link, useUrlParam } from '../../../features/url';
+import { useApi } from '../../../features/api';
+import { container } from '../../../shared/styles/container';
+import { hover } from '../../../shared/styles/hover';
+import { transition } from '../../../shared/styles/transition';
+import { typography } from '../../../shared/styles/typography';
 
 const Styled = styled.div`
     ${container()}
@@ -81,7 +80,7 @@ export const CategoryPath = () => {
             <Wrapper>
                 <CategoryPathItem
                     $disabled={categoryId === null}
-                    to={{ page: 'categories' }}
+                    to={['categories']}
                 >
                     Категории
                 </CategoryPathItem>
@@ -91,7 +90,7 @@ export const CategoryPath = () => {
                             <CategoryPathDivider>{'/'}</CategoryPathDivider>
                             <CategoryPathItem
                                 $disabled={categoryId === item.id}
-                                to={{ page: 'categories', categoryId: item.id }}
+                                to={['categories', { categoryId: item.id }]}
                             >
                                 {item.name}
                             </CategoryPathItem>

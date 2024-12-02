@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { transition } from '../../shared/utils/styles/transition';
-import { hover } from '../../shared/utils/styles/hover';
+import { transition } from '../../shared/styles/transition';
+import { hover } from '../../shared/styles/hover';
 
 export const FooterButton = styled.button`
     ${transition('background-color', 'transform', 'outline-color')}

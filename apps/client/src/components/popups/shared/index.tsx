@@ -1,9 +1,9 @@
 import styled, { css, keyframes } from 'styled-components';
 import { Portal } from '../../portal';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { useMountAnim } from '../../../hooks/useMountAnim';
-import { staticStyles } from '../../../shared/consts/styles/static';
-import { transition } from '../../../shared/utils/styles/transition';
+import { transition } from '../../../shared/styles/transition';
+import { staticStyles } from '../../../shared/consts/staticStyles';
+import { useMountAnim } from '../../../shared/hooks/useMountAnim';
 
 const Overlay = styled(RadixDialog.Overlay).attrs({ forceMount: true })<{
     $animationDuration: string;

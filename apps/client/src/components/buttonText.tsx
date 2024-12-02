@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { typography } from '../shared/utils/styles/typography';
+import { typography } from '../shared/styles/typography';
 
 export const ButtonText = styled.span<{ $size?: 's' | 'm' | 'l' }>`
     ${({ $size = 'm' }) =>

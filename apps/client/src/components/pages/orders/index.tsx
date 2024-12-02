@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '../../../hooks/useApi';
-import { AuthNeedPage } from '../../../features/auth/public/components';
+import { AuthNeedPage } from '../../../features/auth';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { PageLoader } from '../../pageLoader';
 import styled, { css } from 'styled-components';
-import { staticStyles } from '../../../shared/consts/styles/static';
-import { transition } from '../../../shared/utils/styles/transition';
-import { hover } from '../../../shared/utils/styles/hover';
-import { Link } from '../../link';
-import { typography } from '../../../shared/utils/styles/typography';
-import { ApiReturnSchemas } from '../../../shared/consts/schemas/api';
-import { useBreakpoint } from '../../../hooks/useBreakpoints';
+import { staticStyles } from '../../../shared/consts/staticStyles';
+import { Link } from '../../../features/url/components/Link';
+import { ApiReturnData, useApi } from '../../../features/api';
+import { useBreakpoint } from '../../../features/breakpoints';
+import { transition } from '../../../shared/styles/transition';
+import { hover } from '../../../shared/styles/hover';
+import { typography } from '../../../shared/styles/typography';
 
 const OrdersPage = () => {
     return (
@@ -23,7 +22,7 @@ const OrdersPage = () => {
 export default OrdersPage;
 
 export const orderStatusLabelMap: Record<
-    ApiReturnSchemas['getOrder']['status'],
+    ApiReturnData['getOrder']['status'],
     string
 > = {
     awaitedPayment: 'Ожидает оплату',
@@ -39,7 +38,7 @@ const OrdersPageView = ({}) => {
 
     // const searchQuery = useSearchParam('search');
 
-    const [orders, setOrders] = useState<ApiReturnSchemas['getOrders']>([]);
+    const [orders, setOrders] = useState<ApiReturnData['getOrders']>([]);
 
     const isHiddenOrderItemImages = useBreakpoint({ max: 350 });
 
@@ -64,7 +63,7 @@ const OrdersPageView = ({}) => {
                     <ProductTypographyWrapper>
                         <OrderTitleWrapper>
                             <OrderNumberTypo
-                                to={{ page: 'order', orderId: order.id }}
+                                to={['order', { orderId: order.id }]}
                             >
                                 Заказ #{order.orderNumber}
                             </OrderNumberTypo>
@@ -84,16 +83,20 @@ const OrdersPageView = ({}) => {
                         <OrderImagesWrapper>
                             <Image
                                 $url={order.miniatures[0].url ?? ''}
-                                to={{
-                                    page: 'product',
-                                    productId: order.miniatures[0].productId,
-                                    categoryId: order.miniatures[0].categoryId,
-                                }}
+                                to={[
+                                    'product',
+                                    {
+                                        productId:
+                                            order.miniatures[0].productId,
+                                        categoryId:
+                                            order.miniatures[0].categoryId,
+                                    },
+                                ]}
                             />
                             {order.miniatures.length > 1 && (
                                 <OtherOrderItems
                                     $url={order.miniatures[1].url ?? ''}
-                                    to={{ page: 'order', orderId: order.id }}
+                                    to={['order', { orderId: order.id }]}
                                 />
                             )}
                         </OrderImagesWrapper>

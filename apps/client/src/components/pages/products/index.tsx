@@ -1,13 +1,13 @@
 import { PageLoader } from '../../pageLoader';
-import { AuthDependentView } from '../../../features/auth/public/components';
+import { AuthDependentView } from '../../../features/auth';
 import { useEffect, useState } from 'react';
-import { useApi } from '../../../hooks/useApi';
-import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import { useUrlParam } from '../../../modules/url';
-import { matchMediaBreakpoint } from '../../../shared/utils/helpers/isBreakpointMathers';
+import { matchMediaBreakpoint } from '../../../features/breakpoints';
 import { LazyLoadingTrigger, ProductsView } from './productsGrid';
 import { NotFoundPage } from '../shared/NotFoundPage';
 import { parseProductFilters, parseProductSorting } from '../favorites';
+import { useUrlParam } from '../../../features/url';
+import { useApi } from '../../../features/api';
+import { useIntersectionObserver } from '../../../shared/hooks/useIntersectionObserver';
 
 export const ProductsPageView = ({
     isAuthorized = false,

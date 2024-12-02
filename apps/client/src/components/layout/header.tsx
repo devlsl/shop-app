@@ -7,18 +7,18 @@ import {
     XIcon,
 } from 'lucide-react';
 import { TextButton } from '../buttons/textButton';
-import { useBreakpoint } from '../../hooks/useBreakpoints';
 import { Search, setSearchInputValue, useSearchInputValue } from '../search';
 import styled from 'styled-components';
-import { container } from '../../shared/utils/styles/container';
-import { toggleAreShownProductFilters } from '../../hooks/useAppState';
-import { useDebounce } from '../../hooks/useDebounce';
 import { useEffect } from 'react';
-import { setUrlParam, useUrlParam } from '../../modules/url';
-import { HeaderColorModeChangeButton } from '../../features/colorMode/public/components';
-import { showSignInPopup } from '../../features/auth/public/actions';
-import { useIsAuthorized } from '../../features/auth/public/selectors';
-import { HeaderAuthButton } from '../../features/auth/public/components';
+import { HeaderColorModeChangeButton } from '../../features/colorMode';
+import { showSignInPopup } from '../../features/auth';
+import { useIsAuthorized } from '../../features/auth';
+import { HeaderAuthButton } from '../../features/auth';
+import { navigate, setUrlParam, useUrlParam } from '../../features/url';
+import { useBreakpoint } from '../../features/breakpoints';
+import { container } from '../../shared/styles/container';
+import { useDebounce } from '../../shared/hooks/useDebounce';
+import { toggleAreShownProductFilters } from '../../shared/hooks/useAppState';
 
 const Styled = styled.div`
     ${container()}
@@ -44,9 +44,7 @@ export const Header = () => {
     return (
         <Styled>
             {!isBottomBarShowed && (
-                <TextButton
-                    onClick={() => setUrlParam('page', 'categories', true)}
-                >
+                <TextButton onClick={() => navigate('categories')}>
                     Каталог
                 </TextButton>
             )}
@@ -65,9 +63,7 @@ export const Header = () => {
                 <>
                     <IconButton
                         onClick={() =>
-                            isAuthorized
-                                ? setUrlParam('page', 'cart', true)
-                                : showSignInPopup()
+                            isAuthorized ? navigate('cart') : showSignInPopup()
                         }
                     >
                         <ShoppingBagIcon />
@@ -75,7 +71,7 @@ export const Header = () => {
                     <IconButton
                         onClick={() =>
                             isAuthorized
-                                ? setUrlParam('page', 'favorites', true)
+                                ? navigate('favorites')
                                 : showSignInPopup()
                         }
                     >
@@ -84,7 +80,7 @@ export const Header = () => {
                     <IconButton
                         onClick={() =>
                             isAuthorized
-                                ? setUrlParam('page', 'orders', true)
+                                ? navigate('orders')
                                 : showSignInPopup()
                         }
                     >

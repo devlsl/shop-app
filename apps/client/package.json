@@ -19,7 +19,7 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "styled-components": "^6.1.13",
-        "ts-api-generator": "^1.0.29",
+        "ts-api-generator": "^1.0.40",
         "typed.js": "^2.1.0",
         "typewriter-effect": "^2.21.0",
         "zod": "^3.23.8",
