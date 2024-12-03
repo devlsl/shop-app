@@ -1,7 +1,7 @@
 import { apiSchema } from '@shop/shared';
 import { ApiClientOptions } from 'ts-api-generator';
-import { pushNotification } from '../../shared/hooks/useAppState';
 import { setUser } from '../auth';
+import { pushNotification } from '../notifications';
 
 export const apiClientOptions: ApiClientOptions<typeof apiSchema> = {
     apiOrigin: __APP_ENV__.SERVER_HOSTNAME,

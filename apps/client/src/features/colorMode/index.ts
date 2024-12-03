@@ -1,3 +1,3 @@
-export { ColorModeProvider } from './components/ColorModeProvider';
-export { FooterColorModeChangeButton } from './components/FooterColorModeChangeButton';
-export { HeaderColorModeChangeButton } from './components/HeaderColorModeChangeButton';
+export { ColorModeProvider } from './ui/ColorModeProvider';
+export { FooterColorModeChangeButton } from './ui/FooterColorModeChangeButton';
+export { HeaderColorModeChangeButton } from './ui/HeaderColorModeChangeButton';

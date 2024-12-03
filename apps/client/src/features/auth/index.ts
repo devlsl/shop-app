@@ -1,11 +1,10 @@
 export { setUser, showSignInPopup, hideSignInPopup } from './actions';
 
-export { AuthProvider } from './components/AuthProvider';
-export { FooterAuthButton } from './components/FooterAuthButton';
-export { HeaderAuthButton } from './components/HeaderAuthButton';
-export { SignInPopup } from './components/SignInPopup';
-export { AuthDependentView } from './components/AuthDependentView';
-export { AuthNeedPage } from './components/AuthNeedPage';
+export { AuthProvider } from './ui/AuthProvider';
+export { FooterAuthButton } from './ui/FooterAuthButton';
+export { HeaderAuthButton } from './ui/HeaderAuthButton';
+export { AuthDependentView } from './ui/AuthDependentView';
+export { AuthNeedPage } from './ui/AuthNeedPage';
 
 export {
     useIsAuthorized,
