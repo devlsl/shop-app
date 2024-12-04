@@ -14,9 +14,11 @@ services:
             dockerfile: ./apps/server/Dockerfile
         ports:
             - '3000:3000'
+        restart: always
     static:
         build:
             context: ./
             dockerfile: ./apps/static/Dockerfile
         ports:
             - '3001:3001'
+        restart: always
