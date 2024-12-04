@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { typography } from '../../shared/styles/typography';
+import { typography } from '../../styles/typography';
 
 export const NotFoundPage = styled.div`
     width: 100%;

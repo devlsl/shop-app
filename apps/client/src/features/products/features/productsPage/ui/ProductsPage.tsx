@@ -6,7 +6,7 @@ import { LazyLoadingTrigger, ProductsView } from './ProductsGrid';
 import { useNavigationParam } from '../../../../navigation';
 import { useApi } from '../../../../api';
 import { useIntersectionObserver } from '../../../../../shared/hooks/useIntersectionObserver';
-import { NotFoundPage } from '../../../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../../../shared/ui/NotFoundPage';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
 import { parseProductFilters, parseProductSorting } from '../../filters';
 

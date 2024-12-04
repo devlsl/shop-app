@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { typography } from '../../../../shared/styles/typography';
 import { ApiReturnData, useApi } from '../../../api';
 import { Link, useNavigationParam } from '../../../navigation';
-import { NotFoundPage } from '../../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../../shared/ui/NotFoundPage';
 import { orderStatusLabelMap } from '../OrdersPage';
 import { PageLoader } from '../../../../shared/ui/PageLoader';
 import { pushNotification } from '../../../notifications';

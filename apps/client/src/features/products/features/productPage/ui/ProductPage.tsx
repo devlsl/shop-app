@@ -14,7 +14,7 @@ import { pushNotification } from '../../../../notifications';
 import { ButtonText } from '../../../../../shared/ui/ButtonText';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
 import { useNavigationParam } from '../../../../navigation';
-import { NotFoundPage } from '../../../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../../../shared/ui/NotFoundPage';
 import { TextButton } from '../../../../../shared/ui/TextButton';
 
 const Wrapper = styled.div`

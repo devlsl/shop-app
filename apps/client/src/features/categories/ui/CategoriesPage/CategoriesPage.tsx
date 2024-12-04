@@ -7,8 +7,8 @@ import { breakpoint } from '../../../breakpoints';
 import { PageLoader } from '../../../../shared/ui/PageLoader';
 import { useNavigationParam } from '../../../navigation';
 import { useApi } from '../../../api';
-import { CardsGrid } from '../../../../pages/shared/cardsGrid';
-import { Card } from '../../../../pages/shared/card';
+import { CardsGrid } from '../../../../shared/ui/CardsGrid';
+import { Card } from '../../../../shared/ui/Card';
 
 const TitleLine = styled.div`
     ${typography({

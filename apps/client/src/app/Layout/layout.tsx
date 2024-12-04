@@ -25,7 +25,7 @@ const Wrapper = styled.div`
 
 export const Layout = () => {
     const authStatus = useAuthStatus();
-    console.log({ authStatus });
+
     if (authStatus === 'checking') return <PageLoader />;
 
     return (

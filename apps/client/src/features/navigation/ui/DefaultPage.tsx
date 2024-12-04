@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { typography } from '../../../shared/styles/typography';
-import { NotFoundPage } from '../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../shared/ui/NotFoundPage';
 import { navigate } from '../actions';
 import { ButtonText } from '../../../shared/ui/ButtonText';
 import { TextButton } from '../../../shared/ui/TextButton';

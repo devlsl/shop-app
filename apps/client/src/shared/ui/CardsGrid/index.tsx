@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { container } from '../../shared/styles/container';
-import { breakpoint } from '../../features/breakpoints';
+import { container } from '../../styles/container';
+import { breakpoint } from '../../../features/breakpoints';
 
 export const CardsGrid = styled.div`
     ${container()}

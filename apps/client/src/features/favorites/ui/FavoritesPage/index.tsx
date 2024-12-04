@@ -3,7 +3,7 @@ import { useApi } from '../../../api';
 import { useIntersectionObserver } from '../../../../shared/hooks/useIntersectionObserver';
 import { matchMediaBreakpoint } from '../../../breakpoints';
 import { PageLoader } from '../../../../shared/ui/PageLoader';
-import { NotFoundPage } from '../../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../../shared/ui/NotFoundPage';
 import {
     LazyLoadingTrigger,
     ProductsView,

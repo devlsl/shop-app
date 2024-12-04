@@ -10,7 +10,7 @@ import { useApi } from '../../../../api';
 import { transition } from '../../../../../shared/styles/transition';
 import { hover } from '../../../../../shared/styles/hover';
 import { typography } from '../../../../../shared/styles/typography';
-import { CardsGrid } from '../../../../../pages/shared/cardsGrid';
+import { CardsGrid } from '../../../../../shared/ui/CardsGrid';
 import { pushNotification } from '../../../../notifications';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
 import { showProductPreview } from '../../..';

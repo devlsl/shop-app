@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AuthNeedPage } from '../../../auth';
 import { ApiReturnData, useApi } from '../../../api';
 import { useBreakpoint } from '../../../breakpoints';
-import { NotFoundPage } from '../../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../../shared/ui/NotFoundPage';
 import { PageLoader } from '../../../../shared/ui/PageLoader';
 import { Link } from '../../../navigation';
 import styled, { css } from 'styled-components';

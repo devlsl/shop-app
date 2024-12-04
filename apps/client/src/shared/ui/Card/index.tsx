@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { css } from 'styled-components';
-import { Link, LinkProps } from '../../features/navigation';
-import { transition } from '../../shared/styles/transition';
-import { breakpoint } from '../../features/breakpoints';
-import { hover } from '../../shared/styles/hover';
+import { Link, LinkProps } from '../../../features/navigation';
+import { transition } from '../../styles/transition';
+import { breakpoint } from '../../../features/breakpoints';
+import { hover } from '../../styles/hover';
 
 export const CardWrapper = styled(Link)`
     border-radius: 8px;

@@ -3,7 +3,7 @@ import styled, { css, useTheme } from 'styled-components';
 import { AuthNeedPage } from '../../auth';
 import { ApiReturnData, useApi } from '../../api';
 import { PageLoader } from '../../../shared/ui/PageLoader';
-import { NotFoundPage } from '../../../pages/shared/NotFoundPage';
+import { NotFoundPage } from '../../../shared/ui/NotFoundPage';
 import { Checkbox } from '../../../shared/ui/CheckBox';
 import { pushNotification } from '../../notifications';
 import { transition } from '../../../shared/styles/transition';
