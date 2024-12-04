@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { showSignInPopup } from '../actions';
 import { useAuthStatus } from '../selectors';
 import { ButtonText } from '../../../shared/ui/ButtonText';
-import { TextButton } from '../../../ui/buttons/textButton';
 import { typography } from '../../../shared/styles/typography';
+import { TextButton } from '../../../shared/ui/TextButton';
 
 export const AuthNeedPage = ({ children }: { children: React.ReactNode }) => {
     const authStatus = useAuthStatus();

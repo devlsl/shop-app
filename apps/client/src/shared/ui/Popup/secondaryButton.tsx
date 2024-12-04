@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { ButtonLoader } from '../ButtonLoader';
-import { TextButton } from '../../../ui/buttons/textButton';
 import { hover } from '../../styles/hover';
+import { TextButton } from '../TextButton';
 
 const Wrapper = styled(TextButton)`
     flex-grow: 1;

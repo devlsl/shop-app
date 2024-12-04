@@ -13,9 +13,9 @@ import { useApi } from '../../../../api';
 import { pushNotification } from '../../../../notifications';
 import { ButtonText } from '../../../../../shared/ui/ButtonText';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
-import { useUrlParam } from '../../../../url';
+import { useNavigationParam } from '../../../../navigation';
 import { NotFoundPage } from '../../../../../pages/shared/NotFoundPage';
-import { TextButton } from '../../../../../ui/buttons/textButton';
+import { TextButton } from '../../../../../shared/ui/TextButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -260,7 +260,7 @@ const ProductPageView = ({
 }: {
     isAuthorized?: boolean;
 }) => {
-    const productId = useUrlParam('productId') ?? '';
+    const productId = useNavigationParam('productId') ?? '';
     const { data, call } = useApi(
         isAuthorized ? 'getProduct' : 'getProductForGuest',
     );
@@ -271,7 +271,7 @@ const ProductPageView = ({
 
     useEffect(() => {
         call({ productId });
-    }, [productId]);
+    }, [productId, isAuthorized]);
     if (data === null) return <PageLoader />;
     if (data === undefined)
         return <NotFoundPage>Такого товара нет 😢</NotFoundPage>;

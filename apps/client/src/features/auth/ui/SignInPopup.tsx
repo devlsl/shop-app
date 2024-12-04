@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { hideSignInPopup, setUser } from '../actions';
-import { useIsShownSignInPopup } from '../selectors';
-import { apiPayloadSchemas, useApi } from '../../api';
+import { useAuthStatus, useIsShownSignInPopup } from '../selectors';
+import { apiClient, apiPayloadSchemas } from '../../api';
 import { pushNotification } from '../../notifications';
 import {
     Popup,
@@ -13,27 +13,26 @@ import {
 } from '../../../shared/ui/Popup';
 import { ButtonText } from '../../../shared/ui/ButtonText';
 
+const handleAuthButtonClick = async (
+    type: 'signIn' | 'signUp',
+    email: string,
+    password: string,
+) => {
+    const response = await apiClient(type).call({ email, password });
+    if (response.isRight()) {
+        setUser(response.value);
+        pushNotification('success', 'Вы успешно авторизовались');
+        hideSignInPopup();
+    } else {
+        pushNotification('error', 'Неверные данные');
+    }
+};
+
 const SignInPopupContent = () => {
-    const {
-        call: callSignIn,
-        status: signInStatus,
-        data: signInData,
-    } = useApi('signIn');
-    const {
-        call: callSignUp,
-        status: signUpStatus,
-        data: signUpData,
-    } = useApi('signUp');
-
-    const loading = signInStatus === 'loading' || signUpStatus === 'loading';
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleSignInButtonClick = () => callSignIn({ email, password });
-    const handleSignUpButtonClick = () => callSignUp({ email, password });
-
     const [disabled, setDisabled] = useState(true);
+    const authStatus = useAuthStatus();
 
     useEffect(() => {
         const maybePayload = apiPayloadSchemas.signIn.safeParse({
@@ -42,30 +41,6 @@ const SignInPopupContent = () => {
         });
         setDisabled(!maybePayload.success);
     }, [email, password]);
-
-    useEffect(() => {
-        if (signInStatus === 'loading' || signInStatus === 'idle') {
-            return;
-        } else if (signInStatus === 'success') {
-            setUser(signInData);
-            pushNotification('success', 'Вы успешно авторизовались');
-            hideSignInPopup();
-        } else if (signInStatus === 'error') {
-            pushNotification('error', 'Неверные данные');
-        }
-    }, [signInStatus]);
-
-    useEffect(() => {
-        if (signUpStatus === 'loading' || signUpStatus === 'idle') {
-            return;
-        } else if (signUpStatus === 'success') {
-            setUser(signUpData);
-            pushNotification('success', 'Вы успешно авторизовались');
-            hideSignInPopup();
-        } else if (signUpStatus === 'error') {
-            pushNotification('error', 'Неверные данные');
-        }
-    }, [signUpStatus]);
 
     return (
         <PopupContentWrapper>
@@ -83,16 +58,20 @@ const SignInPopupContent = () => {
             />
             <PopupRow>
                 <PopupSecondaryButton
-                    loading={loading}
+                    loading={authStatus === 'checking'}
                     disabled={disabled}
-                    onClick={handleSignInButtonClick}
+                    onClick={() =>
+                        handleAuthButtonClick('signIn', email, password)
+                    }
                 >
                     <ButtonText $size='l'>Войти</ButtonText>
                 </PopupSecondaryButton>
                 <PopupSecondaryButton
-                    loading={loading}
+                    loading={authStatus === 'checking'}
                     disabled={disabled}
-                    onClick={handleSignUpButtonClick}
+                    onClick={() =>
+                        handleAuthButtonClick('signUp', email, password)
+                    }
                 >
                     <ButtonText $size='l'>Зарегистрироваться</ButtonText>
                 </PopupSecondaryButton>

@@ -1,23 +1,21 @@
 import { LogOutIcon, UserRoundIcon } from 'lucide-react';
 import { setUser, showSignInPopup } from '../actions';
 import { useIsAuthorized } from '../selectors';
-import { IconButton } from '../../../ui/buttons/iconButton';
-import { isCurrentPagePrivate, navigate } from '../../url';
+import { isCurrentPagePrivate, navigate } from '../../navigation';
 import { apiClient } from '../../api';
 import { pushNotification } from '../../notifications';
+import { IconButton } from '../../../shared/ui/IconButton';
 
 const HeaderSignOutButton = () => (
     <IconButton
-        onClick={() => {
-            isCurrentPagePrivate() && navigate('categories');
-            setUser(null);
-            apiClient('signOut')
-                .call()
-                .then(
-                    (res) =>
-                        res.isRight() &&
-                        pushNotification('info', 'Вы вышли из аккаунта'),
-                );
+        onClick={async () => {
+            const response = await apiClient('signOut').call();
+
+            if (response.isRight()) {
+                isCurrentPagePrivate() && navigate('categories');
+                setUser(null);
+                pushNotification('info', 'Вы вышли из аккаунта');
+            }
         }}
     >
         <LogOutIcon />

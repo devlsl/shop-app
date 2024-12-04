@@ -11,15 +11,13 @@ import {
 import { hover } from '../../../../../shared/styles/hover';
 import { useAreShownProductFilters } from '../selectors';
 import { toggleAreShownProductFilters } from '../actions';
-import { setUrlParam, useUrlParam } from '../../../../url';
-import {
-    parseProductFilters,
-    parseProductSorting,
-} from '../../../../../pages/favorites';
+
 import { useApi } from '../../../../api';
 import { ButtonText } from '../../../../../shared/ui/ButtonText';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
 import { typography } from '../../../../../shared/styles/typography';
+import { parseProductFilters, parseProductSorting } from '../utils';
+import { setNavigationParam, useNavigationParam } from '../../../../navigation';
 
 const DialogWrapper = styled.div`
     display: grid;
@@ -94,7 +92,7 @@ const sortingSections: {
 ];
 
 const ProductFiltersPopupContent = () => {
-    const page = useUrlParam('page') ?? '';
+    const page = useNavigationParam('page') ?? '';
     const [sorting, setSorting] = useState<
         Record<string, 'desc' | 'asc' | undefined>
     >({});
@@ -107,7 +105,7 @@ const ProductFiltersPopupContent = () => {
         setFilters(parseProductFilters());
     }, []);
 
-    const categoryId = useUrlParam('categoryId') ?? null;
+    const categoryId = useNavigationParam('categoryId') ?? null;
     const { call, data, status } = useApi(
         page === 'favorites' ? 'getFiltersForFavorites' : 'getFilters',
     );
@@ -245,7 +243,7 @@ const ProductFiltersPopupContent = () => {
                             ),
                         );
 
-                        setUrlParam(
+                        setNavigationParam(
                             'filters',
                             Object.entries(newFiltersValue).length === 0
                                 ? null
@@ -258,7 +256,7 @@ const ProductFiltersPopupContent = () => {
                             ),
                         ) as Record<string, 'asc' | 'desc'>;
 
-                        setUrlParam(
+                        setNavigationParam(
                             'sorting',
                             Object.entries(newSortingValue).length === 0
                                 ? null

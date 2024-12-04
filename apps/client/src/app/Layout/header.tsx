@@ -1,27 +1,27 @@
-import { IconButton } from '../../ui/buttons/iconButton';
 import {
     ClipboardListIcon,
     HeartIcon,
     ShoppingBagIcon,
     XIcon,
 } from 'lucide-react';
-import { TextButton } from '../../ui/buttons/textButton';
 import {
     Search,
     setSearchInputValue,
     useSearchInputValue,
-} from '../../ui/search';
+} from '../../shared/ui/Search';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { HeaderColorModeChangeButton } from '../../features/colorMode';
 import { showSignInPopup } from '../../features/auth';
 import { useIsAuthorized } from '../../features/auth';
 import { HeaderAuthButton } from '../../features/auth';
-import { navigate, setUrlParam } from '../../features/url';
+import { navigate, setNavigationParam } from '../../features/navigation';
 import { useBreakpoint } from '../../features/breakpoints';
 import { container } from '../../shared/styles/container';
 import { useDebounce } from '../../shared/hooks/useDebounce';
 import { ProductFiltersTriggerButton } from '../../features/products/features/filters';
+import { TextButton } from '../../shared/ui/TextButton';
+import { IconButton } from '../../shared/ui/IconButton';
 
 const Styled = styled.div`
     ${container()}
@@ -40,7 +40,7 @@ export const Header = () => {
     const debouncedSearchInputValue = useDebounce(searchInputValue, 400);
     useEffect(() => {
         if (debouncedSearchInputValue !== '')
-            setUrlParam('search', debouncedSearchInputValue);
+            setNavigationParam('search', debouncedSearchInputValue);
     }, [debouncedSearchInputValue]);
 
     return (

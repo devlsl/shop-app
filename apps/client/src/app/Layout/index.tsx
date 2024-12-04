@@ -1,40 +1,22 @@
-import styled, { css } from 'styled-components';
-import { breakpoint } from '../../features/breakpoints';
-import { Suspense } from 'react';
-import { useAuthStatus } from '../../features/auth';
-import { PageLoader } from '../../shared/ui/PageLoader';
-import { Header } from './header';
-import { Content } from './content';
-import { Footer } from './footer';
+import { AuthProvider } from '../../features/auth';
+import { ColorModeProvider } from '../../features/colorMode';
+import { NavigationProvider } from '../../features/navigation';
+import { NotificationsProvider } from '../../features/notifications';
+import { ProductsProvider } from '../../features/products';
+import { GlobalStyles } from '../GlobalStyles';
+import { Layout } from './layout';
 
-const Wrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    padding: 8px 0;
-    ${breakpoint(
-        'showBottomBar',
-        css`
-            padding-bottom: 0;
-        `,
-    )}
-`;
-
-export const Layout = () => {
-    const authStatus = useAuthStatus();
-
-    if (authStatus === 'checking') return <PageLoader />;
-
-    return (
-        <Wrapper>
-            <Suspense fallback={<PageLoader />}>
-                <Header />
-                <Content />
-                <Footer />
-            </Suspense>
-        </Wrapper>
-    );
-};
+export const App = () => (
+    <ColorModeProvider>
+        <GlobalStyles />
+        <NavigationProvider>
+            <AuthProvider>
+                <NotificationsProvider>
+                    <ProductsProvider>
+                        <Layout />
+                    </ProductsProvider>
+                </NotificationsProvider>
+            </AuthProvider>
+        </NavigationProvider>
+    </ColorModeProvider>
+);

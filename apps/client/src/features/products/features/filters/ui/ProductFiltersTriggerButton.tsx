@@ -1,10 +1,10 @@
 import { FilterIcon } from 'lucide-react';
-import { IconButton } from '../../../../../ui/buttons/iconButton';
-import { useUrlParam } from '../../../../url';
+import { useNavigationParam } from '../../../../navigation';
 import { toggleAreShownProductFilters } from '../actions';
+import { IconButton } from '../../../../../shared/ui/IconButton';
 
 export const ProductFiltersTriggerButton = () => {
-    const page = useUrlParam('page') ?? '';
+    const page = useNavigationParam('page') ?? '';
     return page === 'products' || page === 'favorites' ? (
         <IconButton onClick={toggleAreShownProductFilters}>
             <FilterIcon />

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { useEffect } from 'react';
-import { Link } from '../../../../url';
+import { Link } from '../../../../navigation';
 import { transition } from '../../../../../shared/styles/transition';
 import { hover } from '../../../../../shared/styles/hover';
 import { useApi } from '../../../../api';
@@ -54,7 +54,7 @@ const ProductPreviewPopupContent = ({
     useEffect(() => {
         if (productId === null) return;
         call({ productId });
-    }, [productId]);
+    }, [productId, isAuthorized]);
 
     if (cash === undefined) {
         hideProductPreview();

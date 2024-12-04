@@ -2,29 +2,30 @@ import { AuthDependentView } from '../../../../auth';
 import { useEffect, useState } from 'react';
 import { matchMediaBreakpoint } from '../../../../breakpoints';
 import { LazyLoadingTrigger, ProductsView } from './ProductsGrid';
-import {
-    parseProductFilters,
-    parseProductSorting,
-} from '../../../../../pages/favorites';
-import { useUrlParam } from '../../../../url';
+
+import { useNavigationParam } from '../../../../navigation';
 import { useApi } from '../../../../api';
 import { useIntersectionObserver } from '../../../../../shared/hooks/useIntersectionObserver';
 import { NotFoundPage } from '../../../../../pages/shared/NotFoundPage';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
+import { parseProductFilters, parseProductSorting } from '../../filters';
 
 export const ProductsPageView = ({
     isAuthorized = false,
 }: {
     isAuthorized?: boolean;
 }) => {
+    useEffect(() => {
+        console.log('ProductsPageView', isAuthorized);
+    }, []);
     const [lazyLoadElementRef, lazyLoadEntry] = useIntersectionObserver({
         threshold: 0,
     });
-    const categoryId = useUrlParam('categoryId') ?? null;
+    const categoryId = useNavigationParam('categoryId') ?? null;
 
-    const filters = useUrlParam('filters');
-    const sorting = useUrlParam('sorting');
-    const searchQuery = useUrlParam('search');
+    const filters = useNavigationParam('filters');
+    const sorting = useNavigationParam('sorting');
+    const searchQuery = useNavigationParam('search');
 
     const { cash, call, status } = useApi(
         isAuthorized ? 'getProductsPageItems' : 'getProductsPageItemsForGuest',
@@ -74,7 +75,7 @@ export const ProductsPageView = ({
 
     useEffect(() => {
         fetchMoreProducts(true);
-    }, [filters, sorting, searchQuery]);
+    }, [filters, sorting, searchQuery, isAuthorized]);
 
     useEffect(() => {
         if (

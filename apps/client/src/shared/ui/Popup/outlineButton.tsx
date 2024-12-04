@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { TextButton } from '../../../ui/buttons/textButton';
 import { hover } from '../../styles/hover';
+import { TextButton } from '../TextButton';
 
 export const PopupOutlineButton = styled(TextButton)`
     background-color: transparent;

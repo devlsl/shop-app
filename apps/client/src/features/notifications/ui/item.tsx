@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { XIcon } from 'lucide-react';
-import { LinkIconButton } from '../../../ui/buttons/linkIconButton';
 import { breakpoint, useBreakpoint } from '../../breakpoints';
 import { transition } from '../../../shared/styles/transition';
 import { typography } from '../../../shared/styles/typography';
@@ -9,6 +8,7 @@ import { hover } from '../../../shared/styles/hover';
 import { animateUnmount } from '../../../shared/styles/animateUnmount';
 import { useMountAnim } from '../../../shared/hooks/useMountAnim';
 import { Notification, NotificationType } from '../types';
+import { LinkIconButton } from '../../../shared/ui/LinkIconButton';
 
 const NotificationWrapper = styled.div<{ $variant: NotificationType }>`
     background-color: ${({ theme, $variant }) =>

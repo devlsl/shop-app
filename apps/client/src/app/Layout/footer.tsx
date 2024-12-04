@@ -4,15 +4,15 @@ import {
     LayoutDashboardIcon,
     ShoppingBagIcon,
 } from 'lucide-react';
-import { FooterButton } from '../../ui/buttons/footerButton';
 import styled from 'styled-components';
 import { FooterColorModeChangeButton } from '../../features/colorMode';
 import { FooterAuthButton } from '../../features/auth';
 import { showSignInPopup } from '../../features/auth';
 import { useIsAuthorized } from '../../features/auth';
-import { navigate } from '../../features/url';
+import { navigate } from '../../features/navigation';
 import { useBreakpoint } from '../../features/breakpoints';
 import { container } from '../../shared/styles/container';
+import { FooterButton } from '../../shared/ui/FooterButton';
 
 const Styled = styled.div`
     ${container()}

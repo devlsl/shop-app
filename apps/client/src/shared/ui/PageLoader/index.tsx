@@ -39,7 +39,6 @@ export const PageLoader = ({
     bgColor?: string;
 }) => {
     const theme = useTheme();
-
     return (
         <Stretch $absolute={absolute} $bgColor={bgColor}>
             <Loader

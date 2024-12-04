@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { css } from 'styled-components';
-import { Link, LinkProps } from '../../features/url';
+import { Link, LinkProps } from '../../features/navigation';
 import { transition } from '../../shared/styles/transition';
 import { breakpoint } from '../../features/breakpoints';
 import { hover } from '../../shared/styles/hover';

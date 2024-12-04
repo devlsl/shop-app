@@ -1,10 +1,10 @@
 import { LogOutIcon, UserRoundIcon } from 'lucide-react';
 import { setUser, showSignInPopup } from '../actions';
 import { useIsAuthorized } from '../selectors';
-import { FooterButton } from '../../../ui/buttons/footerButton';
-import { isCurrentPagePrivate, navigate } from '../../url';
+import { isCurrentPagePrivate, navigate } from '../../navigation';
 import { apiClient } from '../../api';
 import { pushNotification } from '../../notifications';
+import { FooterButton } from '../../../shared/ui/FooterButton';
 
 const FooterSignOutButton = () => (
     <FooterButton

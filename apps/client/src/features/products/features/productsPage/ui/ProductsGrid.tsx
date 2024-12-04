@@ -2,11 +2,9 @@ import styled, { css } from 'styled-components';
 import { memo } from 'react';
 import { z } from 'zod';
 import { apiSchema } from '@shop/shared';
-import { IconButton } from '../../../../../ui/buttons/iconButton';
 import { HeartIcon, PackagePlusIcon } from 'lucide-react';
 import { useTheme } from 'styled-components';
-import { TextButton } from '../../../../../ui/buttons/textButton';
-import { Link } from '../../../../url';
+import { Link } from '../../../../navigation';
 import { showSignInPopup, useIsAuthorized } from '../../../../auth';
 import { useApi } from '../../../../api';
 import { transition } from '../../../../../shared/styles/transition';
@@ -16,6 +14,8 @@ import { CardsGrid } from '../../../../../pages/shared/cardsGrid';
 import { pushNotification } from '../../../../notifications';
 import { PageLoader } from '../../../../../shared/ui/PageLoader';
 import { showProductPreview } from '../../..';
+import { TextButton } from '../../../../../shared/ui/TextButton';
+import { IconButton } from '../../../../../shared/ui/IconButton';
 
 const CardWrapper = styled.div`
     display: flex;
