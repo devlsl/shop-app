@@ -1,14 +1,5 @@
-import {
-    ClipboardListIcon,
-    HeartIcon,
-    ShoppingBagIcon,
-    XIcon,
-} from 'lucide-react';
-import {
-    Search,
-    setSearchInputValue,
-    useSearchInputValue,
-} from '../../shared/ui/Search';
+import { ClipboardListIcon, HeartIcon, ShoppingBagIcon } from 'lucide-react';
+import { Search, useSearchInputValue } from '../../shared/ui/Search';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { HeaderColorModeChangeButton } from '../../features/colorMode';
@@ -22,6 +13,7 @@ import { useDebounce } from '../../shared/hooks/useDebounce';
 import { ProductFiltersTriggerButton } from '../../features/products/features/filters';
 import { TextButton } from '../../shared/ui/TextButton';
 import { IconButton } from '../../shared/ui/IconButton';
+import { Tooltip } from '../../shared/ui/Tooltip';
 
 const Styled = styled.div`
     ${container()}
@@ -53,37 +45,43 @@ export const Header = () => {
             <ProductFiltersTriggerButton />
             <>
                 <Search />
-                <IconButton onClick={() => setSearchInputValue('')}>
-                    <XIcon />
-                </IconButton>
+                {isBottomBarShowed && <HeaderColorModeChangeButton />}
             </>
             {!isBottomBarShowed && (
                 <>
-                    <IconButton
-                        onClick={() =>
-                            isAuthorized ? navigate('cart') : showSignInPopup()
-                        }
-                    >
-                        <ShoppingBagIcon />
-                    </IconButton>
-                    <IconButton
-                        onClick={() =>
-                            isAuthorized
-                                ? navigate('favorites')
-                                : showSignInPopup()
-                        }
-                    >
-                        <HeartIcon />
-                    </IconButton>
-                    <IconButton
-                        onClick={() =>
-                            isAuthorized
-                                ? navigate('orders')
-                                : showSignInPopup()
-                        }
-                    >
-                        <ClipboardListIcon />
-                    </IconButton>
+                    <Tooltip content={'Корзина'}>
+                        <IconButton
+                            onClick={() =>
+                                isAuthorized
+                                    ? navigate('cart')
+                                    : showSignInPopup()
+                            }
+                        >
+                            <ShoppingBagIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip content={'Избранные'}>
+                        <IconButton
+                            onClick={() =>
+                                isAuthorized
+                                    ? navigate('favorites')
+                                    : showSignInPopup()
+                            }
+                        >
+                            <HeartIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip content={'Заказы'}>
+                        <IconButton
+                            onClick={() =>
+                                isAuthorized
+                                    ? navigate('orders')
+                                    : showSignInPopup()
+                            }
+                        >
+                            <ClipboardListIcon />
+                        </IconButton>
+                    </Tooltip>
                     <HeaderColorModeChangeButton />
                     <HeaderAuthButton />
                 </>

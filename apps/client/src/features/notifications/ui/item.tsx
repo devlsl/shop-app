@@ -127,7 +127,7 @@ const Animated = styled.div<{ $unmounting: boolean }>`
             $unmounting,
             keyframes`
                 from { grid-template-rows: 0fr; opacity: 0  }
-                to {grid-template-rows: 1fr; opacity: 1 }
+                to { grid-template-rows: 1fr; opacity: 1 }
             `,
             keyframes`
                 from { grid-template-rows: 1fr; opacity: 1  }

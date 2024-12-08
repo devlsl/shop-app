@@ -16,6 +16,7 @@ import { PageLoader } from '../../../../../shared/ui/PageLoader';
 import { showProductPreview } from '../../..';
 import { TextButton } from '../../../../../shared/ui/TextButton';
 import { IconButton } from '../../../../../shared/ui/IconButton';
+import { Tooltip } from '../../../../../shared/ui/Tooltip';
 
 const CardWrapper = styled.div`
     display: flex;
@@ -151,17 +152,19 @@ const AddToCartButton = ({
     const theme = useTheme();
 
     return (
-        <IconButton onClick={handleClick}>
-            <PackagePlusIcon />
-            {status === 'loading' && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='6px'
-                    gap='3px'
-                />
-            )}
-        </IconButton>
+        <Tooltip content='Добавить в корзину' side='bottom'>
+            <IconButton onClick={handleClick}>
+                <PackagePlusIcon />
+                {status === 'loading' && (
+                    <PageLoader
+                        absolute
+                        startColor={theme.dialog.foreground.background}
+                        size='6px'
+                        gap='3px'
+                    />
+                )}
+            </IconButton>
+        </Tooltip>
     );
 };
 
@@ -209,17 +212,22 @@ const AddToFavoritesButton = ({
     const theme = useTheme();
 
     return (
-        <IconButton onClick={handleClick}>
-            <HeartIcon color={isLiked ? 'red' : undefined} />
-            {isLoading && (
-                <PageLoader
-                    absolute
-                    startColor={theme.dialog.foreground.background}
-                    size='6px'
-                    gap='3px'
-                />
-            )}
-        </IconButton>
+        <Tooltip
+            content={isLiked ? 'Удалить из избранного' : 'Добавить в избранные'}
+            side='bottom'
+        >
+            <IconButton onClick={handleClick}>
+                <HeartIcon color={isLiked ? 'red' : undefined} />
+                {isLoading && (
+                    <PageLoader
+                        absolute
+                        startColor={theme.dialog.foreground.background}
+                        size='6px'
+                        gap='3px'
+                    />
+                )}
+            </IconButton>
+        </Tooltip>
     );
 };
 

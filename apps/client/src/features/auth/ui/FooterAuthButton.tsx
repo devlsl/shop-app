@@ -9,7 +9,7 @@ import { FooterButton } from '../../../shared/ui/FooterButton';
 const FooterSignOutButton = () => (
     <FooterButton
         onClick={() => {
-            isCurrentPagePrivate() && navigate('categories');
+            if (isCurrentPagePrivate()) navigate('categories');
             setUser(null);
             apiClient('signOut')
                 .call()
@@ -21,12 +21,14 @@ const FooterSignOutButton = () => (
         }}
     >
         <LogOutIcon />
+        Выйти
     </FooterButton>
 );
 
 const FooterSignInButton = () => (
     <FooterButton onClick={showSignInPopup}>
         <UserRoundIcon />
+        Войти
     </FooterButton>
 );
 

@@ -19,7 +19,7 @@ export const useMountAnim = (
             return setTimeout(() => {
                 setUnmounting(false);
                 setMounted(false);
-                onUnmount && onUnmount();
+                if (onUnmount) onUnmount();
             }, numericDuration);
         }
         setMounted(nextValue);

@@ -5,7 +5,6 @@ import {
     ShoppingBagIcon,
 } from 'lucide-react';
 import styled from 'styled-components';
-import { FooterColorModeChangeButton } from '../../features/colorMode';
 import { FooterAuthButton } from '../../features/auth';
 import { showSignInPopup } from '../../features/auth';
 import { useIsAuthorized } from '../../features/auth';
@@ -31,6 +30,7 @@ export const Footer = () => {
         <Styled>
             <FooterButton onClick={() => navigate('categories')}>
                 <LayoutDashboardIcon />
+                Категории
             </FooterButton>
 
             <FooterButton
@@ -39,6 +39,7 @@ export const Footer = () => {
                 }
             >
                 <HeartIcon />
+                Избранные
             </FooterButton>
             <FooterButton
                 onClick={() =>
@@ -46,6 +47,7 @@ export const Footer = () => {
                 }
             >
                 <ShoppingBagIcon />
+                Корзина
             </FooterButton>
             <FooterButton
                 onClick={() =>
@@ -53,8 +55,8 @@ export const Footer = () => {
                 }
             >
                 <ClipboardListIcon />
+                Заказы
             </FooterButton>
-            <FooterColorModeChangeButton />
             <FooterAuthButton />
         </Styled>
     );
