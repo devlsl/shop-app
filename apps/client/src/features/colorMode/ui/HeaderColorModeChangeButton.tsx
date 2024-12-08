@@ -11,7 +11,7 @@ export const HeaderColorModeChangeButton = () => {
             content={colorMode === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
         >
             <IconButton onClick={toggleColorMode}>
-                {colorMode === 'dark' ? <MoonIcon /> : <SunIcon />}
+                {colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
             </IconButton>
         </Tooltip>
     );
