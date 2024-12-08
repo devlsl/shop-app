@@ -15,9 +15,6 @@ export const ProductsPageView = ({
 }: {
     isAuthorized?: boolean;
 }) => {
-    useEffect(() => {
-        console.log('ProductsPageView', isAuthorized);
-    }, []);
     const [lazyLoadElementRef, lazyLoadEntry] = useIntersectionObserver({
         threshold: 0,
     });

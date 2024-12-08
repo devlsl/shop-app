@@ -22,8 +22,7 @@ export const createVerifyAccess =
                 }),
                 payload,
             ).mapLeft(() => 'Unauthorized');
-        } catch (error) {
-            console.log(error);
+        } catch {
             return left('Unauthorized');
         }
     };
