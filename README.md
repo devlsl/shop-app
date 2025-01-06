@@ -1,1 +1,1 @@
-Deploy url - https://pets.shop.devlsl.ru/
+Deploy url - https://projects.shop.devlsl.ru/
