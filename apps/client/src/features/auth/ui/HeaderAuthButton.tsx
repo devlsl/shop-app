@@ -26,7 +26,7 @@ const HeaderSignOutButton = () => (
 );
 
 const HeaderSignInButton = () => (
-    <Tooltip content={'Выйти'}>
+    <Tooltip content={'Войти'}>
         <IconButton onClick={showSignInPopup}>
             <UserRoundIcon />
         </IconButton>
